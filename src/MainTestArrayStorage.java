@@ -12,6 +12,7 @@ public class MainTestArrayStorage {
         Resume r3 = new Resume();
         r3.uuid = "uuid3";
 
+
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
         ARRAY_STORAGE.save(r3);
@@ -28,6 +29,21 @@ public class MainTestArrayStorage {
         printAll();
 
         System.out.println("Size: " + ARRAY_STORAGE.size());
+
+        ARRAY_STORAGE.save(r1);
+        ARRAY_STORAGE.save(r2);
+        ARRAY_STORAGE.save(r3);
+
+        Resume r2Upd = new Resume();
+        r2Upd.uuid = "uuid2";
+        Resume r4 = new Resume();
+        r4.uuid = "uui4";
+
+        System.out.println("\nGet r2 with uuid <" + ARRAY_STORAGE.get(r2.uuid) + ">");
+        ARRAY_STORAGE.update(r2Upd);
+        System.out.println("and update r2 with <" + ARRAY_STORAGE.get(r2.uuid) + "> to r2Upd with <" + r2Upd.toString() + ">:");
+        System.out.println("Get r2Upd: " + ARRAY_STORAGE.get(r2Upd.uuid));
+        printAll();
     }
 
     static void printAll() {
