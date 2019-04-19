@@ -20,6 +20,7 @@ public class ArrayStorage {
                 System.out.println("Резюме с uuid <" + uuid + "> уже существует.");
             } else {
                 storage[size] = resume;
+                System.out.println("Резюме с uuid <" + uuid + "> успешно сохранено.");
                 size++;
             }
         } else {
@@ -53,6 +54,7 @@ public class ArrayStorage {
         int i = findElementIndex(uuid);
         if (i >= 0) {
             storage[i] = resume;
+            System.out.println("Резюме с uuid <" + uuid + "> успешно изменено.");
         } else {
             System.out.println("Резюме с uuid <" + uuid + "> не найденo.");
         }

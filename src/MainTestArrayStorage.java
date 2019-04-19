@@ -12,46 +12,8 @@ public class MainTestArrayStorage {
         Resume r3 = new Resume();
         r3.uuid = "uuid3";
 
-        saveThreeResumes(r1, r2, r3);
-        checkArrayStorageMethods(r1, r2, r3);
-        System.out.println("_________________________");
+        saveResume(r1, r2, r3);
 
-        Resume r1Upd = new Resume();
-        r1Upd.uuid = "uuid2";
-        Resume r4 = new Resume();
-        r4.uuid = "uuid4";
-        Resume r3Upd = new Resume();
-        r3Upd.uuid = "uuid3";
-
-        saveThreeResumes(r1Upd, r4, r3Upd);
-        ARRAY_STORAGE.update(r1Upd);
-        ARRAY_STORAGE.update(r3Upd);
-        checkArrayStorageMethods(r1Upd, r4, r3Upd);
-        System.out.println("_________________________");
-
-
-
-//        System.out.println("\nGet r2 with uuid <" + ARRAY_STORAGE.get(r2.uuid) + ">");
-//        ARRAY_STORAGE.update(r2Upd);
-//        System.out.println("and update r2 with <" + ARRAY_STORAGE.get(r2.uuid) + "> to r2Upd with <" + r2Upd.toString() + ">:");
-//        System.out.println("Get r2Upd: " + ARRAY_STORAGE.get(r2Upd.uuid));
-//        printAll();
-    }
-
-    private static void printAll() {
-        System.out.println("\nGet All");
-        for (Resume r : ARRAY_STORAGE.getAll()) {
-            System.out.println(r);
-        }
-    }
-
-    private static void saveThreeResumes(Resume r1, Resume r2, Resume r3) {
-        ARRAY_STORAGE.save(r1);
-        ARRAY_STORAGE.save(r2);
-        ARRAY_STORAGE.save(r3);
-    }
-
-    private static void checkArrayStorageMethods(Resume r1, Resume r2, Resume r3) {
         System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.uuid));
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
@@ -64,6 +26,44 @@ public class MainTestArrayStorage {
         printAll();
 
         System.out.println("Size: " + ARRAY_STORAGE.size());
+        System.out.println("-----------------------");
+
+        /*
+        * Verification of the update method in the ArrayStorage:
+        */
+        saveResume(r1, r2, r3);
+
+        Resume r1upd = new Resume();
+        r1upd.uuid = "uuid1";
+        Resume r3upd = new Resume();
+        r3upd.uuid = "uuid3";
+
+        Resume[] beforeUpdate = ARRAY_STORAGE.getAll();
+        ARRAY_STORAGE.update(r1upd);
+        ARRAY_STORAGE.update(r3upd);
+        Resume[] afterUpdate = ARRAY_STORAGE.getAll();
+
+        for (int i = 0; i < ARRAY_STORAGE.size(); i++) {
+            if (afterUpdate[i].hashCode() == beforeUpdate[i].hashCode()) {
+                if (afterUpdate[i].equals(beforeUpdate[i])) {
+                System.out.println("Резюме c идентификатором <" + afterUpdate[i] + "> осталось без изменений");
+                }
+            } else {
+                System.out.println("Резюме c идентификатором <" + afterUpdate[i] + "> успешно изменено");
+            }
+        }
     }
 
+    private static void printAll() {
+        System.out.println("\nGet All");
+        for (Resume r : ARRAY_STORAGE.getAll()) {
+            System.out.println(r);
+        }
+    }
+
+    private static void saveResume(Resume r1, Resume r2, Resume r3) {
+        ARRAY_STORAGE.save(r1);
+        ARRAY_STORAGE.save(r2);
+        ARRAY_STORAGE.save(r3);
+    }
 }
