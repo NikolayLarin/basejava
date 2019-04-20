@@ -42,6 +42,7 @@ public class ArrayStorage {
         int i = findIndex(uuid);
         if (i >= 0) {
             storage[i] = storage[size - 1];
+            storage [size - 1] = null;
             size--;
         } else {
             System.out.println("Resume with uuid <" + uuid + "> not found.");
@@ -57,14 +58,6 @@ public class ArrayStorage {
         }
     }
 
-    private int findIndex(String uuid) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                return i;
-            }
-        } return -1;
-    }
-
     /**
      * @return array, contains only Resumes in storage (without null)
      */
@@ -74,5 +67,13 @@ public class ArrayStorage {
 
     public int size() {
         return size;
+    }
+
+    private int findIndex(String uuid) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                return i;
+            }
+        } return -1;
     }
 }
