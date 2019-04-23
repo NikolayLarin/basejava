@@ -1,5 +1,8 @@
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.storage.ArrayStorage;
+
 /**
- * Test for your ArrayStorage implementation
+ * Test for your ru.javawebinar.basejava.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
     private static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
@@ -29,7 +32,7 @@ public class MainTestArrayStorage {
         System.out.println("-----------------------");
 
         /*
-         * Verification of the update method in the ArrayStorage
+         * Verification of the update method in the ru.javawebinar.basejava.storage.ArrayStorage
          */
         saveResume(r1, r2, r3);
 

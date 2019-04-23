@@ -1,3 +1,7 @@
+package ru.javawebinar.basejava.storage;
+
+import ru.javawebinar.basejava.model.Resume;
+
 import java.util.Arrays;
 
 /**
@@ -15,7 +19,7 @@ public class ArrayStorage {
     public void save(Resume resume) {
         String uuid = resume.getUuid();
         if (size < storage.length){
-            int i = findIndex(uuid);
+            int i = getIndex(uuid);
             if (i >= 0) {
                 System.out.println("Resume with uuid <" + uuid + "> already exist.");
             } else {
@@ -29,7 +33,7 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        int i = findIndex(uuid);
+        int i = getIndex(uuid);
         if (i >= 0) {
             return storage[i];
         } else {
@@ -39,7 +43,7 @@ public class ArrayStorage {
     }
 
     public void delete(String uuid) {
-        int i = findIndex(uuid);
+        int i = getIndex(uuid);
         if (i >= 0) {
             storage[i] = storage[size - 1];
             storage [size - 1] = null;
@@ -50,7 +54,7 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        int i = findIndex(resume.getUuid());
+        int i = getIndex(resume.getUuid());
         if (i >= 0) {
             storage[i] = resume;
         } else {
@@ -69,7 +73,7 @@ public class ArrayStorage {
         return size;
     }
 
-    private int findIndex(String uuid) {
+    private int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
