@@ -17,9 +17,6 @@ public interface Storage {
 
     void update(Resume r);
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
     Resume[] getAll();
 
     int size();
