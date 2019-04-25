@@ -2,19 +2,20 @@ package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.ArrayStorage;
+import ru.javawebinar.basejava.storage.Storage;
 
 /**
  * Test for ru.javawebinar.basejava.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    private static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    private static final Storage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
-        Resume r1 = new Resume();
+        final Resume r1 = new Resume();
         r1.setUuid("uuid1");
-        Resume r2 = new Resume();
+        final Resume r2 = new Resume();
         r2.setUuid("uuid2");
-        Resume r3 = new Resume();
+        final Resume r3 = new Resume();
         r3.setUuid("uuid3");
 
         saveResume(r1, r2, r3);
