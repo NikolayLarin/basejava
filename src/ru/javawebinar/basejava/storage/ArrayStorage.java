@@ -3,36 +3,19 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 /**
- * Array based storage for Resumes
+ * Unsorted array based storage implementation for Resumes
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void save(Resume r) {
-        if (size >= STORAGE_LIMIT){
-            System.out.println("Can't add resume: storage is full." +
-                    "\nDelete unnecessary resumes or contact support.");
-        } else {
-            String uuid = r.getUuid();
-            if (getIndex(uuid) >= 0) {
-                System.out.println("Resume with uuid <" + uuid + "> already exist.");
-            } else {
-                storage[size] = r;
-                size++;
-            }
-        }
+    protected void saveResume(Resume r, int index) {
+        storage[size] = r;
     }
 
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0){
-            storage[index] = storage[size - 1];
-            storage [size - 1] = null;
-            size--;
-        } else {
-            System.out.println("Resume with uuid <" + uuid + "> not found.");
-        }
+    protected void deleteResume(int index) {
+        storage[index] = storage[size - 1];
+        storage[size - 1] = null;
     }
 
     @Override
@@ -41,6 +24,7 @@ public class ArrayStorage extends AbstractArrayStorage {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
-        } return -1;
+        }
+        return -1;
     }
 }

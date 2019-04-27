@@ -5,7 +5,7 @@ import ru.javawebinar.basejava.storage.SortedArrayStorage;
 import ru.javawebinar.basejava.storage.Storage;
 
 /**
- * Test for ru.javawebinar.basejava.storage.ArrayStorage implementation
+ * Test for ru.javawebinar.basejava.storage.ArrayStorage & SortedArrayStorage implementation
  */
 public class MainTestArrayStorage {
     private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
@@ -35,7 +35,7 @@ public class MainTestArrayStorage {
         System.out.println("-----------------------");
 
         /*
-         * Verification of the update method in the ru.javawebinar.basejava.storage.ArrayStorage
+         * Verification of the update method
          */
         saveResume(r1, r2, r3);
 
@@ -50,9 +50,9 @@ public class MainTestArrayStorage {
         Resume[] afterUpdate = ARRAY_STORAGE.getAll();
 
         for (int i = 0; i < ARRAY_STORAGE.size(); i++) {
-             if (afterUpdate[i] == beforeUpdate[i]) {
+            if (afterUpdate[i] == beforeUpdate[i]) {
                 System.out.println("Резюме c идентификатором <" + afterUpdate[i] + "> осталось без изменений");
-             }  else {
+            } else {
                 System.out.println("Резюме c идентификатором <" + afterUpdate[i] + "> успешно изменено");
             }
         }

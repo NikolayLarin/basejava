@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Interactive test for ru.javawebinar.basejava.storage.ArrayStorage implementation
+ * Interactive test for ru.javawebinar.basejava.storage.ArrayStorage & SortedArrayStorage implementation
  */
 public class MainArray {
     private final static Storage ARRAY_STORAGE = new SortedArrayStorage();
