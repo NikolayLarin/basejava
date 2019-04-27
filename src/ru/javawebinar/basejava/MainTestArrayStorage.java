@@ -1,14 +1,14 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.storage.ArrayStorage;
+import ru.javawebinar.basejava.storage.SortedArrayStorage;
 import ru.javawebinar.basejava.storage.Storage;
 
 /**
  * Test for ru.javawebinar.basejava.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    private static final Storage ARRAY_STORAGE = new ArrayStorage();
+    private static final Storage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
         final Resume r1 = new Resume();
@@ -50,11 +50,9 @@ public class MainTestArrayStorage {
         Resume[] afterUpdate = ARRAY_STORAGE.getAll();
 
         for (int i = 0; i < ARRAY_STORAGE.size(); i++) {
-            if (afterUpdate[i].hashCode() == beforeUpdate[i].hashCode()) {
-                if (afterUpdate[i].equals(beforeUpdate[i])) {
+             if (afterUpdate[i] == beforeUpdate[i]) {
                 System.out.println("Резюме c идентификатором <" + afterUpdate[i] + "> осталось без изменений");
-                }
-            } else {
+             }  else {
                 System.out.println("Резюме c идентификатором <" + afterUpdate[i] + "> успешно изменено");
             }
         }
