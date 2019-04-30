@@ -10,16 +10,16 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected void saveResume(Resume r, int i) {
-        int index = -i - 1;
-        System.arraycopy(storage, index, storage, index + 1, size - index);
-        storage[index] = r;
+    protected void saveResume(Resume r, int index) {
+        int insPoint = -index - 1;
+        System.arraycopy(storage, insPoint, storage, insPoint + 1, size - insPoint);
+        storage[insPoint] = r;
     }
 
     @Override
     protected void deleteResume(int index) {
-        System.arraycopy(storage, index + 1, storage, index, size - index - 1);
-        storage[size - 1] = null;
+        int length = size - index - 1;
+        System.arraycopy(storage, index + 1, storage, index, length);
     }
 
     @Override
