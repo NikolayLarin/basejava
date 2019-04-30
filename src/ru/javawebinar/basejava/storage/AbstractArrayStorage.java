@@ -1,5 +1,8 @@
 package ru.javawebinar.basejava.storage;
 
+import ru.javawebinar.basejava.exception.ExistStorageException;
+import ru.javawebinar.basejava.exception.NotExistStorageException;
+import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
@@ -37,13 +40,16 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void save(Resume r) {
         if (size == STORAGE_LIMIT) {
-            System.out.println("Can't add resume: storage is full." +
-                    "\nDelete unnecessary resumes or contact support.");
+            String storageFull = "Can't add resume: storage is full." +
+                    "\nDelete unnecessary resumes or contact support.";
+            System.out.println(storageFull);
+            throw new StorageException(storageFull, r.getUuid());
         } else {
             String uuid = r.getUuid();
             int index = getIndex(uuid);
             if (index >= 0) {
                 System.out.println("Resume with uuid <" + uuid + "> already exist.");
+                throw new ExistStorageException(uuid);
             } else {
                 saveResume(r, index);
                 size++;
@@ -53,11 +59,11 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public Resume get(String uuid) {
         int index = getIndex(uuid);
-        if (index >= 0) {
-            return storage[index];
-        } else {
+        if (index < 0) {
             printNotFound(uuid);
-            return null;
+            throw new NotExistStorageException(uuid);
+        } else {
+            return storage[index];
         }
     }
 
@@ -69,6 +75,7 @@ public abstract class AbstractArrayStorage implements Storage {
             size--;
         } else {
             printNotFound(uuid);
+            throw new NotExistStorageException(uuid);
         }
     }
 
@@ -85,5 +92,6 @@ public abstract class AbstractArrayStorage implements Storage {
 
     private void printNotFound(String uuid) {
         System.out.println("Resume with uuid <" + uuid + "> not found.");
+        throw new NotExistStorageException(uuid);
     }
 }
