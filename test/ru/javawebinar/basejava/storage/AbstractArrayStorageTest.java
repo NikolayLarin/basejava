@@ -9,10 +9,9 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 public abstract class AbstractArrayStorageTest {
-//    private Storage storage = new ArrayStorage();
     private Storage storage;
 
-    protected AbstractArrayStorageTest (Storage storage) {
+    protected AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -69,7 +68,7 @@ public abstract class AbstractArrayStorageTest {
         Assert.assertEquals(3, result.length);
     }
 
-    @Test (expected = StorageException.class)
+    @Test(expected = StorageException.class)
     public void save() {
         storage.save(new Resume());
         Assert.assertEquals(4, storage.size());
@@ -82,7 +81,7 @@ public abstract class AbstractArrayStorageTest {
         Assert.assertEquals(10000, storage.size());
     }
 
-    @Test (expected = ExistStorageException.class)
+    @Test(expected = ExistStorageException.class)
     public void saveExist() {
         storage.save(new Resume());
         Assert.assertEquals(4, storage.size());
