@@ -80,14 +80,14 @@ public abstract class AbstractArrayStorageTest {
         storage.clear();
         int i = 0;
         try {
-            for (i = 0; i < 10000; i++) {
+            for (i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
                 storage.save(new Resume());
             }
         } catch (RuntimeException e) {
             fail("RuntimeException: storage overflow in AbstractArrayStorage, " +
                     "storage limit <" + i + "> reached");
         }
-        Assert.assertEquals(10000, storage.size());
+        Assert.assertEquals(AbstractArrayStorage.STORAGE_LIMIT, storage.size());
         storage.save(new Resume());
     }
 
