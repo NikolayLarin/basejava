@@ -12,7 +12,6 @@ public class MainReflection {
         System.out.println(r);
         System.out.println(r.getClass());
         System.out.println(r.getClass().getDeclaredFields()[0] + "\n--------------------");
-
         Field field = r.getClass().getDeclaredFields()[0];
         field.setAccessible(true);
         System.out.println(field.getName());
@@ -44,5 +43,13 @@ public class MainReflection {
          */
         Method toString = r.getClass().getDeclaredMethod("toString");
         System.out.println(toString.invoke(r) + "\n--------------------");
+
+        /*
+         * Implementation toString() method via invoke reflection at Resume class by G.Kislin
+         */
+        Class<? extends Resume> resumeClass = r.getClass();
+        Method method = resumeClass.getMethod("toString");
+        Object result = method.invoke(r);
+        System.out.println(result + "\n--------------------");
     }
 }
