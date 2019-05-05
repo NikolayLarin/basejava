@@ -33,7 +33,6 @@ public abstract class AbstractArrayStorageTest {
         RESUME_3 = new Resume(UUID_3);
     }
 
-
     protected AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
