@@ -27,10 +27,10 @@ public abstract class AbstractArrayStorageTest {
     private static final Resume RESUME_3;
 
     static {
-        RESUME_2 = new Resume(UUID_2);
         RESUME_1 = new Resume(UUID_1);
-        RESUME_4 = new Resume(UUID_4);
+        RESUME_2 = new Resume(UUID_2);
         RESUME_3 = new Resume(UUID_3);
+        RESUME_4 = new Resume(UUID_4);
     }
 
     protected AbstractArrayStorageTest(Storage storage) {
