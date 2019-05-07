@@ -32,19 +32,16 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     public void save(Resume r) {
+        String uuid = r.getUuid();
+        int index = getIndex(uuid);
         if (size == STORAGE_LIMIT) {
-            String storageFull = "Can't add resume: storage is full." +
-                    "\nDelete unnecessary resumes or contact support.";
+            String storageFull = "Can't add resume: storage is full.";
             throw new StorageException(storageFull, r.getUuid());
+        } else if (index >= 0) {
+            throw new ExistStorageException(uuid);
         } else {
-            String uuid = r.getUuid();
-            int index = getIndex(uuid);
-            if (index >= 0) {
-                throw new ExistStorageException(uuid);
-            } else {
-                saveResume(r, index);
-                size++;
-            }
+            saveResume(r, index);
+            size++;
         }
     }
 
