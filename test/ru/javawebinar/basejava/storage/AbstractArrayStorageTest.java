@@ -14,7 +14,7 @@ import static org.junit.Assert.fail;
 
 
 public abstract class AbstractArrayStorageTest {
-    private final Storage storage;
+    protected final Storage storage;
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
@@ -127,7 +127,7 @@ public abstract class AbstractArrayStorageTest {
         storage.get("notExist");
     }
 
-    private void assertSize(int size) {
+    protected void assertSize(int size) {
         assertEquals(size, storage.size());
     }
 }
