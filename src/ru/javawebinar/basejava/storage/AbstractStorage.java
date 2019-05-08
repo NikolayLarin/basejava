@@ -40,17 +40,17 @@ public abstract class AbstractStorage implements Storage {
         if (index < 0) {
             throw new NotExistStorageException(uuid);
         } else {
-            fillDeletedElement(index);
+            deleteResume(index);
         }
     }
-
-    protected abstract Resume getResume(int index);
-
-    protected abstract int getIndex(String uuid);
 
     protected abstract void updateResume(Resume r, int index);
 
     protected abstract void saveResume(Resume r, int index);
 
-    protected abstract void fillDeletedElement(int index);
+    protected abstract Resume getResume(int index);
+
+    protected abstract void deleteResume(int index);
+
+    protected abstract int getIndex(String uuid);
 }

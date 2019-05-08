@@ -23,11 +23,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
+    @Override
+    protected void updateResume(Resume r, int index) {
+        storage[index] = r;
     }
 
     @Override
@@ -41,16 +39,27 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateResume(Resume r, int index) {
-        storage[index] = r;
-    }
-
-    @Override
     protected Resume getResume(int index) {
         return storage[index];
     }
 
+    @Override
+    protected void deleteResume(int index) {
+        fillDeletedElement(index);
+        storage[size - 1] = null;
+        size--;
+    }
+
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, size);
+    }
+
     protected abstract void insertElement(Resume r, int index);
+
+    protected abstract void fillDeletedElement(int index);
 
     protected abstract int getIndex(String uuid);
 }
