@@ -10,7 +10,7 @@ import java.util.Objects;
  */
 public class ListStorage extends AbstractStorage {
 
-    protected final static ArrayList<Resume> storage = new ArrayList<>();
+    protected ArrayList<Resume> storage = new ArrayList<>();
 
     public int size() {
         return storage.size();
@@ -31,12 +31,12 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(String uuid, int index) {
+    protected Resume getResume(int index) {
         return storage.get(index);
     }
 
     @Override
-    protected void deleteResume(String uuid, int index) {
+    protected void deleteResume(int index) {
         storage.remove(index);
     }
 

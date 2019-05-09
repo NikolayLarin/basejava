@@ -2,14 +2,14 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.TreeMap;
+import java.util.HashMap;
 
 /**
  * List based storage for Resumes
  */
 public class MapStorage extends AbstractStorage {
 
-    protected final static TreeMap<String, Resume> storage = new TreeMap<>();
+    protected HashMap<String, Resume> storage = new HashMap<>();
 
     public int size() {
         return storage.size();
@@ -30,13 +30,14 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(String uuid, int index) {
-        return storage.get(uuid);
+    protected Resume getResume(int index) {
+//        return storage.get(uuid);
+        return null;
     }
 
     @Override
-    protected void deleteResume(String uuid, int index) {
-        storage.remove(uuid);
+    protected void deleteResume(int index) {
+//        storage.remove(uuid);
     }
 
     /**
