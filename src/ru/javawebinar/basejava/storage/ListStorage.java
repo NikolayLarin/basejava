@@ -21,23 +21,23 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateResume(Resume resume, int index) {
-        storage.set(index, resume);
+    protected void updateResume(Resume resume, String searchKey) {
+        storage.set(Integer.parseInt(searchKey), resume);
     }
 
     @Override
-    protected void saveResume(Resume r, int index) {
+    protected void saveResume(Resume r, String searchKey) {
         storage.add(r);
     }
 
     @Override
-    protected Resume getResume(int index) {
-        return storage.get(index);
+    protected Resume getResume(String searchKey) {
+        return storage.get(Integer.parseInt(searchKey));
     }
 
     @Override
-    protected void deleteResume(int index) {
-        storage.remove(index);
+    protected void deleteResume(String searchKey) {
+        storage.remove(Integer.parseInt(searchKey));
     }
 
     /**
@@ -49,14 +49,20 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected int getIndex(String uuid) {
+    protected String getSearchKey(String uuid) {
         int index = 0;
         for (Resume r : storage) {
             if (Objects.equals(r.getUuid(), uuid)) {
-                return index;
+                return Integer.toString(index);
             }
             index++;
         }
-        return -1;
+        return "-1";
+    }
+
+    @Override
+    protected boolean isExist(String searchKey) {
+        int index = Integer.parseInt(searchKey);
+        return index >= 0;
     }
 }

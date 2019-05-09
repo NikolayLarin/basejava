@@ -24,28 +24,28 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateResume(Resume r, int index) {
-        storage[index] = r;
+    protected void updateResume(Resume r, String searchKey) {
+        storage[Integer.parseInt(searchKey)] = r;
     }
 
     @Override
-    protected void saveResume(Resume r, int index) {
+    protected void saveResume(Resume r, String searchKey) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Can't add resume: storage is full.", r.getUuid());
         } else {
-            insertElement(r, index);
+            insertElement(r, Integer.parseInt(searchKey));
             size++;
         }
     }
 
     @Override
-    protected Resume getResume(int index) {
-        return storage[index];
+    protected Resume getResume(String searchKey) {
+        return storage[Integer.parseInt(searchKey)];
     }
 
     @Override
-    protected void deleteResume(int index) {
-        fillDeletedElement(index);
+    protected void deleteResume(String searchKey) {
+        fillDeletedElement(Integer.parseInt(searchKey));
         storage[size - 1] = null;
         size--;
     }
@@ -55,6 +55,19 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
      */
     public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
+    }
+
+
+    @Override
+    protected String getSearchKey(String uuid) {
+        int index = getIndex(uuid);
+        return Integer.toString(index);
+    }
+
+    @Override
+    protected boolean isExist(String searchKey) {
+        int index = Integer.parseInt(searchKey);
+        return index >= 0;
     }
 
     protected abstract void insertElement(Resume r, int index);
