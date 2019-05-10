@@ -26,7 +26,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     @Override
     protected void updateResume(Resume r, Object searchKey) {
         storage[(int) searchKey] = r;
-//        storage[Integer.parseInt(searchKey.toString())] = r;
     }
 
     @Override
@@ -58,12 +57,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.copyOf(storage, size);
     }
 
-
-    @Override
-    protected Object getSearchKey(String uuid) {
-        return getIndex(uuid);
-    }
-
     @Override
     protected boolean isExist(Object searchKey) {
         return (int) searchKey >= 0;
@@ -72,6 +65,4 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void insertElement(Resume r, int index);
 
     protected abstract void fillDeletedElement(int index);
-
-    protected abstract int getIndex(String uuid);
 }

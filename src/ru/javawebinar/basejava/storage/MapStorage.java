@@ -3,13 +3,14 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * List based storage for Resumes
  */
 public class MapStorage extends AbstractStorage {
 
-    protected HashMap<String, Resume> storage = new HashMap<>();
+    protected Map<String, Resume> storage = new HashMap<>();
 
     public int size() {
         return storage.size();
