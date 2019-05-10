@@ -2,14 +2,15 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.TreeMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * List based storage for Resumes
  */
 public class MapStorage extends AbstractStorage {
 
-    protected final static TreeMap<String, Resume> storage = new TreeMap<>();
+    protected Map<String, Resume> storage = new HashMap<>();
 
     public int size() {
         return storage.size();
@@ -20,23 +21,23 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateResume(Resume r, int index) {
+    protected void updateResume(Resume r, Object searchKey) {
         storage.put(r.getUuid(), r);
     }
 
     @Override
-    protected void saveResume(Resume r, int index) {
+    protected void saveResume(Resume r, Object searchKey) {
         storage.put(r.getUuid(), r);
     }
 
     @Override
-    protected Resume getResume(String uuid, int index) {
-        return storage.get(uuid);
+    protected Resume getResume(Object searchKey) {
+        return storage.get(searchKey.toString());
     }
 
     @Override
-    protected void deleteResume(String uuid, int index) {
-        storage.remove(uuid);
+    protected void deleteResume(Object searchKey) {
+        storage.remove(searchKey.toString());
     }
 
     /**
@@ -48,11 +49,12 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected int getIndex(String uuid) {
-        if (storage.containsKey(uuid)) {
-            return 1;
-        }
-        return -1;
+    protected Object getSearchKey(String uuid) {
+        return uuid;
     }
 
+    @Override
+    protected boolean isExist(Object searchKey) {
+        return storage.containsKey(searchKey.toString());
+    }
 }
