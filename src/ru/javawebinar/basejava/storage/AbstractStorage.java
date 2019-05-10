@@ -8,7 +8,7 @@ public abstract class AbstractStorage implements Storage {
 
     public void update(Resume r) {
         String uuid = r.getUuid();
-        Integer searchKey = getSearchKey(uuid);
+        Object searchKey = getSearchKey(uuid);
         if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         } else {
@@ -18,7 +18,7 @@ public abstract class AbstractStorage implements Storage {
 
     public void save(Resume r) {
         String uuid = r.getUuid();
-        Integer searchKey = getSearchKey(uuid);
+        Object searchKey = getSearchKey(uuid);
         if (isExist(searchKey)) {
             throw new ExistStorageException(uuid);
         } else {
@@ -27,7 +27,7 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public Resume get(String uuid) {
-        Integer searchKey = getSearchKey(uuid);
+        Object searchKey = getSearchKey(uuid);
         if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         } else {
@@ -36,7 +36,7 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public void delete(String uuid) {
-        Integer searchKey = getSearchKey(uuid);
+        Object searchKey = getSearchKey(uuid);
         if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         } else {
@@ -44,15 +44,15 @@ public abstract class AbstractStorage implements Storage {
         }
     }
 
-    protected abstract void updateResume(Resume r, Integer searchKey);
+    protected abstract void updateResume(Resume r, Object searchKey);
 
-    protected abstract void saveResume(Resume r, Integer searchKey);
+    protected abstract void saveResume(Resume r, Object searchKey);
 
-    protected abstract void deleteResume(Integer searchKey);
+    protected abstract void deleteResume(Object searchKey);
 
-    protected abstract Integer getSearchKey(String uuid);
+    protected abstract Object getSearchKey(String uuid);
 
-    protected abstract boolean isExist(Integer searchKey);
+    protected abstract boolean isExist(Object searchKey);
 
-    protected abstract Resume getResume(Integer searchKey);
+    protected abstract Resume getResume(Object searchKey);
 }
