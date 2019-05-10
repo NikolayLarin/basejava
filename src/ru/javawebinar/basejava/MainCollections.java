@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -82,7 +83,40 @@ public class MainCollections {
         queue.push(2);
         System.out.println(queue);
 
+        List<String> nameList = new ArrayList<>(Arrays.asList("Mr.Green", "Mr.Yellow", "Mr.Red"));
+        String[] strArray = nameList.toArray(new String[0]);
+        for (String str : strArray) {
+            System.out.println(str);
+        }
 
 
+        List<GreekLetter> letterList = new ArrayList<>();
+        letterList.add(new GreekLetter("Gamma",  3));
+        letterList.add(new GreekLetter("Omega", 24));
+        letterList.add(new GreekLetter("Alpha",  1));
+        Object[] objArray = letterList.toArray(new Object[0]);
+        for (Object str : objArray) {
+            System.out.println(str);
+        }
+        Integer a = 5;
+        Integer b = a + 1;
+        System.out.println(b);
     }
+
+    static class GreekLetter {
+
+        private String letter;
+        private int position;
+
+        protected GreekLetter(String letter, int position) {
+            this.letter = letter;
+            this.position = position;
+        }
+
+        @Override
+        public String toString() {
+            return "{" + "letter='" + letter + '\'' + ", position=" + position + '}';
+        }
+    }
+
 }
