@@ -2,8 +2,11 @@ package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -64,5 +67,22 @@ public class MainCollections {
             System.out.println(entry.getValue());
         }
         System.out.println("---------------");
+
+
+        Deque<Integer> queue = new ArrayDeque<>(Arrays.asList(1,2,3,4));
+        queue.add(5);
+        queue.remove(1);
+        queue.remove(2);
+        System.out.println(queue);
+
+        queue.clear();
+        queue.push(7);
+        queue.push(1);
+        queue.push(0);
+        queue.push(2);
+        System.out.println(queue);
+
+
+
     }
 }
