@@ -50,7 +50,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         Integer index = 0;
         for (Resume r : storage) {
             if (Objects.equals(r.getUuid(), uuid)) {
