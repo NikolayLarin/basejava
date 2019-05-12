@@ -70,7 +70,7 @@ public class MainCollections {
         System.out.println("---------------");
 
 
-        Deque<Integer> queue = new ArrayDeque<>(Arrays.asList(1,2,3,4));
+        Deque<Integer> queue = new ArrayDeque<>(Arrays.asList(1, 2, 3, 4));
         queue.add(5);
         queue.remove(1);
         queue.remove(2);
@@ -89,34 +89,8 @@ public class MainCollections {
             System.out.println(str);
         }
 
-
-        List<GreekLetter> letterList = new ArrayList<>();
-        letterList.add(new GreekLetter("Gamma",  3));
-        letterList.add(new GreekLetter("Omega", 24));
-        letterList.add(new GreekLetter("Alpha",  1));
-        Object[] objArray = letterList.toArray(new Object[0]);
-        for (Object str : objArray) {
-            System.out.println(str);
-        }
-        Integer a = 5;
-        Integer b = a + 1;
-        System.out.println(b);
+        List<Resume> resumes = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
+        resumes.remove(1); // UnsupportedOperationException
+        System.out.println(resumes);
     }
-
-    static class GreekLetter {
-
-        private String letter;
-        private int position;
-
-        protected GreekLetter(String letter, int position) {
-            this.letter = letter;
-            this.position = position;
-        }
-
-        @Override
-        public String toString() {
-            return "{" + "letter='" + letter + '\'' + ", position=" + position + '}';
-        }
-    }
-
 }
