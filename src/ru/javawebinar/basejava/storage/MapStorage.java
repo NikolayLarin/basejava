@@ -21,22 +21,22 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateResume(Resume r, Object searchKey) {
+    protected void doUpdate(Resume r, Object searchKey) {
         mapStorage.put(r.getUuid(), r);
     }
 
     @Override
-    protected void saveResume(Resume r, Object searchKey) {
+    protected void doSave(Resume r, Object searchKey) {
         mapStorage.put(r.getUuid(), r);
     }
 
     @Override
-    protected Resume getResume(Object searchKey) {
+    protected Resume doGet(Object searchKey) {
         return mapStorage.get(searchKey.toString());
     }
 
     @Override
-    protected void deleteResume(Object searchKey) {
+    protected void doDelete(Object searchKey) {
         mapStorage.remove(searchKey.toString());
     }
 

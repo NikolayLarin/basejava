@@ -24,12 +24,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void updateResume(Resume r, Object index) {
+    protected void doUpdate(Resume r, Object index) {
         storage[(int) index] = r;
     }
 
     @Override
-    protected void saveResume(Resume r, Object index) {
+    protected void doSave(Resume r, Object index) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Can't add resume: storage is full.", r.getUuid());
         } else {
@@ -39,12 +39,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResume(Object index) {
+    protected Resume doGet(Object index) {
         return storage[(int) index];
     }
 
     @Override
-    protected void deleteResume(Object index) {
+    protected void doDelete(Object index) {
         fillDeletedElement((int) index);
         storage[size - 1] = null;
         size--;
