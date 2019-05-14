@@ -14,15 +14,18 @@ public class Resume {
 
     public Resume() {
         this.uuid = UUID.randomUUID().toString();
+        this.fullName = UUID.randomUUID().toString();
     }
 
     public Resume(String uuid) {
         this.uuid = uuid;
     }
+
     public Resume(String uuid, String fullName) {
         this.uuid = uuid;
         this.fullName = fullName;
     }
+
     public String getUuid() {
         return uuid;
     }
