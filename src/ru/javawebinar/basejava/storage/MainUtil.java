@@ -9,6 +9,6 @@ public class MainUtil {
     }
 
     private static Integer getInt() {
-        return -1;
+        return -1; // can'n be null
     }
 }

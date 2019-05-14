@@ -6,10 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * List based storage for Resumes
+ * Map based storage for Resumes
  */
 public class MapStorage extends AbstractStorage {
-
     protected Map<String, Resume> mapStorage = new HashMap<>();
 
     public int size() {
