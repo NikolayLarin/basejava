@@ -3,10 +3,10 @@ package ru.javawebinar.basejava.storage;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class MapStorageTest extends AbstractStorageTest {
+public class MapResumeStorageTest extends AbstractStorageTest {
 
-    public MapStorageTest() {
-        super(new MapStorage());
+    public MapResumeStorageTest() {
+        super(new MapResumeStorage());
     }
 
     @Ignore
