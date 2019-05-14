@@ -3,12 +3,13 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Map based storage for Resumes
  */
-public class MapStorage extends AbstractStorage {
+public class MapResumeStorage extends AbstractStorage {
     protected Map<String, Resume> mapStorage = new HashMap<>();
 
     public int size() {
@@ -45,6 +46,12 @@ public class MapStorage extends AbstractStorage {
     public Resume[] getAll() {
         return mapStorage.values().toArray(new Resume[0]);
     }
+
+
+    public List<Resume> getAllSorted() {
+        return null;
+    }
+
 
     @Override
     protected String getSearchKey(String uuid) {
