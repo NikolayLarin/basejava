@@ -3,38 +3,17 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.List;
 
 /**
  * Sorted array based storage implementation for Resumes
  */
 public class SortedArrayStorage extends AbstractArrayStorage {
-/*  nested class
-    private static class ResumeComparator implements Comparator<Resume> {
-        @Override
-        public int compare(Resume r1, Resume r2) {
-            return r1.getUuid().compareTo(r2.getUuid());
-        }
+
+    @Override
+    public List<Resume> getAllSorted() {
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
-    private static final ResumeComparator RESUME_COMPARATOR = new ResumeComparator();
-*/
-
-/*  anonymous class
-    private static final Comparator<Resume> RESUME_COMPARATOR = new Comparator<Resume>() {
-        @Override
-        public int compare(Resume r1, Resume r2) {
-            return r1.getUuid().compareTo(r2.getUuid());
-        }
-    };
-*/
-
-/*  lambda
-    private static final Comparator<Resume> RESUME_COMPARATOR = (r1, r2) -> r1.getUuid().compareTo(r2.getUuid());
-*/
-
-    private static final Comparator<Resume> RESUME_COMPARATOR =
-            Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
-
 
     @Override
     protected void insertElement(Resume r, int index) {
@@ -51,7 +30,33 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected Integer getSearchKey(String uuid) {
-        Resume searchKey = new Resume(uuid, "Ivan");
+        Resume searchKey = new Resume(uuid);
         return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR);
     }
+
+/*
+    nested class
+    private static class ResumeComparator implements Comparator<Resume> {
+        @Override
+        public int compare(Resume r1, Resume r2) {
+            return r1.getUuid().compareTo(r2.getUuid());
+        }
+    }
+
+    private static final ResumeComparator RESUME_COMPARATOR = new ResumeComparator();
+
+    anonymous class
+    private static final Comparator<Resume> RESUME_COMPARATOR = new Comparator<Resume>() {
+        @Override
+        public int compare(Resume r1, Resume r2) {
+            return r1.getUuid().compareTo(r2.getUuid());
+        }
+    };
+
+    lambda
+    private static final Comparator<Resume> RESUME_COMPARATOR = (r1, r2) -> r1.getUuid().compareTo(r2.getUuid());
+
+    private static final Comparator<Resume> RESUME_COMPARATOR =
+            Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
+*/
 }

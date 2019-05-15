@@ -3,7 +3,6 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -42,15 +41,8 @@ public class ListStorage extends AbstractStorage {
         listStorage.remove((int) searchKey);
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public Resume[] getAll() {
-        return listStorage.toArray(new Resume[0]);
-    }
-
     public List<Resume> getAllSorted() {
-        listStorage.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
+        listStorage.sort(RESUME_COMPARATOR);
         return listStorage;
     }
 

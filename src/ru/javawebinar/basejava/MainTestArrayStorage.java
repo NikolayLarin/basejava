@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava;
 
+import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.storage.SortedArrayStorage;
 import ru.javawebinar.basejava.storage.Storage;
@@ -21,7 +22,10 @@ public class MainTestArrayStorage {
         System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.getUuid()));
         System.out.println("Size: " + ARRAY_STORAGE.size());
 
-        System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
+        try {
+            System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
+        } catch (StorageException ignored) {
+        }
 
         printAll();
         ARRAY_STORAGE.delete(r1.getUuid());
@@ -40,10 +44,10 @@ public class MainTestArrayStorage {
         Resume r1upd = new Resume("uuid1");
         Resume r3upd = new Resume("uuid3");
 
-        Resume[] beforeUpdate = ARRAY_STORAGE.getAll();
+        Resume[] beforeUpdate = ARRAY_STORAGE.getAllSorted().toArray(new Resume[0]);
         ARRAY_STORAGE.update(r1upd);
         ARRAY_STORAGE.update(r3upd);
-        Resume[] afterUpdate = ARRAY_STORAGE.getAll();
+        Resume[] afterUpdate = ARRAY_STORAGE.getAllSorted().toArray(new Resume[0]);
 
         for (int i = 0; i < ARRAY_STORAGE.size(); i++) {
             if (afterUpdate[i] == beforeUpdate[i]) {
@@ -56,7 +60,7 @@ public class MainTestArrayStorage {
 
     private static void printAll() {
         System.out.println("\nGet All");
-        for (Resume r : ARRAY_STORAGE.getAll()) {
+        for (Resume r : ARRAY_STORAGE.getAllSorted().toArray(new Resume[0])) {
             System.out.println(r);
         }
     }
