@@ -10,7 +10,6 @@ import ru.javawebinar.basejava.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertSame;
@@ -25,16 +24,20 @@ public abstract class AbstractStorageTest {
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
 
-    private static final Resume RESUME_1;
-    private static final Resume RESUME_2;
-    private static final Resume RESUME_4;
-    private static final Resume RESUME_3;
+    private static final String FULL_NAME_1 = "name1";
+    private static final String FULL_NAME_2 = "name11";
+    private static final String FULL_NAME_3 = "name111";
+
+    protected static final Resume RESUME_1;
+    protected static final Resume RESUME_2;
+    protected static final Resume RESUME_4;
+    protected static final Resume RESUME_3;
 
     static {
-        RESUME_1 = new Resume(UUID_1);
-        RESUME_2 = new Resume(UUID_2);
-        RESUME_3 = new Resume(UUID_3);
-        RESUME_4 = new Resume(UUID_4);
+        RESUME_1 = new Resume(UUID_1, FULL_NAME_1);
+        RESUME_2 = new Resume(UUID_2, FULL_NAME_2);
+        RESUME_3 = new Resume(UUID_3, FULL_NAME_1);
+        RESUME_4 = new Resume(UUID_4, FULL_NAME_3);
     }
 
     protected AbstractStorageTest(Storage storage) {
@@ -62,7 +65,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume r1upd = new Resume(UUID_1, "Ivan");
+        Resume r1upd = new Resume(UUID_1, FULL_NAME_1);
         storage.update(r1upd);
         assertSame(r1upd, storage.get(UUID_1));
     }
@@ -74,19 +77,15 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAllSorted() {
-        Resume[] expectedArr = {RESUME_1, RESUME_2, RESUME_3};
-        Resume[] resultArr = storage.getAllSorted().toArray(new Resume[0]);
-        assertArrayEquals(expectedArr, resultArr);
-        assertEquals(3, resultArr.length);
-        List<Resume> experctedList = new ArrayList<>();
-        experctedList.add(RESUME_1);
-        experctedList.add(RESUME_2);
-        experctedList.add(RESUME_3);
-        List<Resume> resultList = storage.getAllSorted();
-        assertEquals(experctedList, resultList);
-        assertEquals(3, resultList.size());
-        experctedList.add(RESUME_4);
-        assertNotEquals(experctedList, resultList);
+        List<Resume> expected = new ArrayList<>();
+        expected.add(RESUME_1);
+        expected.add(RESUME_2);
+        expected.add(RESUME_3);
+        List<Resume> result = storage.getAllSorted();
+        assertEquals(expected, result);
+        assertEquals(3, result.size());
+        expected.add(RESUME_4);
+        assertNotEquals(expected, result);
     }
 
     @Test
