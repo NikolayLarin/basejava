@@ -13,9 +13,4 @@ public class MapResumeStorageTest extends AbstractStorageTest {
     @Test
     public void saveOverflow() {
     }
-
-    @Ignore
-    @Test
-    public void getAll() {
-    }
 }
