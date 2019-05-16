@@ -3,7 +3,7 @@ package ru.javawebinar.basejava.model;
 import java.util.UUID;
 
 /**
- * ru.javawebinar.basejava.model.Resume class
+ * Resume class
  */
 public class Resume {
 
@@ -15,10 +15,6 @@ public class Resume {
     public Resume() {
         this.uuid = UUID.randomUUID().toString();
         this.fullName = UUID.randomUUID().toString();
-    }
-
-    public Resume(String uuid) {
-        this.uuid = uuid;
     }
 
     public Resume(String uuid, String fullName) {
