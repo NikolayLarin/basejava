@@ -3,15 +3,17 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
- * Map based storage for Resumes
+ * Map based storage for Resumes with Resume as a searchKey
  */
 public class MapResumeStorage extends AbstractStorage {
-    protected Map<String, Resume> mapResume = new HashMap<>();
+    private Map<String, Resume> mapResume = new HashMap<>();
 
     @Override
     public int size() {
@@ -43,20 +45,30 @@ public class MapResumeStorage extends AbstractStorage {
         mapResume.remove(searchKey.toString());
     }
 
+    /**
+     * Returns sorted by fullName Resume List
+     */
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> list = new ArrayList<>(mapResume.values());
-        list.sort(RESUME_COMPARATOR);
+        list.sort(Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid));
         return list;
     }
 
     @Override
-    protected String getSearchKey(String uuid) {
-        return uuid;
+    protected Object getSearchKey(String uuid) {
+        Resume r;
+        for (Map.Entry<String, Resume> entry : mapResume.entrySet()) {
+            r = entry.getValue();
+            if (Objects.equals(r.getUuid(), uuid)) {
+                return r;
+            }
+        }
+        return null;
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return mapResume.containsKey(searchKey.toString());
+        return searchKey != null;
     }
 }
