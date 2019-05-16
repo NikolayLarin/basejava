@@ -3,19 +3,15 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
- * Map based storage for Resumes
+ * Map based storage for Resumes with Uuid as a searchKey
  */
-// TODO implement
-// TODO create new MapStorage with search key not uuid
 public class MapUuidStorage extends AbstractStorage {
-    private Map<String, Resume> mapUuid = new HashMap<>();
+    protected Map<String, Resume> mapUuid = new HashMap<>();
 
     @Override
     public int size() {
@@ -29,12 +25,12 @@ public class MapUuidStorage extends AbstractStorage {
 
     @Override
     protected void doUpdate(Resume r, Object searchKey) {
-        mapUuid.put(r.getFullName(), r);
+        mapUuid.put(r.getUuid(), r);
     }
 
     @Override
     protected void doSave(Resume r, Object searchKey) {
-        mapUuid.put(r.getFullName(), r);
+        mapUuid.put(r.getUuid(), r);
     }
 
     @Override
@@ -47,27 +43,23 @@ public class MapUuidStorage extends AbstractStorage {
         mapUuid.remove(searchKey.toString());
     }
 
+    /**
+     * Returns sorted by Uuid Resume List
+     */
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> list = new ArrayList<>(mapUuid.values());
-        list.sort(Comparator.comparing(Resume::getFullName));
+        list.sort(RESUME_COMPARATOR);
         return list;
     }
 
     @Override
     protected String getSearchKey(String uuid) {
-        for (Map.Entry<String, Resume> entry : mapUuid.entrySet()) {
-            Resume r = entry.getValue();
-            if (Objects.equals(r.getUuid(), uuid)) {
-                return r.getFullName();
-            }
-        }
-        return null;
+        return uuid;
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return false;
-//        return mapUuid.containsKey(searchKey.toString());
+        return mapUuid.containsKey(searchKey.toString());
     }
 }
