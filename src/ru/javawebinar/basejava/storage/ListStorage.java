@@ -13,10 +13,12 @@ public class ListStorage extends AbstractStorage {
 
     protected List<Resume> listStorage = new ArrayList<>();
 
+    @Override
     public int size() {
         return listStorage.size();
     }
 
+    @Override
     public void clear() {
         listStorage.clear();
     }
@@ -41,6 +43,7 @@ public class ListStorage extends AbstractStorage {
         listStorage.remove((int) searchKey);
     }
 
+    @Override
     public List<Resume> getAllSorted() {
         listStorage.sort(RESUME_COMPARATOR);
         return listStorage;
