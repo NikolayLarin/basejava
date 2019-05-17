@@ -1,6 +1,6 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.UUID;
+import java.util.Objects;
 
 /**
  * Resume class
@@ -9,13 +9,7 @@ public class Resume {
 
     // Unique identifier
     private final String uuid;
-
     private String fullName;
-
-    public Resume() {
-        this.uuid = UUID.randomUUID().toString();
-        this.fullName = UUID.randomUUID().toString();
-    }
 
     public Resume(String uuid, String fullName) {
         this.uuid = uuid;
@@ -42,7 +36,7 @@ public class Resume {
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        return Objects.hash(this, uuid, fullName);
     }
 
     @Override
