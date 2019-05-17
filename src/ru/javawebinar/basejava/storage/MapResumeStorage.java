@@ -4,7 +4,6 @@ import ru.javawebinar.basejava.model.Resume;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Map based storage for Resumes with Resume as a searchKey
@@ -23,23 +22,24 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Resume r, Object searchKey) {
-        mapResume.put(r.getUuid(), r);
+    protected void doUpdate(Resume resume, Object searchKey) {
+        mapResume.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
-        mapResume.put(r.getUuid(), r);
+    protected void doSave(Resume resume, Object searchKey) {
+        mapResume.put(resume.getUuid(), resume);
     }
 
     @Override
     protected Resume doGet(Object searchKey) {
-        return mapResume.get(searchKey.toString());
+        return (Resume) searchKey;
     }
 
     @Override
     protected void doDelete(Object searchKey) {
-        mapResume.remove(searchKey.toString());
+        Resume resume = (Resume) searchKey;
+        mapResume.remove(resume.getUuid());
     }
 
     /**
@@ -52,14 +52,7 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     protected Object getSearchKey(String uuid) {
-        Resume resume;
-        for (Map.Entry<String, Resume> entry : mapResume.entrySet()) {
-            resume = entry.getValue();
-            if (Objects.equals(resume.getUuid(), uuid)) {
-                return resume;
-            }
-        }
-        return null;
+        return mapResume.get(uuid);
     }
 
     @Override
