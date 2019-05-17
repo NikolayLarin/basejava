@@ -2,20 +2,10 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Unsorted array based storage implementation for Resumes
  */
 public class ArrayStorage extends AbstractArrayStorage {
-
-    @Override
-    public List<Resume> getAllSorted() {
-        Arrays.sort(storage, 0, size, RESUME_COMPARATOR);
-        return new ArrayList<>(Arrays.asList(Arrays.copyOf(storage, size)));
-    }
 
     @Override
     protected void insertElement(Resume resume, int index) {
