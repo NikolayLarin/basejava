@@ -24,13 +24,13 @@ public class MapUuidStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Resume r, Object searchKey) {
-        mapUuid.put(r.getUuid(), r);
+    protected void doUpdate(Resume resume, Object searchKey) {
+        mapUuid.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
-        mapUuid.put(r.getUuid(), r);
+    protected void doSave(Resume resume, Object searchKey) {
+        mapUuid.put(resume.getUuid(), resume);
     }
 
     @Override

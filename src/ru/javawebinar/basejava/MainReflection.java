@@ -8,25 +8,25 @@ import java.lang.reflect.Method;
 
 public class MainReflection {
     public static void main(String[] args) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        Resume r = new Resume();
-        System.out.println(r);
-        System.out.println(r.getClass());
-        System.out.println(r.getClass().getDeclaredFields()[0] + "\n--------------------");
-        Field field = r.getClass().getDeclaredFields()[0];
+        Resume resume = new Resume("uuid_1", "name1");
+        System.out.println(resume);
+        System.out.println(resume.getClass());
+        System.out.println(resume.getClass().getDeclaredFields()[0] + "\n--------------------");
+        Field field = resume.getClass().getDeclaredFields()[0];
         field.setAccessible(true);
         System.out.println(field.getName());
-        System.out.println(field.get(r));
-        field.set(r, "new_uuid1");
-        System.out.println(r + "\n--------------------");
+        System.out.println(field.get(resume));
+        field.set(resume, "new_uuid1");
+        System.out.println(resume + "\n--------------------");
 
         /*
          * First implementation toString() method via invoke reflection at Resume class
          */
-        field.set(r, "new_uuid2");
-        int totalMethodsNumbers = r.getClass().getDeclaredMethods().length;
+        field.set(resume, "new_uuid2");
+        int totalMethodsNumbers = resume.getClass().getDeclaredMethods().length;
         int toStringKey = -1;
         for (int i = 0; i < totalMethodsNumbers; i++) {
-            String str = r.getClass().getDeclaredMethods()[i].toString();
+            String str = resume.getClass().getDeclaredMethods()[i].toString();
             if (str.contains("toString()")) {
                 toStringKey = i;
             }
@@ -36,20 +36,20 @@ public class MainReflection {
         } else {
             System.out.println("toString() method found in Resume class with index =" + " " + toStringKey);
         }
-        System.out.println(r.getClass().getDeclaredMethods()[toStringKey].invoke(r) + "\n--------------------");
+        System.out.println(resume.getClass().getDeclaredMethods()[toStringKey].invoke(resume) + "\n--------------------");
 
         /*
          * Second implementation toString() method via invoke reflection at Resume class
          */
-        Method toString = r.getClass().getDeclaredMethod("toString");
-        System.out.println(toString.invoke(r) + "\n--------------------");
+        Method toString = resume.getClass().getDeclaredMethod("toString");
+        System.out.println(toString.invoke(resume) + "\n--------------------");
 
         /*
          * Implementation toString() method via invoke reflection at Resume class by G.Kislin
          */
-        Class<? extends Resume> resumeClass = r.getClass();
+        Class<? extends Resume> resumeClass = resume.getClass();
         Method method = resumeClass.getMethod("toString");
-        Object result = method.invoke(r);
+        Object result = method.invoke(resume);
         System.out.println(result + "\n--------------------");
     }
 }

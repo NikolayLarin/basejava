@@ -33,22 +33,22 @@ public class MainCollections {
         collection.add(RESUME_2);
         collection.add(RESUME_3);
 
-        for (Resume r : collection) {
-            System.out.println(r);
-            if (Objects.equals(r.getUuid(), UUID_1)) {
-//                collection.remove(r);
+        for (Resume resume : collection) {
+            System.out.println(resume);
+            if (Objects.equals(resume.getUuid(), UUID_1)) {
+//                collection.remove(resume);
             }
         }
         System.out.println("---------------");
 
         Iterator<Resume> iterator = collection.iterator();
         while (iterator.hasNext()) {
-            Resume r = iterator.next();
-            if (Objects.equals(r.getUuid(), UUID_1)) {
+            Resume resume = iterator.next();
+            if (Objects.equals(resume.getUuid(), UUID_1)) {
                 iterator.remove();
-                System.out.println(r);
+                System.out.println(resume);
             }
-            System.out.println(r);
+            System.out.println(resume);
         }
         System.out.println(collection.toString());
         System.out.println("---------------");

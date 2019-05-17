@@ -57,11 +57,11 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     protected Object getSearchKey(String uuid) {
-        Resume r;
+        Resume resume;
         for (Map.Entry<String, Resume> entry : mapResume.entrySet()) {
-            r = entry.getValue();
-            if (Objects.equals(r.getUuid(), uuid)) {
-                return r;
+            resume = entry.getValue();
+            if (Objects.equals(resume.getUuid(), uuid)) {
+                return resume;
             }
         }
         return null;

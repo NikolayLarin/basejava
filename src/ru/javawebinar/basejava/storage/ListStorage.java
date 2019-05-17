@@ -27,8 +27,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doSave(Resume r, Object searchKey) {
-        listStorage.add(r);
+    protected void doSave(Resume resume, Object searchKey) {
+        listStorage.add(resume);
     }
 
     @Override
@@ -49,8 +49,8 @@ public class ListStorage extends AbstractStorage {
     @Override
     protected Integer getSearchKey(String uuid) {
         int index = 0;
-        for (Resume r : listStorage) {
-            if (Objects.equals(r.getUuid(), uuid)) {
+        for (Resume resume : listStorage) {
+            if (Objects.equals(resume.getUuid(), uuid)) {
                 return index;
             }
             index++;
