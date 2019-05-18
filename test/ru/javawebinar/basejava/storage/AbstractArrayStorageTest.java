@@ -4,8 +4,6 @@ import org.junit.Test;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.UUID;
-
 import static org.junit.Assert.fail;
 
 public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
@@ -20,7 +18,7 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
         int i = 0;
         try {
             for (i = 0; i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-                storage.save(new Resume(randomUUID(), "name"));
+                storage.save(new Resume("name"));
             }
         } catch (StorageException e) {
             fail("RuntimeException: storage overflow in AbstractArrayStorage, " +
@@ -28,9 +26,5 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
         }
         assertSize(AbstractArrayStorage.STORAGE_LIMIT);
         storage.save(RESUME_4);
-    }
-
-    private String randomUUID() {
-        return UUID.randomUUID().toString();
     }
 }
