@@ -2,11 +2,13 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Map based storage for Resumes with Resume as a searchKey
+ * Map based storage for Resumes with Resume as a searchKey for searching Resume in collection.
  */
 public class MapResumeStorage extends AbstractStorage {
     private Map<String, Resume> mapResume = new HashMap<>();
@@ -42,12 +44,9 @@ public class MapResumeStorage extends AbstractStorage {
         mapResume.remove(resume.getUuid());
     }
 
-    /**
-     * Returns sorted by fullName Resume List
-     */
     @Override
-    public Resume[] getAll() {
-        return mapResume.values().toArray(new Resume[0]);
+    public List<Resume> getAll() {
+        return new ArrayList<>(mapResume.values());
     }
 
     @Override
