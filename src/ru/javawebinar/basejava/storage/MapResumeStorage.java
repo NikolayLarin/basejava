@@ -5,25 +5,35 @@ import ru.javawebinar.basejava.model.Resume;
 /**
  * Map based storage for Resumes with Resume as a searchKey for searching Resume in collection.
  */
-public class MapResumeStorage extends AbstractMapStorage {
+public class MapResumeStorage extends AbstractMapStorage<Resume> {
 
     @Override
-    protected Resume doGet(Object resume) {
-        return (Resume) resume;
+    protected Resume doGet(Resume resume) {
+        return resume;
     }
 
     @Override
-    protected void doDelete(Object resume) {
-        map.remove(((Resume) resume).getUuid());
+    protected void doUpdate(Resume resume, Resume searchKey) {
+        map.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected void doSave(Resume resume, Resume searchKey) {
+        map.put(resume.getUuid(), resume);
+    }
+
+    @Override
+    protected void doDelete(Resume resume) {
+        map.remove(resume.getUuid());
+    }
+
+    @Override
+    protected Resume getSearchKey(String uuid) {
         return map.get(uuid);
     }
 
     @Override
-    protected boolean isExist(Object resume) {
+    protected boolean isExist(Resume resume) {
         return resume != null;
     }
 }
