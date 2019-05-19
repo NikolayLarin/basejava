@@ -8,8 +8,8 @@ import ru.javawebinar.basejava.model.Resume;
 public class MapResumeStorage extends AbstractMapStorage<Resume> {
 
     @Override
-    protected Resume doGet(Resume resume) {
-        return resume;
+    protected Resume doGet(Resume searchKey) {
+        return searchKey;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class MapResumeStorage extends AbstractMapStorage<Resume> {
     }
 
     @Override
-    protected boolean isExist(Resume resume) {
-        return resume != null;
+    protected boolean isExist(Resume searchKey) {
+        return searchKey != null;
     }
 }

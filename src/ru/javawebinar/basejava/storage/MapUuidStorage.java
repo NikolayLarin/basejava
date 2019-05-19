@@ -8,18 +8,18 @@ import ru.javawebinar.basejava.model.Resume;
 public class MapUuidStorage extends AbstractMapStorage<String> {
 
     @Override
-    protected Resume doGet(String uuid) {
-        return map.get(uuid);
+    protected Resume doGet(String searchKey) {
+        return map.get(searchKey);
     }
 
     @Override
-    protected void doUpdate(Resume resume, String uuid) {
-        map.put(uuid, resume);
+    protected void doUpdate(Resume resume, String searchKey) {
+        map.put(searchKey, resume);
     }
 
     @Override
-    protected void doSave(Resume resume, String uuid) {
-        map.put(uuid, resume);
+    protected void doSave(Resume resume, String searchKey) {
+        map.put(searchKey, resume);
     }
 
     @Override
