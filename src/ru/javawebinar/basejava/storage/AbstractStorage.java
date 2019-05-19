@@ -4,13 +4,10 @@ import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
-
-    protected final static Comparator<Resume> RESUME_COMPARATOR =
-            Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
     protected abstract Object getSearchKey(String uuid);
 
@@ -50,10 +47,13 @@ public abstract class AbstractStorage implements Storage {
         doDelete(searchKey);
     }
 
+    /**
+     * Returns Resumes list sorted firstly by fullName then by UUID
+     */
     @Override
     public List<Resume> getAllSorted() {
         List<Resume> list = doCopyAll();
-        list.sort(RESUME_COMPARATOR);
+        Collections.sort(list);
         return list;
     }
 
