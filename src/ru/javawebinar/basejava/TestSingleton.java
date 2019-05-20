@@ -1,5 +1,7 @@
 package ru.javawebinar.basejava;
 
+import ru.javawebinar.basejava.model.SectionType;
+
 public class TestSingleton {
     private static TestSingleton instance;
 
@@ -18,6 +20,9 @@ public class TestSingleton {
         Singleton instance = Singleton.valueOf("INSTANCE");
         System.out.println(instance.name() + "  " + instance.toString()
                 + "  " + instance + "  ordinal: " + instance.ordinal());
+        for (SectionType type : SectionType.values()) {
+            System.out.println(type + ": " + type.getTitle());
+        }
     }
 
     public enum Singleton {
