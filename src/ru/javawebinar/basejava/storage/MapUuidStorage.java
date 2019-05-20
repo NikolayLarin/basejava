@@ -5,16 +5,16 @@ import ru.javawebinar.basejava.model.Resume;
 /**
  * Map based storage for Resumes with Uuid as a searchKey for searching Resume in collection.
  */
-public class MapUuidStorage extends AbstractMapStorage {
+public class MapUuidStorage extends AbstractMapStorage<String> {
 
     @Override
-    protected Resume doGet(Object uuid) {
-        return map.get(uuid.toString());
+    protected Resume doGet(String searchKey) {
+        return map.get(searchKey);
     }
 
     @Override
-    protected void doDelete(Object uuid) {
-        map.remove(uuid.toString());
+    protected void doDelete(String uuid) {
+        map.remove(uuid);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class MapUuidStorage extends AbstractMapStorage {
     }
 
     @Override
-    protected boolean isExist(Object uuid) {
-        return map.containsKey(uuid.toString());
+    protected boolean isExist(String uuid) {
+        return map.containsKey(uuid);
     }
 }

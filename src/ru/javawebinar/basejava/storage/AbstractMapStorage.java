@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Map based storage for Resumes.
  */
-public abstract class AbstractMapStorage extends AbstractStorage {
+public abstract class AbstractMapStorage<SK> extends AbstractStorage<SK> {
     protected Map<String, Resume> map = new HashMap<>();
 
     @Override
@@ -24,12 +24,12 @@ public abstract class AbstractMapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Resume resume, Object searchKey) {
+    protected void doUpdate(Resume resume, SK searchKey) {
         doPut(resume);
     }
 
     @Override
-    protected void doSave(Resume resume, Object searchKey) {
+    protected void doSave(Resume resume, SK searchKey) {
         doPut(resume);
     }
 
@@ -41,5 +41,4 @@ public abstract class AbstractMapStorage extends AbstractStorage {
     private void doPut(Resume resume) {
         map.put(resume.getUuid(), resume);
     }
-
 }
