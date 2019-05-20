@@ -13,16 +13,6 @@ public class MapUuidStorage extends AbstractMapStorage<String> {
     }
 
     @Override
-    protected void doUpdate(Resume resume, String searchKey) {
-        map.put(searchKey, resume);
-    }
-
-    @Override
-    protected void doSave(Resume resume, String searchKey) {
-        map.put(searchKey, resume);
-    }
-
-    @Override
     protected void doDelete(String uuid) {
         map.remove(uuid);
     }
