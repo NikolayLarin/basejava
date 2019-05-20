@@ -25,16 +25,21 @@ public abstract class AbstractMapStorage extends AbstractStorage {
 
     @Override
     protected void doUpdate(Resume resume, Object searchKey) {
-        map.put(resume.getUuid(), resume);
+        doPut(resume);
     }
 
     @Override
     protected void doSave(Resume resume, Object searchKey) {
-        map.put(resume.getUuid(), resume);
+        doPut(resume);
     }
 
     @Override
     public List<Resume> doCopyAll() {
         return new ArrayList<>(map.values());
     }
+
+    private void doPut(Resume resume) {
+        map.put(resume.getUuid(), resume);
+    }
+
 }
