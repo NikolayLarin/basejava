@@ -1,5 +1,7 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -54,5 +56,47 @@ public class Resume implements Comparable<Resume> {
     public int compareTo(Resume o) {
         int cmp = fullName.compareTo(o.getFullName());
         return cmp != 0 ? cmp : uuid.compareTo(o.getUuid());
+    }
+
+    private class Contacts {
+        private Map<ContactType, String> contacts = new HashMap<>();
+
+        public void setName(String name) {
+            contacts.put(ContactType.NAME, name);
+        }
+
+        public String getName() {
+            return contacts.get(ContactType.NAME);
+        }
+    }
+
+    private enum ContactType {
+        NAME,
+        SURNAME,
+        ADDRESS,
+        EMAIL;
+    }
+
+    private class Sections {
+        private Map<SectionType, String> sections = new HashMap<>();
+    }
+
+    private enum SectionType {
+        PERSONAL("Личные качества"),
+        OBJECTIVE("Позиция"),
+        ACHIEVEMENT("Достижения"),
+        QUALIFICATIONS("Квалификация"),
+        EXPERIENCE("Опыт работы"),
+        EDUCATION("Образование");
+
+        private String title;
+
+        SectionType(String title) {
+            this.title = title;
+        }
+
+        public String getTitle() {
+            return title;
+        }
     }
 }
