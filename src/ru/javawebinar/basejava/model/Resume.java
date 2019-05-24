@@ -1,8 +1,5 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,9 +11,9 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private String fullName;
-    protected Contacts contacts = new Contacts();
-    protected StringSections stringSections = new StringSections();
-    protected ListSections listSections = new ListSections();
+    protected ContactSection contacts = new ContactSection();
+    protected StringSection stringSections = new StringSection();
+    protected ListSection listSections = new ListSection();
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
