@@ -11,18 +11,18 @@ public class ResumeTestData {
 
         Resume testResume = new Resume("Григорий Кислин");
 
-        testResume.contacts.setPhone(data.phone);
-        testResume.contacts.setSkype(data.skype);
-        testResume.contacts.setEmail(data.email);
-        testResume.contacts.setLinkedin(data.linkedin);
-        testResume.contacts.setGitHub(data.gitHub);
-        testResume.contacts.setStackOverflow(data.stackOverflow);
-        testResume.contacts.setSite(data.site);
-
-        for (EnumMap.Entry<ContactType, String> entry : testResume.contacts.getMap().entrySet()) {
-            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
-        }
-        printLine();
+        testResume.setContacts(ContactType.PHONE, data.phone);
+//        testResume.contacts.setContact(data.skype);
+//        testResume.contacts.setContact(data.email);
+//        testResume.contacts.setContact(data.linkedin);
+//        testResume.contacts.setContact(data.gitHub);
+//        testResume.contacts.setContact(data.stackOverflow);
+//        testResume.contacts.setContact(data.site);
+//
+//        for (EnumMap.Entry<ContactType, ContactSection> entry : testResume.contactsMap.entrySet()) {
+//            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
+//        }
+//        printLine();
 
         testResume.stringSections.setObjective(data.objective);
         testResume.stringSections.setPersonal(data.personal);
