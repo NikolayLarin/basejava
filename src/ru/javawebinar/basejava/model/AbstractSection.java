@@ -1,34 +1,14 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.EnumMap;
-
 abstract class AbstractSection<T> {
 
-    EnumMap<SectionType, T> map = new EnumMap<>(SectionType.class);
+    private T element;
 
-    void setObjective(T objective) {
-        map.put(SectionType.OBJECTIVE, objective);
+    public AbstractSection(T element) {
+        this.element = element;
     }
 
-    void setPersonal(T personal) {
-        map.put(SectionType.PERSONAL, personal);
+    public T getElement() {
+        return element;
     }
-
-    void setAchievements(T achievements) {
-        map.put(SectionType.ACHIEVEMENT, achievements);
-    }
-
-    void setQualifications(T qualifications) {
-        map.put(SectionType.QUALIFICATIONS, qualifications);
-    }
-
-    void setEducations(T educations) {
-        map.put(SectionType.EDUCATION, educations);
-    }
-
-
-    EnumMap<SectionType, T> getMap() {
-        return map;
-    }
-
 }

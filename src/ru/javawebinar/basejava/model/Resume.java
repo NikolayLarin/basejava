@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Objects;
 import java.util.UUID;
@@ -12,14 +13,8 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private String fullName;
-    protected ContactSection contacts = new ContactSection();
-    protected StringSection stringSections = new StringSection();
-    protected ListSection listSections = new ListSection();
-    EnumMap<ContactType, String> contactsMap = new EnumMap<>(ContactType.class);
-
-    public void setContacts(ContactType contactType, String contact) {
-        this.contactsMap.put(contactType, contact);
-    }
+    private EnumMap<ContactType, ContactSection> contactsMap = new EnumMap<>(ContactType.class);
+    private EnumMap<SectionType, AbstractSection> sectionsMap = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -30,6 +25,35 @@ public class Resume implements Comparable<Resume> {
         Objects.requireNonNull(fullName, "fullName can't be null");
         this.uuid = uuid;
         this.fullName = fullName;
+    }
+
+    public void setContact(ContactType contactType, String contact) {
+        ContactSection contactSection = new ContactSection(contact);
+        this.contactsMap.put(contactType, contactSection);
+    }
+
+    public void setSection(SectionType sectionType, String element) {
+        StringSection stringSection = new StringSection(element);
+        this.sectionsMap.put(sectionType, stringSection);
+    }
+
+    public void setSection(SectionType sectionType, ArrayList<String> element) {
+        ListSection listSection = new ListSection(element);
+        this.sectionsMap.put(sectionType, listSection);
+    }
+
+    public void setSection(SectionType sectionType, String title,
+                           String period, String position, ArrayList<String> description) {
+        ObjectSection objectSection = new ObjectSection(title, period, position, description);
+        this.sectionsMap.put(sectionType, objectSection);
+    }
+
+    public EnumMap<ContactType, ContactSection> getContactsMap() {
+        return new EnumMap<>(contactsMap);
+    }
+
+    public EnumMap<SectionType, AbstractSection> getSectionsMap() {
+        return new EnumMap<>(sectionsMap);
     }
 
     public String getUuid() {

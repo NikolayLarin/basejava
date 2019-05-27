@@ -11,37 +11,39 @@ public class ResumeTestData {
 
         Resume testResume = new Resume("Григорий Кислин");
 
-        testResume.setContacts(ContactType.PHONE, data.phone);
-//        testResume.contacts.setContact(data.skype);
-//        testResume.contacts.setContact(data.email);
-//        testResume.contacts.setContact(data.linkedin);
-//        testResume.contacts.setContact(data.gitHub);
-//        testResume.contacts.setContact(data.stackOverflow);
-//        testResume.contacts.setContact(data.site);
-//
-//        for (EnumMap.Entry<ContactType, ContactSection> entry : testResume.contactsMap.entrySet()) {
-//            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
-//        }
-//        printLine();
+        testResume.setContact(ContactType.PHONE, data.phone);
+        testResume.setContact(ContactType.SKYPE, data.skype);
+        testResume.setContact(ContactType.EMAIL, data.email);
+        testResume.setContact(ContactType.LINKEDIN, data.linkedin);
+        testResume.setContact(ContactType.GITHUB, data.gitHub);
+        testResume.setContact(ContactType.STACKOVERFLOW, data.stackOverflow);
+        testResume.setContact(ContactType.SITE, data.site);
 
-        testResume.stringSections.setObjective(data.objective);
-        testResume.stringSections.setPersonal(data.personal);
-        for (EnumMap.Entry<SectionType, String> entry : testResume.stringSections.getMap().entrySet()) {
-            System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue());
-            printLine();
+        for (EnumMap.Entry<ContactType, ContactSection> entry : testResume.getContactsMap().entrySet()) {
+            System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
         }
+        printLine();
 
+        testResume.setSection(SectionType.OBJECTIVE, data.objective);
+        testResume.setSection(SectionType.PERSONAL, data.personal);
         ArrayList<String> achievements = new ArrayList<>(Arrays.asList(data.getAchievements()));
-        testResume.listSections.setAchievements(achievements);
         ArrayList<String> qualifications = new ArrayList<>(Arrays.asList(data.getQualifications()));
-        testResume.listSections.setQualifications(qualifications);
-        for (EnumMap.Entry<SectionType, ArrayList<String>> entry : testResume.listSections.getMap().entrySet()) {
-            System.out.println(entry.getKey().getTitle() + ": ");
-            for (int i = 0; i < entry.getValue().size(); i++) {
-                System.out.println(dot() + entry.getValue().get(i));
+        testResume.setSection(SectionType.ACHIEVEMENT, achievements);
+        testResume.setSection(SectionType.QUALIFICATIONS, qualifications);
+//        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
+//            System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue().getElement());
+//            printLine();
+//        }
+
+        for (EnumMap.Entry<SectionType, AbstractSection> entryTitles : testResume.getSectionsMap().entrySet()) {
+            System.out.println(entryTitles.getKey().getTitle() + ": ");
+            for (EnumMap.Entry<SectionType, AbstractSection> entryVolumes : testResume.getSectionsMap().entrySet()) {
+                System.out.println(dot() + entryVolumes.getValue().getElement());
             }
         }
         printLine();
+
+
     }
 
     private static void printLine() {
@@ -116,6 +118,20 @@ public class ResumeTestData {
                     "архитектурных шаблонов, UML, функционального программирования";
             qualification[11] = "Родной русский, английский \"upper intermediate\"";
             return qualification;
+        }
+
+        void experience_1() {
+            String element = "Java Online Projects";
+            String period = "10/2013 - Сейчас";
+            String position = "Автор проекта";
+            ArrayList<String> description = new ArrayList<>();
+            description.add("Создание, организация и проведение Java онлайн проектов и стажировок");
+        }
+
+        void education_1() {
+            String element = "Coursera";
+            String period = "03/2013 - 05/2013";
+            String position = "\"Functional Programming Principles in Scala\" by Martin Odersky";
         }
     }
 }

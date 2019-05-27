@@ -2,20 +2,16 @@ package ru.javawebinar.basejava.model;
 
 
 public class ContactSection {
-    private ContactType contact;
+    private String contact;
 
-    public ContactType getContact() {
-        return contact;
-    }
-
-    public void setContact(ContactType contact) {
+    public ContactSection(String contact) {
         this.contact = contact;
     }
 
-//    @Override
-//    public ContactType toString() {
-//        return contact;
-//    }
+    @Override
+    public String toString() {
+        return contact;
+    }
 }
 
 
