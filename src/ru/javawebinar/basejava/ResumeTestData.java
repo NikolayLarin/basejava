@@ -1,4 +1,10 @@
-package ru.javawebinar.basejava.model;
+package ru.javawebinar.basejava;
+
+import ru.javawebinar.basejava.model.AbstractSection;
+import ru.javawebinar.basejava.model.ContactSection;
+import ru.javawebinar.basejava.model.ContactType;
+import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.SectionType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +12,6 @@ import java.util.EnumMap;
 
 public class ResumeTestData {
     public static void main(String[] args) {
-
         ResumeTestData.ResumeData data = new ResumeTestData().new ResumeData();
 
         Resume testResume = new Resume("Григорий Кислин");
@@ -28,20 +33,30 @@ public class ResumeTestData {
         testResume.setSection(SectionType.PERSONAL, data.personal);
         ArrayList<String> achievements = new ArrayList<>(Arrays.asList(data.getAchievements()));
         ArrayList<String> qualifications = new ArrayList<>(Arrays.asList(data.getQualifications()));
+
         testResume.setSection(SectionType.ACHIEVEMENT, achievements);
         testResume.setSection(SectionType.QUALIFICATIONS, qualifications);
-//        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
-//            System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue().getElement());
-//            printLine();
-//        }
 
-        for (EnumMap.Entry<SectionType, AbstractSection> entryTitles : testResume.getSectionsMap().entrySet()) {
-            System.out.println(entryTitles.getKey().getTitle() + ": ");
-            for (EnumMap.Entry<SectionType, AbstractSection> entryVolumes : testResume.getSectionsMap().entrySet()) {
-                System.out.println(dot() + entryVolumes.getValue().getElement());
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
+            boolean isStringSection = entry.getKey().name().equals("OBJECTIVE") || entry.getKey().name().equals("PERSONAL");
+            if (isStringSection) {
+                System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue().getElement());
+                printLine();
             }
         }
-        printLine();
+
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
+            boolean isListSection = entry.getKey().name().equals("ACHIEVEMENT") || entry.getKey().name().equals("QUALIFICATIONS");
+            if (isListSection) {
+                System.out.println(entry.getKey().getTitle() + ": ");
+                ArrayList<String> arr = (ArrayList<String>) entry.getValue().getElement();
+                for (String s : arr) {
+                    System.out.println(dot() + s);
+                }
+                printLine();
+            }
+        }
+//        printLine();
 
 
     }

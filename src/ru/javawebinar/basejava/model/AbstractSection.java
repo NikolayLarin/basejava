@@ -1,7 +1,6 @@
 package ru.javawebinar.basejava.model;
 
-abstract class AbstractSection<T> {
-
+public abstract class AbstractSection<T> {
     private T element;
 
     public AbstractSection(T element) {

@@ -42,12 +42,6 @@ public class Resume implements Comparable<Resume> {
         this.sectionsMap.put(sectionType, listSection);
     }
 
-    public void setSection(SectionType sectionType, String title,
-                           String period, String position, ArrayList<String> description) {
-        ObjectSection objectSection = new ObjectSection(title, period, position, description);
-        this.sectionsMap.put(sectionType, objectSection);
-    }
-
     public EnumMap<ContactType, ContactSection> getContactsMap() {
         return new EnumMap<>(contactsMap);
     }
@@ -69,13 +63,15 @@ public class Resume implements Comparable<Resume> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return Objects.equals(uuid, resume.uuid) &&
-                Objects.equals(fullName, resume.fullName);
+        return uuid.equals(resume.uuid) &&
+                fullName.equals(resume.fullName) &&
+                contactsMap.equals(resume.contactsMap) &&
+                sectionsMap.equals(resume.sectionsMap);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName);
+        return Objects.hash(uuid, fullName, contactsMap, sectionsMap);
     }
 
     @Override
