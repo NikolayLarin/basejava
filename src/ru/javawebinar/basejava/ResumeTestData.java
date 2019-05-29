@@ -2,18 +2,21 @@ package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.AboutMeSection;
 import ru.javawebinar.basejava.model.AbstractSection;
+import ru.javawebinar.basejava.model.Career;
+import ru.javawebinar.basejava.model.CareerSection;
 import ru.javawebinar.basejava.model.ContactSection;
 import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.model.SectionType;
 import ru.javawebinar.basejava.model.SkillsSection;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumMap;
 
 /**
- * This class tests input and output in Resume Sections.
+ * This class tests input in and output out in Resume Sections.
  * Input data described in inner ResumeData class.
  */
 public class ResumeTestData {
@@ -21,7 +24,11 @@ public class ResumeTestData {
         ResumeTestData.ResumeData data = new ResumeTestData().new ResumeData();
 
         Resume testResume = new Resume("Григорий Кислин");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/YYYY");
 
+        /**
+         * It's a input block in Resume Sections
+         */
         testResume.setContact(ContactType.PHONE, data.phone);
         testResume.setContact(ContactType.SKYPE, data.skype);
         testResume.setContact(ContactType.EMAIL, data.email);
@@ -37,11 +44,15 @@ public class ResumeTestData {
 
         testResume.setSection(SectionType.OBJECTIVE, data.objective);
         testResume.setSection(SectionType.PERSONAL, data.personal);
-        ArrayList<String> achievements = new ArrayList<>(Arrays.asList(data.getAchievements()));
-        ArrayList<String> qualifications = new ArrayList<>(Arrays.asList(data.getQualifications()));
+        ArrayList<String> achievements = data.getAchievements();
+        ArrayList<String> qualifications = data.getQualifications();
 
         testResume.setSection(SectionType.ACHIEVEMENT, achievements);
         testResume.setSection(SectionType.QUALIFICATIONS, qualifications);
+
+        testResume.setSection(SectionType.EXPERIENCE, data.getExperience_1());
+        testResume.setSection(SectionType.EXPERIENCE, data.getExperience_2());
+        testResume.setSection(SectionType.EDUCATION, data.getEducation_1());
 
         /**
          * First kind of data output from Sections in Resume
@@ -67,15 +78,29 @@ public class ResumeTestData {
         }
         printLine();
 
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
+            boolean isCareerSection = entry.getKey().name().equals("EXPERIENCE") || entry.getKey().name().equals("EDUCATION");
+            if (isCareerSection) {
+                System.out.println(entry.getKey().getTitle() + ":");
+                CareerSection careerSection = (CareerSection) entry.getValue();
+                System.out.println(careerSection.getElement().getTitle() + "\n" +
+                        careerSection.getElement().getStartDate().format(formatter) + " - " +
+                        careerSection.getElement().getEndDate().format(formatter) + "\n" +
+                        careerSection.getElement().getPosition() + "\n" +
+                        careerSection.getElement().getDescription());
+                printLine();
+            }
+        }
+
         /**
          * Second kind of data output from Sections in Resume
          */
-        for (EnumMap.Entry<SectionType, AboutMeSection> entry : testResume.getStringSectionMap().entrySet()) {
+        for (EnumMap.Entry<SectionType, AboutMeSection> entry : testResume.getAboutMeSectionMap().entrySet()) {
             System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue().getElement());
             printLine();
         }
 
-        for (EnumMap.Entry<SectionType, SkillsSection> entry : testResume.getListSectionMap().entrySet()) {
+        for (EnumMap.Entry<SectionType, SkillsSection> entry : testResume.getSkillsSectionMap().entrySet()) {
             System.out.println(entry.getKey().getTitle() + ": ");
             for (String str : entry.getValue().getElement()) {
                 System.out.println(dot() + str);
@@ -107,69 +132,84 @@ public class ResumeTestData {
         String personal = "Аналитический склад ума, сильная логика, креативность, " +
                 "инициативность. Пурист кода и архитектуры.";
 
-        String[] getAchievements() {
-            String[] achievement = new String[6];
-            achievement[0] = "С 2013 года: разработка проектов " +
+        ArrayList<String> getAchievements() {
+            ArrayList<String> achievement = new ArrayList<>();
+            achievement.add("С 2013 года: разработка проектов " +
                     "\"Разработка Web приложения\",\"Java Enterprise\", " +
                     "\"Многомодульный maven. Многопоточность. XML (JAXB/StAX). " +
                     "Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)\". Организация " +
-                    "онлайн стажировок и ведение проектов. Более 1000 выпускников.";
-            achievement[1] = "Реализация двухфакторной аутентификации для онлайн платформы " +
+                    "онлайн стажировок и ведение проектов. Более 1000 выпускников.");
+            achievement.add("Реализация двухфакторной аутентификации для онлайн платформы " +
                     "управления проектами Wrike. Интеграция с Twilio, DuoSecurity, " +
-                    "Google Authenticator, Jira, Zendesk.";
-            achievement[2] = "Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. " +
+                    "Google Authenticator, Jira, Zendesk.");
+            achievement.add("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. " +
                     "Интеграция с 1С, Bonita BPM, CMIS, LDAP. " +
                     "Разработка приложения управления окружением на стеке: Scala/Play/Anorm/JQuery. " +
-                    "Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.";
-            achievement[3] = "Реализация c нуля Rich Internet Application приложения на стеке технологий JPA, " +
-                    "Spring, Spring-MVC, GWT, ExtGWT (GXT), Commet, HTML5, Highstock для алгоритмического трейдинга. ";
-            achievement[4] = "Создание JavaEE фреймворка для отказоустойчивого взаимодействия слабо-связанных сервисов " +
+                    "Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
+            achievement.add("Реализация c нуля Rich Internet Application приложения на стеке технологий JPA, " +
+                    "Spring, Spring-MVC, GWT, ExtGWT (GXT), Commet, HTML5, Highstock для алгоритмического трейдинга.");
+            achievement.add("Создание JavaEE фреймворка для отказоустойчивого взаимодействия слабо-связанных сервисов " +
                     "SOA-base архитектура, JAX-WS, JMS, AS Glassfish). Сбор статистики сервисов и информации о состоянии " +
                     "через систему мониторинга Nagios. Реализация онлайн клиента для администрирования " +
-                    "и мониторинга системы по JMX (Jython/ Django).";
-            achievement[5] = "Реализация протоколов по приему платежей всех основных платежных системы России " +
-                    "(Cyberplat, Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.";
+                    "и мониторинга системы по JMX (Jython/ Django).");
+            achievement.add("Реализация протоколов по приему платежей всех основных платежных системы России " +
+                    "(Cyberplat, Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
             return achievement;
         }
 
-        String[] getQualifications() {
-            String[] qualification = new String[12];
-            qualification[0] = "JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2";
-            qualification[1] = "Version control: Subversion, Git, Mercury, ClearCase, Perforce";
-            qualification[2] = "DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, " +
-                    "MySQL, SQLite, MS SQL, HSQLDB ";
-            qualification[3] = "Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy, " +
-                    "XML/XSD/XSLT, SQL, C/C++, Unix shell scripts";
-            qualification[4] = "Java Frameworks: Java 8 (Time API, Streams), Guava, Java Executor, MyBatis, " +
+        ArrayList<String> getQualifications() {
+            ArrayList<String> qualification = new ArrayList<>();
+            qualification.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
+            qualification.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
+            qualification.add("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle, " +
+                    "MySQL, SQLite, MS SQL, HSQLDB ");
+            qualification.add("Languages: Java, Scala, Python/Jython/PL-Python, JavaScript, Groovy, " +
+                    "XML/XSD/XSLT, SQL, C/C++, Unix shell scripts");
+            qualification.add("Java Frameworks: Java 8 (Time API, Streams), Guava, Java Executor, MyBatis, " +
                     "Spring (MVC, Security, Data, Clouds, Boot), JPA (Hibernate, EclipseLink), Guice, GWT(SmartGWT, " +
-                    "ExtGWT/GXT), Vaadin, Jasperreports, Apache Commons, Eclipse SWT, JUnit, Selenium (htmlelements)";
-            qualification[5] = "Python: Django";
-            qualification[6] = "JavaScript: jQuery, ExtJS, Bootstrap.js, underscore.js";
-            qualification[7] = "Scala: SBT, Play2, Specs2, Anorm, Spray, Akka";
-            qualification[8] = "Технологии: Servlet, JSP/JSTL, JAX-WS, REST, EJB, RMI, JMS, JavaMail, JAXB, " +
+                    "ExtGWT/GXT), Vaadin, Jasperreports, Apache Commons, Eclipse SWT, JUnit, Selenium (htmlelements)");
+            qualification.add("Python: Django");
+            qualification.add("JavaScript: jQuery, ExtJS, Bootstrap.js, underscore.js");
+            qualification.add("Scala: SBT, Play2, Specs2, Anorm, Spray, Akka");
+            qualification.add("Технологии: Servlet, JSP/JSTL, JAX-WS, REST, EJB, RMI, JMS, JavaMail, JAXB, " +
                     "StAX, SAX, DOM, XSLT, MDB, JMX, JDBC, JPA, JNDI, JAAS, SOAP, AJAX, Commet, HTML5, ESB, CMIS, " +
-                    "BPMN2, LDAP, OAuth1, OAuth2, JWT";
-            qualification[9] = "Инструменты: Maven + plugin development, Gradle, настройка Ngnix, " +
+                    "BPMN2, LDAP, OAuth1, OAuth2, JWT");
+            qualification.add("Инструменты: Maven + plugin development, Gradle, настройка Ngnix, " +
                     "администрирование Hudson/Jenkins, Ant + custom task, SoapUI, JPublisher, Flyway, " +
-                    "Nagios, iReport, OpenCmis, Bonita, pgBouncer";
-            qualification[10] = "Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, " +
-                    "архитектурных шаблонов, UML, функционального программирования";
-            qualification[11] = "Родной русский, английский \"upper intermediate\"";
+                    "Nagios, iReport, OpenCmis, Bonita, pgBouncer");
+            qualification.add("Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, " +
+                    "архитектурных шаблонов, UML, функционального программирования");
+            qualification.add("Родной русский, английский \"upper intermediate\"");
             return qualification;
         }
 
-        void experience_1() {
-            String element = "Java Online Projects";
-            String period = "10/2013 - Сейчас";
-            String position = "Автор проекта";
-            ArrayList<String> description = new ArrayList<>();
-            description.add("Создание, организация и проведение Java онлайн проектов и стажировок");
+        Career getExperience_1() {
+            Career career = new Career("Java Online Projects",
+                    "Автор проекта",
+                    LocalDate.of(2013, 10, 01),
+                    LocalDate.now());
+            career.setDescription("Создание, организация и проведение Java онлайн проектов и стажировок");
+            return career;
         }
 
-        void education_1() {
-            String element = "Coursera";
-            String period = "03/2013 - 05/2013";
-            String position = "\"Functional Programming Principles in Scala\" by Martin Odersky";
+        Career getExperience_2() {
+            Career career = new Career("Wrike",
+                    "Старший разработчик (backend)",
+                    LocalDate.of(2014, 10, 01),
+                    LocalDate.of(2016, 01, 01));
+            career.setDescription("Проектирование и разработка онлайн платформы управления проектами Wrike " +
+                    "(Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
+                    "Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
+            return career;
+        }
+
+
+        Career getEducation_1() {
+            Career career = new Career("Coursera",
+                    "\"Functional Programming Principles in Scala\" by Martin Odersky",
+                    LocalDate.of(2013, 03, 01),
+                    LocalDate.of(2013, 05, 01));
+            return career;
         }
     }
 }

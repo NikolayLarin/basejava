@@ -2,11 +2,11 @@ package ru.javawebinar.basejava.model;
 
 /**
  * This class stores EXPERIENCE("Опыт работы") or EDUCATION("Образование") Sections in Resume
- * as a RiseUp object.
+ * as a Career object.
  */
-public class RiseUpSection extends AbstractSection<RiseUp> {
+public class CareerSection extends AbstractSection<Career> {
 
-    public RiseUpSection(RiseUp riseUp) {
-        super(riseUp);
+    public CareerSection(Career career) {
+        super(career);
     }
 }

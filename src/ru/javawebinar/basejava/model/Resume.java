@@ -2,6 +2,7 @@ package ru.javawebinar.basejava.model;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -42,19 +43,31 @@ public class Resume implements Comparable<Resume> {
         this.sectionsMap.put(sectionType, skillsSection);
     }
 
-    public EnumMap<SectionType, AboutMeSection> getStringSectionMap() {
-        EnumMap<SectionType, AboutMeSection> stringSectionMap = new EnumMap<>(SectionType.class);
-        stringSectionMap.put(SectionType.OBJECTIVE, (AboutMeSection) sectionsMap.get(SectionType.OBJECTIVE));
-        stringSectionMap.put(SectionType.PERSONAL, (AboutMeSection) sectionsMap.get(SectionType.PERSONAL));
-        return stringSectionMap;
+    public void setSection(SectionType sectionType, Career element) {
+        CareerSection careerSection = new CareerSection(element);
+        this.sectionsMap.put(sectionType, careerSection);
     }
 
-    public EnumMap<SectionType, SkillsSection> getListSectionMap() {
-        EnumMap<SectionType, SkillsSection> listSectionMap = new EnumMap<>(SectionType.class);
-        listSectionMap.put(SectionType.ACHIEVEMENT, (SkillsSection) sectionsMap.get(SectionType.ACHIEVEMENT));
-        listSectionMap.put(SectionType.QUALIFICATIONS, (SkillsSection) sectionsMap.get(SectionType.QUALIFICATIONS));
-        return listSectionMap;
+    public EnumMap<SectionType, AboutMeSection> getAboutMeSectionMap() {
+        EnumMap<SectionType, AboutMeSection> aboutMeSectionMap = new EnumMap<>(SectionType.class);
+        aboutMeSectionMap.put(SectionType.OBJECTIVE, (AboutMeSection) sectionsMap.get(SectionType.OBJECTIVE));
+        aboutMeSectionMap.put(SectionType.PERSONAL, (AboutMeSection) sectionsMap.get(SectionType.PERSONAL));
+        return aboutMeSectionMap;
     }
+
+    public EnumMap<SectionType, SkillsSection> getSkillsSectionMap() {
+        EnumMap<SectionType, SkillsSection> skillsSectionMap = new EnumMap<>(SectionType.class);
+        skillsSectionMap.put(SectionType.ACHIEVEMENT, (SkillsSection) sectionsMap.get(SectionType.ACHIEVEMENT));
+        skillsSectionMap.put(SectionType.QUALIFICATIONS, (SkillsSection) sectionsMap.get(SectionType.QUALIFICATIONS));
+        return skillsSectionMap;
+    }
+//    public EnumMap<SectionType, CareerSection> getCareerSectionMap() {
+//        EnumMap<SectionType, CareerSection> careerSectionMap = new EnumMap<>(SectionType.class);
+////        careerSectionMap.put(SectionType.EXPERIENCE, (CareerSection) sectionsMap.get(SectionType.EXPERIENCE));
+////        careerSectionMap.put(SectionType.EDUCATION, (CareerSection) sectionsMap.get(SectionType.EDUCATION));
+//        careerSectionMap.putAll((Map<? extends SectionType, ? extends CareerSection>) getSectionsMap());
+//        return careerSectionMap;
+//    }
 
     public EnumMap<ContactType, ContactSection> getContactsMap() {
         return new EnumMap<>(contactsMap);
