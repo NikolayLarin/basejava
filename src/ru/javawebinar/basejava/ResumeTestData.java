@@ -3,6 +3,7 @@ package ru.javawebinar.basejava;
 import ru.javawebinar.basejava.model.AbstractSection;
 import ru.javawebinar.basejava.model.ContactSection;
 import ru.javawebinar.basejava.model.ContactType;
+import ru.javawebinar.basejava.model.ListSection;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.model.SectionType;
 
@@ -49,16 +50,14 @@ public class ResumeTestData {
             boolean isListSection = entry.getKey().name().equals("ACHIEVEMENT") || entry.getKey().name().equals("QUALIFICATIONS");
             if (isListSection) {
                 System.out.println(entry.getKey().getTitle() + ": ");
-                ArrayList<String> arr = (ArrayList<String>) entry.getValue().getElement();
+                ListSection listSection = (ListSection) entry.getValue();
+                ArrayList<String> arr = listSection.getElement();
                 for (String s : arr) {
                     System.out.println(dot() + s);
                 }
                 printLine();
             }
         }
-//        printLine();
-
-
     }
 
     private static void printLine() {
