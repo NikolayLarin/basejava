@@ -4,11 +4,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class JobOrStudy {
+/**
+ * This class describes EXPERIENCE("Опыт работы") and EDUCATION("Образование") Sections in Resume.
+ */
+public class RiseUp {
     private LocalDate startDate;
     private LocalDate endDate;
     private String position;
     private String description;
+
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/YYYY");
 
@@ -48,7 +52,7 @@ public class JobOrStudy {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        JobOrStudy that = (JobOrStudy) o;
+        RiseUp that = (RiseUp) o;
         return startDate.equals(that.startDate) &&
                 endDate.equals(that.endDate) &&
                 position.equals(that.position) &&

@@ -33,13 +33,27 @@ public class Resume implements Comparable<Resume> {
     }
 
     public void setSection(SectionType sectionType, String element) {
-        StringSection stringSection = new StringSection(element);
-        this.sectionsMap.put(sectionType, stringSection);
+        AboutMeSection aboutMeSection = new AboutMeSection(element);
+        this.sectionsMap.put(sectionType, aboutMeSection);
     }
 
     public void setSection(SectionType sectionType, ArrayList<String> element) {
-        ListSection listSection = new ListSection(element);
-        this.sectionsMap.put(sectionType, listSection);
+        SkillsSection skillsSection = new SkillsSection(element);
+        this.sectionsMap.put(sectionType, skillsSection);
+    }
+
+    public EnumMap<SectionType, AboutMeSection> getStringSectionMap() {
+        EnumMap<SectionType, AboutMeSection> stringSectionMap = new EnumMap<>(SectionType.class);
+        stringSectionMap.put(SectionType.OBJECTIVE, (AboutMeSection) sectionsMap.get(SectionType.OBJECTIVE));
+        stringSectionMap.put(SectionType.PERSONAL, (AboutMeSection) sectionsMap.get(SectionType.PERSONAL));
+        return stringSectionMap;
+    }
+
+    public EnumMap<SectionType, SkillsSection> getListSectionMap() {
+        EnumMap<SectionType, SkillsSection> listSectionMap = new EnumMap<>(SectionType.class);
+        listSectionMap.put(SectionType.ACHIEVEMENT, (SkillsSection) sectionsMap.get(SectionType.ACHIEVEMENT));
+        listSectionMap.put(SectionType.QUALIFICATIONS, (SkillsSection) sectionsMap.get(SectionType.QUALIFICATIONS));
+        return listSectionMap;
     }
 
     public EnumMap<ContactType, ContactSection> getContactsMap() {

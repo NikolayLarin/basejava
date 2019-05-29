@@ -2,6 +2,9 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
+/**
+ * This class describes Contact Section in Resume and stores it as a String.
+ */
 public class ContactSection {
     private String contact;
 

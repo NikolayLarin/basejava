@@ -1,16 +1,21 @@
 package ru.javawebinar.basejava;
 
+import ru.javawebinar.basejava.model.AboutMeSection;
 import ru.javawebinar.basejava.model.AbstractSection;
 import ru.javawebinar.basejava.model.ContactSection;
 import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.ListSection;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.model.SectionType;
+import ru.javawebinar.basejava.model.SkillsSection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumMap;
 
+/**
+ * This class tests input and output in Resume Sections.
+ * Input data described in inner ResumeData class.
+ */
 public class ResumeTestData {
     public static void main(String[] args) {
         ResumeTestData.ResumeData data = new ResumeTestData().new ResumeData();
@@ -38,6 +43,9 @@ public class ResumeTestData {
         testResume.setSection(SectionType.ACHIEVEMENT, achievements);
         testResume.setSection(SectionType.QUALIFICATIONS, qualifications);
 
+        /**
+         * First kind of data output from Sections in Resume
+         */
         for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
             boolean isStringSection = entry.getKey().name().equals("OBJECTIVE") || entry.getKey().name().equals("PERSONAL");
             if (isStringSection) {
@@ -50,13 +58,29 @@ public class ResumeTestData {
             boolean isListSection = entry.getKey().name().equals("ACHIEVEMENT") || entry.getKey().name().equals("QUALIFICATIONS");
             if (isListSection) {
                 System.out.println(entry.getKey().getTitle() + ": ");
-                ListSection listSection = (ListSection) entry.getValue();
-                ArrayList<String> arr = listSection.getElement();
-                for (String s : arr) {
-                    System.out.println(dot() + s);
+                SkillsSection skillsSection = (SkillsSection) entry.getValue();
+                for (String str : skillsSection.getElement()) {
+                    System.out.println(dot() + str);
                 }
                 printLine();
             }
+        }
+        printLine();
+
+        /**
+         * Second kind of data output from Sections in Resume
+         */
+        for (EnumMap.Entry<SectionType, AboutMeSection> entry : testResume.getStringSectionMap().entrySet()) {
+            System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue().getElement());
+            printLine();
+        }
+
+        for (EnumMap.Entry<SectionType, SkillsSection> entry : testResume.getListSectionMap().entrySet()) {
+            System.out.println(entry.getKey().getTitle() + ": ");
+            for (String str : entry.getValue().getElement()) {
+                System.out.println(dot() + str);
+            }
+            printLine();
         }
     }
 
