@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 
 /**
  * This class tests input in and output out in Resume Sections.
@@ -44,15 +45,14 @@ public class ResumeTestData {
 
         testResume.setSection(SectionType.OBJECTIVE, data.objective);
         testResume.setSection(SectionType.PERSONAL, data.personal);
-        ArrayList<String> achievements = data.getAchievements();
-        ArrayList<String> qualifications = data.getQualifications();
+        List<String> achievements = data.getAchievements();
+        List<String> qualifications = data.getQualifications();
 
         testResume.setSection(SectionType.ACHIEVEMENT, achievements);
         testResume.setSection(SectionType.QUALIFICATIONS, qualifications);
 
-        testResume.setSection(SectionType.EXPERIENCE, data.getExperience_1());
-        testResume.setSection(SectionType.EXPERIENCE, data.getExperience_2());
-        testResume.setSection(SectionType.EDUCATION, data.getEducation_1());
+        testResume.setSection(SectionType.EXPERIENCE, data.getExperience());
+        testResume.setSection(SectionType.EDUCATION, data.getEducation());
 
         /**
          * First kind of data output from Sections in Resume
@@ -78,19 +78,20 @@ public class ResumeTestData {
         }
         printLine();
 
-        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
-            boolean isCareerSection = entry.getKey().name().equals("EXPERIENCE") || entry.getKey().name().equals("EDUCATION");
-            if (isCareerSection) {
-                System.out.println(entry.getKey().getTitle() + ":");
-                CareerSection careerSection = (CareerSection) entry.getValue();
-                System.out.println(careerSection.getElement().getTitle() + "\n" +
-                        careerSection.getElement().getStartDate().format(formatter) + " - " +
-                        careerSection.getElement().getEndDate().format(formatter) + "\n" +
-                        careerSection.getElement().getPosition() + "\n" +
-                        careerSection.getElement().getDescription());
-                printLine();
-            }
-        }
+//        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
+//            boolean isCareerSection = entry.getKey().name().equals("EXPERIENCE") || entry.getKey().name().equals("EDUCATION");
+//            if (isCareerSection) {
+//                System.out.println(entry.getKey().getTitle() + ":");
+//                CareerSection careerSection = (CareerSection) entry.getValue();
+//
+//                System.out.println(careerSection.getElement().getTitle() + "\n" +
+//                        careerSection.getElement().getStartDate().format(formatter) + " - " +
+//                        careerSection.getElement().getEndDate().format(formatter) + "\n" +
+//                        careerSection.getElement().getPosition() + "\n" +
+//                        careerSection.getElement().getDescription());
+//                printLine();
+//            }
+//        }
 
         /**
          * Second kind of data output from Sections in Resume
@@ -183,33 +184,35 @@ public class ResumeTestData {
             return qualification;
         }
 
-        Career getExperience_1() {
-            Career career = new Career("Java Online Projects",
+        ArrayList<Career> getExperience() {
+            ArrayList<Career> experience = new ArrayList<>();
+            Career career_1 = new Career("Java Online Projects",
                     "Автор проекта",
                     LocalDate.of(2013, 10, 01),
                     LocalDate.now());
-            career.setDescription("Создание, организация и проведение Java онлайн проектов и стажировок");
-            return career;
-        }
+            career_1.setDescription("Создание, организация и проведение Java онлайн проектов и стажировок");
 
-        Career getExperience_2() {
-            Career career = new Career("Wrike",
+            Career career_2 = new Career("Wrike",
                     "Старший разработчик (backend)",
                     LocalDate.of(2014, 10, 01),
                     LocalDate.of(2016, 01, 01));
-            career.setDescription("Проектирование и разработка онлайн платформы управления проектами Wrike " +
+            career_2.setDescription("Проектирование и разработка онлайн платформы управления проектами Wrike " +
                     "(Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
                     "Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
-            return career;
+            experience.add(career_1);
+            experience.add(career_2);
+            return experience;
         }
 
 
-        Career getEducation_1() {
-            Career career = new Career("Coursera",
+        ArrayList<Career> getEducation() {
+            ArrayList<Career> education = new ArrayList<>();
+            Career education_1 = new Career("Coursera",
                     "\"Functional Programming Principles in Scala\" by Martin Odersky",
                     LocalDate.of(2013, 03, 01),
                     LocalDate.of(2013, 05, 01));
-            return career;
+            education.add(education_1);
+            return education;
         }
     }
 }
