@@ -34,8 +34,8 @@ public class Resume implements Comparable<Resume> {
     }
 
     public void setSection(SectionType sectionType, String element) {
-        AboutMeSection aboutMeSection = new AboutMeSection(element);
-        this.sectionsMap.put(sectionType, aboutMeSection);
+        AboutSection aboutSection = new AboutSection(element);
+        this.sectionsMap.put(sectionType, aboutSection);
     }
 
     public void setSection(SectionType sectionType, List<String> element) {
@@ -46,26 +46,6 @@ public class Resume implements Comparable<Resume> {
     public void setSection(SectionType sectionType, ArrayList<Career> element) {
         CareerSection careerSection = new CareerSection(element);
         this.sectionsMap.put(sectionType, careerSection);
-    }
-
-    public EnumMap<SectionType, AboutMeSection> getAboutMeSectionMap() {
-        EnumMap<SectionType, AboutMeSection> aboutMeSectionMap = new EnumMap<>(SectionType.class);
-        aboutMeSectionMap.put(SectionType.OBJECTIVE, (AboutMeSection) sectionsMap.get(SectionType.OBJECTIVE));
-        aboutMeSectionMap.put(SectionType.PERSONAL, (AboutMeSection) sectionsMap.get(SectionType.PERSONAL));
-        return aboutMeSectionMap;
-    }
-
-    public EnumMap<SectionType, SkillsSection> getSkillsSectionMap() {
-        EnumMap<SectionType, SkillsSection> skillsSectionMap = new EnumMap<>(SectionType.class);
-        skillsSectionMap.put(SectionType.ACHIEVEMENT, (SkillsSection) sectionsMap.get(SectionType.ACHIEVEMENT));
-        skillsSectionMap.put(SectionType.QUALIFICATIONS, (SkillsSection) sectionsMap.get(SectionType.QUALIFICATIONS));
-        return skillsSectionMap;
-    }
-    public EnumMap<SectionType, CareerSection> getCareerSectionMap() {
-        EnumMap<SectionType, CareerSection> careerSectionMap = new EnumMap<>(SectionType.class);
-        careerSectionMap.put(SectionType.EXPERIENCE, (CareerSection) sectionsMap.get(SectionType.EXPERIENCE));
-        careerSectionMap.put(SectionType.EDUCATION, (CareerSection) sectionsMap.get(SectionType.EDUCATION));
-        return careerSectionMap;
     }
 
     public EnumMap<ContactType, ContactSection> getContactsMap() {

@@ -1,6 +1,5 @@
 package ru.javawebinar.basejava;
 
-import ru.javawebinar.basejava.model.AboutMeSection;
 import ru.javawebinar.basejava.model.AbstractSection;
 import ru.javawebinar.basejava.model.Career;
 import ru.javawebinar.basejava.model.CareerSection;
@@ -54,9 +53,6 @@ public class ResumeTestData {
         testResume.setSection(SectionType.EXPERIENCE, data.getExperience());
         testResume.setSection(SectionType.EDUCATION, data.getEducation());
 
-        /**
-         * First kind of data output from Sections in Resume
-         */
         for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
             boolean isStringSection = entry.getKey().name().equals("OBJECTIVE") || entry.getKey().name().equals("PERSONAL");
             if (isStringSection) {
@@ -91,34 +87,6 @@ public class ResumeTestData {
                 }
                 printLine();
             }
-        }
-
-        /**
-         * Second kind of data output from Sections in Resume
-         */
-        for (EnumMap.Entry<SectionType, AboutMeSection> entry : testResume.getAboutMeSectionMap().entrySet()) {
-            System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue().getElement());
-            printLine();
-        }
-
-        for (EnumMap.Entry<SectionType, SkillsSection> entry : testResume.getSkillsSectionMap().entrySet()) {
-            System.out.println(entry.getKey().getTitle() + ": ");
-            for (String str : entry.getValue().getElement()) {
-                System.out.println(dot() + str);
-            }
-            printLine();
-        }
-
-        for (EnumMap.Entry<SectionType, CareerSection> entry : testResume.getCareerSectionMap().entrySet()) {
-            System.out.println(entry.getKey().getTitle() + ": ");
-            for (Career career : entry.getValue().getElement()) {
-                System.out.println("\n" + career.getTitle() + "\n" +
-                        career.getStartDate().format(formatter) + " - " +
-                        career.getEndDate().format(formatter) + "   " +
-                        career.getPosition() + "\n                    " +
-                        career.getDescription());
-            }
-            printLine();
         }
     }
 
