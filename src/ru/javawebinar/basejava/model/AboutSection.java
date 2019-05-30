@@ -9,6 +9,7 @@ public class AboutSection extends AbstractSection<String> {
     public AboutSection(String element) {
         super(element);
     }
+
     @Override
     public String toString() {
         return getElement();
