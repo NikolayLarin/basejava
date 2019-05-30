@@ -61,13 +61,12 @@ public class Resume implements Comparable<Resume> {
         skillsSectionMap.put(SectionType.QUALIFICATIONS, (SkillsSection) sectionsMap.get(SectionType.QUALIFICATIONS));
         return skillsSectionMap;
     }
-//    public EnumMap<SectionType, CareerSection> getCareerSectionMap() {
-//        EnumMap<SectionType, CareerSection> careerSectionMap = new EnumMap<>(SectionType.class);
-////        careerSectionMap.put(SectionType.EXPERIENCE, (CareerSection) sectionsMap.get(SectionType.EXPERIENCE));
-////        careerSectionMap.put(SectionType.EDUCATION, (CareerSection) sectionsMap.get(SectionType.EDUCATION));
-//        careerSectionMap.putAll((Map<? extends SectionType, ? extends CareerSection>) getSectionsMap());
-//        return careerSectionMap;
-//    }
+    public EnumMap<SectionType, CareerSection> getCareerSectionMap() {
+        EnumMap<SectionType, CareerSection> careerSectionMap = new EnumMap<>(SectionType.class);
+        careerSectionMap.put(SectionType.EXPERIENCE, (CareerSection) sectionsMap.get(SectionType.EXPERIENCE));
+        careerSectionMap.put(SectionType.EDUCATION, (CareerSection) sectionsMap.get(SectionType.EDUCATION));
+        return careerSectionMap;
+    }
 
     public EnumMap<ContactType, ContactSection> getContactsMap() {
         return new EnumMap<>(contactsMap);

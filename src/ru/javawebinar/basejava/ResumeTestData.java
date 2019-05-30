@@ -76,22 +76,22 @@ public class ResumeTestData {
                 printLine();
             }
         }
-        printLine();
 
-//        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
-//            boolean isCareerSection = entry.getKey().name().equals("EXPERIENCE") || entry.getKey().name().equals("EDUCATION");
-//            if (isCareerSection) {
-//                System.out.println(entry.getKey().getTitle() + ":");
-//                CareerSection careerSection = (CareerSection) entry.getValue();
-//
-//                System.out.println(careerSection.getElement().getTitle() + "\n" +
-//                        careerSection.getElement().getStartDate().format(formatter) + " - " +
-//                        careerSection.getElement().getEndDate().format(formatter) + "\n" +
-//                        careerSection.getElement().getPosition() + "\n" +
-//                        careerSection.getElement().getDescription());
-//                printLine();
-//            }
-//        }
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
+            boolean isCareerSection = entry.getKey().name().equals("EXPERIENCE") || entry.getKey().name().equals("EDUCATION");
+            if (isCareerSection) {
+                System.out.println(entry.getKey().getTitle() + ":");
+                CareerSection careerSection = (CareerSection) entry.getValue();
+                for (Career career : careerSection.getElement()) {
+                    System.out.println("\n" + career.getTitle() + "\n" +
+                            career.getStartDate().format(formatter) + " - " +
+                            career.getEndDate().format(formatter) + "   " +
+                            career.getPosition() + "\n                    " +
+                            career.getDescription());
+                }
+                printLine();
+            }
+        }
 
         /**
          * Second kind of data output from Sections in Resume
@@ -108,10 +108,22 @@ public class ResumeTestData {
             }
             printLine();
         }
+
+        for (EnumMap.Entry<SectionType, CareerSection> entry : testResume.getCareerSectionMap().entrySet()) {
+            System.out.println(entry.getKey().getTitle() + ": ");
+            for (Career career : entry.getValue().getElement()) {
+                System.out.println("\n" + career.getTitle() + "\n" +
+                        career.getStartDate().format(formatter) + " - " +
+                        career.getEndDate().format(formatter) + "   " +
+                        career.getPosition() + "\n                    " +
+                        career.getDescription());
+            }
+            printLine();
+        }
     }
 
     private static void printLine() {
-        System.out.println("-----------------------");
+        System.out.println("------------------------------");
     }
 
     private static String dot() {
