@@ -16,6 +16,8 @@ public class Career {
     public Career(String title, String position, LocalDate startDate, LocalDate endDate) {
         Objects.requireNonNull(title, "company or institution name can't be null");
         Objects.requireNonNull(position, "position or career can't be null");
+        Objects.requireNonNull(startDate, "startDate can't be null");
+        Objects.requireNonNull(endDate, "endDate can't be null");
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
