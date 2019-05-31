@@ -13,7 +13,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.List;
 
 /**
  * This class tests input in and output out in Resume Sections.
@@ -68,14 +67,21 @@ public class ResumeTestData {
         for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
             boolean isCareerSection = entry.getKey().name().equals("EXPERIENCE") || entry.getKey().name().equals("EDUCATION");
             if (isCareerSection) {
-                System.out.println(entry.getKey().getTitle() + ":\n");
+                System.out.println(entry.getKey().getTitle() + ":");
                 CareerSection careerSection = (CareerSection) entry.getValue();
                 for (Career career : careerSection.getElement()) {
-                    System.out.println(career.getTitle() + "\n" +
-                            career.getStartDate().format(formatter) + " - " +
+                    System.out.print("\n" + career.getTitle());
+                    String url = career.getUrl();
+                    if (url != null) {
+                        System.out.println("  " + url);
+                    }
+                    System.out.println(career.getStartDate().format(formatter) + " - " +
                             career.getEndDate().format(formatter) + "   " +
-                            career.getPosition() + "\n                    " +
-                            career.getDescription());
+                            career.getPosition() + "                    ");
+                    String description = career.getDescription();
+                    if (description != null) {
+                        System.out.print(description + "\n");
+                    }
                 }
                 printLine();
             }
@@ -163,6 +169,7 @@ public class ResumeTestData {
                     LocalDate.of(2013, 10, 1),
                     LocalDate.now());
             career_1.setDescription("Создание, организация и проведение Java онлайн проектов и стажировок");
+            career_1.setUrl("http://javaops.ru/");
             experience.add(career_1);
 
             Career career_2 = new Career("Wrike",
@@ -172,6 +179,7 @@ public class ResumeTestData {
             career_2.setDescription("Проектирование и разработка онлайн платформы управления проектами Wrike " +
                     "(Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
                     "Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
+            career_2.setUrl("https://www.wrike.com/");
             experience.add(career_2);
 
             Career career_3 = new Career("RIT Center",
@@ -196,6 +204,7 @@ public class ResumeTestData {
                     " SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация " +
                     "RIA-приложения для администрирования, мониторинга и анализа результатов в области " +
                     "алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
+            career_4.setUrl("http://www.luxoft.ru/");
             experience.add(career_4);
 
             Career career_5 = new Career("Yota",
@@ -206,6 +215,7 @@ public class ResumeTestData {
                     "(GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). " +
                     "Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX " +
                     "клиента (Python/ Jython, Django, ExtJS).");
+            career_5.setUrl("https://www.yota.ru/");
             experience.add(career_5);
 
             Career career_6 = new Career("Enkata",
@@ -214,6 +224,7 @@ public class ResumeTestData {
                     LocalDate.of(2008, 6, 1));
             career_6.setDescription("Реализация клиентской (Eclipse RCP) и серверной " +
                     "(JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).");
+            career_6.setUrl("http://enkata.com/");
             experience.add(career_6);
 
             Career career_7 = new Career("Siemens AG",
@@ -222,6 +233,7 @@ public class ResumeTestData {
                     LocalDate.of(2007, 2, 1));
             career_7.setDescription("Разработка информационной модели, проектирование интерфейсов, реализация и " +
                     "отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).");
+            career_7.setUrl("https://www.siemens.com/ru/ru/home.html");
             experience.add(career_7);
 
             Career career_8 = new Career("Alcatel",
@@ -230,6 +242,7 @@ public class ResumeTestData {
                     LocalDate.of(2005, 1, 1));
             career_8.setDescription("Тестирование, отладка, внедрение ПО цифровой телефонной " +
                     "станции Alcatel 1000 S12 (CHILL, ASM).");
+            career_8.setUrl("http://www.alcatel.ru/");
             experience.add(career_8);
 
             return experience;
@@ -242,24 +255,28 @@ public class ResumeTestData {
                     "\"Functional Programming Principles in Scala\" by Martin Odersky",
                     LocalDate.of(2013, 3, 1),
                     LocalDate.of(2013, 5, 1));
+            education_1.setUrl("https://www.coursera.org/course/progfun");
             education.add(education_1);
 
             Career education_2 = new Career("Luxoft",
                     "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"",
                     LocalDate.of(2011, 3, 1),
                     LocalDate.of(2011, 4, 1));
+            education_2.setUrl("http://www.luxoft-training.ru/training/catalog/course.html?ID=22366");
             education.add(education_2);
 
             Career education_3 = new Career("Siemens AG",
                     "3 месяца обучения мобильным IN сетям (Берлин)",
                     LocalDate.of(2005, 1, 1),
                     LocalDate.of(2005, 4, 1));
+            education_3.setUrl("http://www.siemens.ru/");
             education.add(education_3);
 
-            Career education_4 = new Career("Siemens AG",
+            Career education_4 = new Career("Alcatel",
                     "6 месяцев обучения цифровым телефонным сетям (Москва)",
                     LocalDate.of(1997, 9, 1),
                     LocalDate.of(1998, 3, 1));
+            education_4.setUrl("http://www.alcatel.ru/");
             education.add(education_4);
 
             Career education_5 = new Career("Санкт-Петербургский национальный исследовательский " +
@@ -267,6 +284,7 @@ public class ResumeTestData {
                     "Аспирантура (программист С, С++)",
                     LocalDate.of(1993, 9, 1),
                     LocalDate.of(1996, 7, 1));
+            education_5.setUrl("http://www.ifmo.ru/");
             education.add(education_5);
 
             Career education_6 = new Career("Санкт-Петербургский национальный исследовательский " +
@@ -274,6 +292,7 @@ public class ResumeTestData {
                     "Инженер (программист Fortran, C)",
                     LocalDate.of(1987, 9, 1),
                     LocalDate.of(1993, 7, 1));
+            education_6.setUrl("http://www.ifmo.ru/");
             education.add(education_6);
 
             return education;

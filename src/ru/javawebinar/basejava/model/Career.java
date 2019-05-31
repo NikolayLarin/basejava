@@ -7,7 +7,8 @@ import java.util.Objects;
  * This class describes EXPERIENCE("Опыт работы") and EDUCATION("Образование") Sections in Resume.
  */
 public class Career {
-    private String title;
+    private Link homePage;
+
     private String position;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -18,7 +19,7 @@ public class Career {
         Objects.requireNonNull(position, "position or career can't be null");
         Objects.requireNonNull(startDate, "startDate can't be null");
         Objects.requireNonNull(endDate, "endDate can't be null");
-        this.title = title;
+        this.homePage = new Link(title);
         this.startDate = startDate;
         this.endDate = endDate;
         this.position = position;
@@ -28,8 +29,17 @@ public class Career {
         this.description = description;
     }
 
+    public void setUrl(String url) {
+        this.homePage.setUrl(url);
+    }
+
+
     public String getTitle() {
-        return title;
+        return homePage.getTitle();
+    }
+
+    public String getUrl() {
+        return homePage.getUrl();
     }
 
     public LocalDate getStartDate() {
@@ -53,15 +63,15 @@ public class Career {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Career career = (Career) o;
-        return title.equals(career.title) &&
+        return homePage.equals(career.homePage) &&
+                position.equals(career.position) &&
                 startDate.equals(career.startDate) &&
                 endDate.equals(career.endDate) &&
-                position.equals(career.position) &&
                 Objects.equals(description, career.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, startDate, endDate, position, description);
+        return Objects.hash(homePage, position, startDate, endDate, description);
     }
 }
