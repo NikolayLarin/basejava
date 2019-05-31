@@ -3,7 +3,7 @@ package ru.javawebinar.basejava.model;
 import java.util.Objects;
 
 public abstract class AbstractSection<T> {
-    private T element;
+    private final T element;
 
     public AbstractSection(T element) {
         Objects.requireNonNull(element, " sections element can't be null");

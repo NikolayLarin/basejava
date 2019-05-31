@@ -14,9 +14,9 @@ public class Resume implements Comparable<Resume> {
 
     // Unique identifier
     private final String uuid;
-    private String fullName;
-    private Map<ContactType, ContactSection> contactsMap = new EnumMap<>(ContactType.class);
-    private Map<SectionType, AbstractSection> sectionsMap = new EnumMap<>(SectionType.class);
+    private final String fullName;
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -30,31 +30,30 @@ public class Resume implements Comparable<Resume> {
     }
 
     public void setContact(ContactType contactType, String contact) {
-        ContactSection contactSection = new ContactSection(contact);
-        this.contactsMap.put(contactType, contactSection);
+        this.contacts.put(contactType, contact);
     }
 
     public void setSection(SectionType sectionType, String element) {
         AboutSection aboutSection = new AboutSection(element);
-        this.sectionsMap.put(sectionType, aboutSection);
+        this.sections.put(sectionType, aboutSection);
     }
 
     public void setSection(SectionType sectionType, List<String> element) {
         SkillsSection skillsSection = new SkillsSection(element);
-        this.sectionsMap.put(sectionType, skillsSection);
+        this.sections.put(sectionType, skillsSection);
     }
 
     public void setSection(SectionType sectionType, ArrayList<Career> element) {
         CareerSection careerSection = new CareerSection(element);
-        this.sectionsMap.put(sectionType, careerSection);
+        this.sections.put(sectionType, careerSection);
     }
 
-    public EnumMap<ContactType, ContactSection> getContactsMap() {
-        return new EnumMap<>(contactsMap);
+    public EnumMap<ContactType, String> getContacts() {
+        return new EnumMap<>(contacts);
     }
 
-    public EnumMap<SectionType, AbstractSection> getSectionsMap() {
-        return new EnumMap<>(sectionsMap);
+    public EnumMap<SectionType, AbstractSection> getSections() {
+        return new EnumMap<>(sections);
     }
 
     public String getUuid() {
@@ -72,13 +71,13 @@ public class Resume implements Comparable<Resume> {
         Resume resume = (Resume) o;
         return uuid.equals(resume.uuid) &&
                 fullName.equals(resume.fullName) &&
-                contactsMap.equals(resume.contactsMap) &&
-                sectionsMap.equals(resume.sectionsMap);
+                contacts.equals(resume.contacts) &&
+                sections.equals(resume.sections);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName, contactsMap, sectionsMap);
+        return Objects.hash(uuid, fullName, contacts, sections);
     }
 
     @Override

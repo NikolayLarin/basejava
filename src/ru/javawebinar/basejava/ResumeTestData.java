@@ -3,7 +3,6 @@ package ru.javawebinar.basejava;
 import ru.javawebinar.basejava.model.AbstractSection;
 import ru.javawebinar.basejava.model.Career;
 import ru.javawebinar.basejava.model.CareerSection;
-import ru.javawebinar.basejava.model.ContactSection;
 import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.model.SectionType;
@@ -33,7 +32,7 @@ public class ResumeTestData {
         testResume.setContact(ContactType.STACKOVERFLOW, data.stackOverflow);
         testResume.setContact(ContactType.SITE, data.site);
 
-        for (EnumMap.Entry<ContactType, ContactSection> entry : testResume.getContactsMap().entrySet()) {
+        for (EnumMap.Entry<ContactType, String> entry : testResume.getContacts().entrySet()) {
             System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
         }
         printLine();
@@ -49,7 +48,7 @@ public class ResumeTestData {
         testResume.setSection(SectionType.EXPERIENCE, data.getExperience());
         testResume.setSection(SectionType.EDUCATION, data.getEducation());
 
-        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
             boolean isAboutSection = entry.getKey().name().equals("OBJECTIVE") || entry.getKey().name().equals("PERSONAL");
             if (isAboutSection) {
                 System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue().getElement());
@@ -57,7 +56,7 @@ public class ResumeTestData {
             }
         }
 
-        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
             boolean isSkillsSection = entry.getKey().name().equals("ACHIEVEMENT") || entry.getKey().name().equals("QUALIFICATIONS");
             if (isSkillsSection) {
                 System.out.println(entry.getKey().getTitle() + ": ");
@@ -69,7 +68,7 @@ public class ResumeTestData {
             }
         }
 
-        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSectionsMap().entrySet()) {
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
             boolean isCareerSection = entry.getKey().name().equals("EXPERIENCE") || entry.getKey().name().equals("EDUCATION");
             if (isCareerSection) {
                 System.out.println(entry.getKey().getTitle() + ":\n");
