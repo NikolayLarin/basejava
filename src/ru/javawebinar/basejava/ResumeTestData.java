@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava;
 
+import ru.javawebinar.basejava.model.AboutSection;
 import ru.javawebinar.basejava.model.AbstractSection;
 import ru.javawebinar.basejava.model.Career;
 import ru.javawebinar.basejava.model.CareerSection;
@@ -37,16 +38,12 @@ public class ResumeTestData {
         }
         printLine();
 
-        testResume.setSection(SectionType.OBJECTIVE, data.objective);
-        testResume.setSection(SectionType.PERSONAL, data.personal);
-        List<String> achievements = data.getAchievements();
-        List<String> qualifications = data.getQualifications();
-
-        testResume.setSection(SectionType.ACHIEVEMENT, achievements);
-        testResume.setSection(SectionType.QUALIFICATIONS, qualifications);
-
-        testResume.setSection(SectionType.EXPERIENCE, data.getExperience());
-        testResume.setSection(SectionType.EDUCATION, data.getEducation());
+        testResume.setSection(SectionType.OBJECTIVE, new AboutSection(data.objective));
+        testResume.setSection(SectionType.PERSONAL, new AboutSection(data.personal));
+        testResume.setSection(SectionType.ACHIEVEMENT, new SkillsSection(data.getAchievements()));
+        testResume.setSection(SectionType.QUALIFICATIONS, new SkillsSection(data.getQualifications()));
+        testResume.setSection(SectionType.EXPERIENCE, new CareerSection(data.getExperience()));
+        testResume.setSection(SectionType.EDUCATION, new CareerSection(data.getEducation()));
 
         for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
             boolean isAboutSection = entry.getKey().name().equals("OBJECTIVE") || entry.getKey().name().equals("PERSONAL");

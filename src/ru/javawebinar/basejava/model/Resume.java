@@ -2,7 +2,6 @@ package ru.javawebinar.basejava.model;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -33,19 +32,8 @@ public class Resume implements Comparable<Resume> {
         this.contacts.put(contactType, contact);
     }
 
-    public void setSection(SectionType sectionType, String element) {
-        AboutSection aboutSection = new AboutSection(element);
-        this.sections.put(sectionType, aboutSection);
-    }
-
-    public void setSection(SectionType sectionType, List<String> element) {
-        SkillsSection skillsSection = new SkillsSection(element);
-        this.sections.put(sectionType, skillsSection);
-    }
-
-    public void setSection(SectionType sectionType, ArrayList<Career> element) {
-        CareerSection careerSection = new CareerSection(element);
-        this.sections.put(sectionType, careerSection);
+    public void setSection(SectionType sectionType, AbstractSection section) {
+        this.sections.put(sectionType, section);
     }
 
     public EnumMap<ContactType, String> getContacts() {
