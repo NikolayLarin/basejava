@@ -1,6 +1,5 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
