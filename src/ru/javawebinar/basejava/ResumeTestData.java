@@ -1,7 +1,7 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.AboutSection;
-import ru.javawebinar.basejava.model.AbstractSection;
+import ru.javawebinar.basejava.model.Section;
 import ru.javawebinar.basejava.model.Career;
 import ru.javawebinar.basejava.model.CareerSection;
 import ru.javawebinar.basejava.model.ContactType;
@@ -44,7 +44,7 @@ public class ResumeTestData {
         testResume.setSection(SectionType.EXPERIENCE, new CareerSection(data.getExperience()));
         testResume.setSection(SectionType.EDUCATION, new CareerSection(data.getEducation()));
 
-        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
+        for (EnumMap.Entry<SectionType, Section> entry : testResume.getSections().entrySet()) {
             boolean isAboutSection = entry.getKey().name().equals("OBJECTIVE") || entry.getKey().name().equals("PERSONAL");
             if (isAboutSection) {
                 System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue().getElement());
@@ -52,7 +52,7 @@ public class ResumeTestData {
             }
         }
 
-        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
+        for (EnumMap.Entry<SectionType, Section> entry : testResume.getSections().entrySet()) {
             boolean isSkillsSection = entry.getKey().name().equals("ACHIEVEMENT") || entry.getKey().name().equals("QUALIFICATIONS");
             if (isSkillsSection) {
                 System.out.println(entry.getKey().getTitle() + ": ");
@@ -64,7 +64,7 @@ public class ResumeTestData {
             }
         }
 
-        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
+        for (EnumMap.Entry<SectionType, Section> entry : testResume.getSections().entrySet()) {
             boolean isCareerSection = entry.getKey().name().equals("EXPERIENCE") || entry.getKey().name().equals("EDUCATION");
             if (isCareerSection) {
                 System.out.println(entry.getKey().getTitle() + ":");
