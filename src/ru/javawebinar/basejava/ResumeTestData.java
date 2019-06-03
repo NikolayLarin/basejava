@@ -1,11 +1,11 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.AboutSection;
-import ru.javawebinar.basejava.model.Section;
 import ru.javawebinar.basejava.model.Career;
 import ru.javawebinar.basejava.model.CareerSection;
 import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.Section;
 import ru.javawebinar.basejava.model.SectionType;
 import ru.javawebinar.basejava.model.SkillsSection;
 
@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This class tests input in and output out in Resume Sections.
@@ -162,7 +164,7 @@ public class ResumeTestData {
             return qualification;
         }
 
-        ArrayList<Career> getExperience() {
+        Set<Career> getExperience() {
             ArrayList<Career> experience = new ArrayList<>();
             Career career_1 = new Career("Java Online Projects",
                     "Автор проекта",
@@ -244,12 +246,11 @@ public class ResumeTestData {
                     "станции Alcatel 1000 S12 (CHILL, ASM).");
             career_8.setUrl("http://www.alcatel.ru/");
             experience.add(career_8);
-
-            return experience;
+            return new HashSet<>(experience);
         }
 
 
-        ArrayList<Career> getEducation() {
+        Set<Career> getEducation() {
             ArrayList<Career> education = new ArrayList<>();
             Career education_1 = new Career("Coursera",
                     "\"Functional Programming Principles in Scala\" by Martin Odersky",
@@ -294,8 +295,7 @@ public class ResumeTestData {
                     LocalDate.of(1993, 7, 1));
             education_6.setUrl("http://www.ifmo.ru/");
             education.add(education_6);
-
-            return education;
+            return new HashSet<>(education);
         }
     }
 }
