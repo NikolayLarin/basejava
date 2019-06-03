@@ -4,6 +4,7 @@ import ru.javawebinar.basejava.model.AboutSection;
 import ru.javawebinar.basejava.model.Career;
 import ru.javawebinar.basejava.model.CareerSection;
 import ru.javawebinar.basejava.model.ContactType;
+import ru.javawebinar.basejava.model.Link;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.model.Section;
 import ru.javawebinar.basejava.model.SectionType;
@@ -13,7 +14,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -44,7 +47,7 @@ public class ResumeTestData {
         testResume.setSection(SectionType.ACHIEVEMENT, new SkillsSection(data.getAchievements()));
         testResume.setSection(SectionType.QUALIFICATIONS, new SkillsSection(data.getQualifications()));
         testResume.setSection(SectionType.EXPERIENCE, new CareerSection(data.getExperience()));
-        testResume.setSection(SectionType.EDUCATION, new CareerSection(data.getEducation()));
+//        testResume.setSection(SectionType.EDUCATION, new CareerSection(data.getEducation()));
 
         for (EnumMap.Entry<SectionType, Section> entry : testResume.getSections().entrySet()) {
             boolean isAboutSection = entry.getKey().name().equals("OBJECTIVE") || entry.getKey().name().equals("PERSONAL");
@@ -71,18 +74,22 @@ public class ResumeTestData {
             if (isCareerSection) {
                 System.out.println(entry.getKey().getTitle() + ":");
                 CareerSection careerSection = (CareerSection) entry.getValue();
-                for (Career career : careerSection.getElement()) {
-                    System.out.print("\n" + career.getTitle());
-                    String url = career.getUrl();
-                    if (url != null) {
-                        System.out.println("  " + url);
-                    }
-                    System.out.println(career.getStartDate().format(formatter) + " - " +
-                            career.getEndDate().format(formatter) + "   " +
-                            career.getPosition() + "                    ");
-                    String description = career.getDescription();
-                    if (description != null) {
-                        System.out.print(description + "\n");
+                for (Map.Entry<Link, Set<Career>> careerEntry : careerSection.getElement().entrySet()) {
+                    System.out.println(careerEntry.getKey().getTitle() +
+                            " \n" + careerEntry.getKey().getUrl());
+                    for (Career career : careerEntry.getValue()) {
+                        System.out.print("\n" + career.getTitle());
+                        String url = career.getUrl();
+                        if (url != null) {
+                            System.out.println("  " + url);
+                        }
+                        System.out.println(career.getStartDate().format(formatter) + " - " +
+                                career.getEndDate().format(formatter) + "   " +
+                                career.getPosition() + "                    ");
+                        String description = career.getDescription();
+                        if (description != null) {
+                            System.out.print(description + "\n");
+                        }
                     }
                 }
                 printLine();
@@ -164,15 +171,19 @@ public class ResumeTestData {
             return qualification;
         }
 
-        Set<Career> getExperience() {
-            ArrayList<Career> experience = new ArrayList<>();
+        private Map<Link, Set<Career>> getExperience() {
+            Map<Link, Set<Career>> experienceMap = new HashMap<>();
+
             Career career_1 = new Career("Java Online Projects",
                     "Автор проекта",
                     LocalDate.of(2013, 10, 1),
                     LocalDate.now());
             career_1.setDescription("Создание, организация и проведение Java онлайн проектов и стажировок");
             career_1.setUrl("http://javaops.ru/");
-            experience.add(career_1);
+//            Set<Career> experience_1 = new HashSet<>();
+//            experience_1.add(career_1);
+//            experienceMap.put(career_1.getHomePage(), experience_1);
+            experienceMap = setCareerElement(experienceMap, career_1);
 
             Career career_2 = new Career("Wrike",
                     "Старший разработчик (backend)",
@@ -182,7 +193,7 @@ public class ResumeTestData {
                     "(Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
                     "Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
             career_2.setUrl("https://www.wrike.com/");
-            experience.add(career_2);
+            experienceMap = setCareerElement(experienceMap, career_2);
 
             Career career_3 = new Career("RIT Center",
                     "Java архитектор",
@@ -196,7 +207,7 @@ public class ResumeTestData {
                     "браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, " +
                     "Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, " +
                     "Unix shell remote scripting via ssh tunnels, PL/Python.");
-            experience.add(career_3);
+            experienceMap = setCareerElement(experienceMap, career_3);
 
             Career career_4 = new Career("Luxoft (Deutsche Bank)",
                     "Ведущий программист",
@@ -207,7 +218,7 @@ public class ResumeTestData {
                     "RIA-приложения для администрирования, мониторинга и анализа результатов в области " +
                     "алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
             career_4.setUrl("http://www.luxoft.ru/");
-            experience.add(career_4);
+            experienceMap = setCareerElement(experienceMap, career_4);
 
             Career career_5 = new Career("Yota",
                     "Ведущий специалист",
@@ -218,7 +229,7 @@ public class ResumeTestData {
                     "Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX " +
                     "клиента (Python/ Jython, Django, ExtJS).");
             career_5.setUrl("https://www.yota.ru/");
-            experience.add(career_5);
+            experienceMap = setCareerElement(experienceMap, career_5);
 
             Career career_6 = new Career("Enkata",
                     "Разработчик ПО",
@@ -227,7 +238,7 @@ public class ResumeTestData {
             career_6.setDescription("Реализация клиентской (Eclipse RCP) и серверной " +
                     "(JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).");
             career_6.setUrl("http://enkata.com/");
-            experience.add(career_6);
+            experienceMap = setCareerElement(experienceMap, career_6);
 
             Career career_7 = new Career("Siemens AG",
                     "Разработчик ПО",
@@ -236,7 +247,7 @@ public class ResumeTestData {
             career_7.setDescription("Разработка информационной модели, проектирование интерфейсов, реализация и " +
                     "отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).");
             career_7.setUrl("https://www.siemens.com/ru/ru/home.html");
-            experience.add(career_7);
+            experienceMap = setCareerElement(experienceMap, career_7);
 
             Career career_8 = new Career("Alcatel",
                     "Инженер по аппаратному и программному тестированию",
@@ -245,8 +256,24 @@ public class ResumeTestData {
             career_8.setDescription("Тестирование, отладка, внедрение ПО цифровой телефонной " +
                     "станции Alcatel 1000 S12 (CHILL, ASM).");
             career_8.setUrl("http://www.alcatel.ru/");
-            experience.add(career_8);
-            return new HashSet<>(experience);
+            experienceMap = setCareerElement(experienceMap, career_8);
+            return experienceMap;
+        }
+
+        private Map<Link, Set<Career>> setCareerElement(Map<Link, Set<Career>> map, Career career) {
+            Set<Career> set = new HashSet<>();
+            for (Link link : map.keySet()) {
+                if (link == career.getHomePage()) {
+                    set = map.get(link);
+                    set.add(career);
+                    map.put(link, set);
+                }
+                else {
+                    set.add(career);
+                    map.put(link, set);
+                }
+            }
+            return new HashMap<>(map);
         }
 
 

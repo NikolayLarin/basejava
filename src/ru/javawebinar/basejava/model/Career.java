@@ -42,6 +42,10 @@ public class Career {
         return homePage.getUrl();
     }
 
+    public Link getHomePage() {
+        return homePage;
+    }
+
     public LocalDate getStartDate() {
         return startDate;
     }
@@ -57,6 +61,7 @@ public class Career {
     public String getDescription() {
         return description;
     }
+
 
     @Override
     public boolean equals(Object o) {
