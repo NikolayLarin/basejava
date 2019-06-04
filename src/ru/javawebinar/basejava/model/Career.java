@@ -79,4 +79,5 @@ public class Career {
     public int hashCode() {
         return Objects.hash(homePage, position, startDate, endDate, description);
     }
+
 }
