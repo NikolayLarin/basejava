@@ -23,10 +23,32 @@ public class MainFile {
             }
         }
 
-        try (FileInputStream fis = new FileInputStream(filePath)){
+        try (FileInputStream fis = new FileInputStream(filePath)) {
             System.out.println(fis.read());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        System.out.println("--------------------");
+        recursiveOut("D:/Java_Projects/TopJava.ru/basejava");
+
     }
+
+    static void recursiveOut(String filePath) {
+        File dir = new File("D:/Java_Projects/TopJava.ru/basejava");
+        System.out.println(dir.isDirectory());
+
+        if (dir.isDirectory()) {
+            String[] list = dir.list();
+            if (list != null) {
+                for (String name : list) {
+                    System.out.println(name);
+                }
+                for (String name : list) {
+                    recursiveOut(name);
+                }
+            }
+        }
+
+    }
+
 }
