@@ -1,15 +1,14 @@
 package ru.javawebinar.basejava.model;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class stores EXPERIENCE("Опыт работы") or EDUCATION("Образование") Sections in Resume
  * as a List of Career object.
  */
-public class CareerSection extends Section<Map<Link, List<Career>>> {
+public class CareerSection extends Section<List<CareerList>> {
 
-    public CareerSection(Map<Link, List<Career>> career) {
-        super(career);
+    public CareerSection(List<CareerList> careerList) {
+        super(careerList);
     }
 }
