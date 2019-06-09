@@ -32,7 +32,7 @@ public class MainFile {
 
         FilesTree filesTree = new FilesTree();
         filesTree.dirWalker("D:/Java_Projects/TopJava.ru/basejava");
-        if (filesTree.getDirCounter()==305+1 && filesTree.getFileCounter()==1346) {
+        if (filesTree.getDirCounter() == 305 + 1 && filesTree.getFileCounter() == 1346) {
             System.out.println("\nThe file tree walking was successful. " +
                     "\nTotal directory listed :" + filesTree.getDirCounter() +
                     "\nTotal files listed: " + filesTree.getFileCounter());
@@ -68,7 +68,7 @@ class FilesTree {
             if (files != null) {
                 for (File file : files) {
                     dirWalker(file.getPath());
-                    if (file.isFile()){
+                    if (file.isFile()) {
                         fileCounter++;
                     }
                 }
