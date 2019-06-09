@@ -29,26 +29,53 @@ public class MainFile {
             throw new RuntimeException(e);
         }
         System.out.println("--------------------");
-        recursiveOut("D:/Java_Projects/TopJava.ru/basejava");
+
+        FilesTree filesTree = new FilesTree();
+        filesTree.dirWalker("D:/Java_Projects/TopJava.ru/basejava");
+        if (filesTree.getDirCounter()==305+1 && filesTree.getFileCounter()==1346) {
+            System.out.println("\nThe file tree walking was successful. " +
+                    "\nTotal directory listed :" + filesTree.getDirCounter() +
+                    "\nTotal files listed: " + filesTree.getFileCounter());
+        }
 
     }
+}
 
-    static void recursiveOut(String filePath) {
-        File dir = new File("D:/Java_Projects/TopJava.ru/basejava");
-        System.out.println(dir.isDirectory());
+class FilesTree {
+    private int dirCounter;
+    private int fileCounter;
 
+    int getDirCounter() {
+        return dirCounter;
+    }
+
+    int getFileCounter() {
+        return fileCounter;
+    }
+
+    void dirWalker(String filePath) {
+        File dir = new File(filePath);
         if (dir.isDirectory()) {
+            dirCounter++;
+            System.out.println("\n" + dir);
             String[] list = dir.list();
             if (list != null) {
                 for (String name : list) {
                     System.out.println(name);
                 }
-                for (String name : list) {
-                    recursiveOut(name);
+            }
+            File[] files = dir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    dirWalker(file.getPath());
+                    if (file.isFile()){
+                        fileCounter++;
+                    }
                 }
             }
         }
 
     }
-
 }
+
+
