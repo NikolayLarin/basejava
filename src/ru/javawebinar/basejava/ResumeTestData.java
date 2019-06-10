@@ -101,22 +101,22 @@ public class ResumeTestData {
         return "\u00B7 ";
     }
 
-    private class ResumeData {
+    public class ResumeData {
 
-        String phone = "+7(921) 855-0482";
-        String skype = "grigory.kislin";
-        String email = "gkislin@yandex.ru";
-        String linkedin = "https://www.linkedin.com/in/gkislin";
-        String gitHub = "https://github.com/gkislin";
-        String stackOverflow = "https://stackoverflow.com/users/548473";
-        String site = "http://gkislin.ru/";
+        public String phone = "+7(921) 855-0482";
+        public String skype = "grigory.kislin";
+        public String email = "gkislin@yandex.ru";
+        public String linkedin = "https://www.linkedin.com/in/gkislin";
+        public String gitHub = "https://github.com/gkislin";
+        public String stackOverflow = "https://stackoverflow.com/users/548473";
+        public String site = "http://gkislin.ru/";
 
-        String objective = "Ведущий стажировок " +
+        public String objective = "Ведущий стажировок " +
                 "и корпоративного обучения по Java Web и Enterprise технологиям";
-        String personal = "Аналитический склад ума, сильная логика, креативность, " +
+        public String personal = "Аналитический склад ума, сильная логика, креативность, " +
                 "инициативность. Пурист кода и архитектуры.";
 
-        ArrayList<String> getAchievements() {
+        public ArrayList<String> getAchievements() {
             ArrayList<String> achievement = new ArrayList<>();
             achievement.add("С 2013 года: разработка проектов " +
                     "\"Разработка Web приложения\",\"Java Enterprise\", " +
@@ -141,7 +141,7 @@ public class ResumeTestData {
             return achievement;
         }
 
-        ArrayList<String> getQualifications() {
+        public ArrayList<String> getQualifications() {
             ArrayList<String> qualification = new ArrayList<>();
             qualification.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
             qualification.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
@@ -167,7 +167,7 @@ public class ResumeTestData {
             return qualification;
         }
 
-        private List<CareerList> getExperience() {
+        public List<CareerList> getExperience() {
             List<CareerList> experience = new ArrayList<>();
 
             Career career_1 = new Career("Автор проекта",
@@ -254,7 +254,7 @@ public class ResumeTestData {
             return experience;
         }
 
-        private List<CareerList> getEducation() {
+        public List<CareerList> getEducation() {
             List<CareerList> education = new ArrayList<>();
 
             Career education_1 = new Career("\"Functional Programming Principles in Scala\" by Martin Odersky",
