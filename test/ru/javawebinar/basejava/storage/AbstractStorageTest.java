@@ -5,12 +5,7 @@ import org.junit.Test;
 import ru.javawebinar.basejava.ResumeTestData;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
-import ru.javawebinar.basejava.model.AboutSection;
-import ru.javawebinar.basejava.model.CareerSection;
-import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.model.SectionType;
-import ru.javawebinar.basejava.model.SkillsSection;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,41 +15,27 @@ import static org.junit.Assert.assertSame;
 
 
 public abstract class AbstractStorageTest {
-    protected final Storage storage;
+    protected Storage storage;
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
     private static final String UUID_3 = "uuid3";
     private static final String UUID_4 = "uuid4";
-    private static final ResumeTestData.ResumeData DATA = new ResumeTestData().new ResumeData();
 
 
-    protected static final Resume RESUME_1;
-    protected static final Resume RESUME_2;
-    protected static final Resume RESUME_3;
-    protected static final Resume RESUME_4;
+    private static final Resume RESUME_1;
+    private static final Resume RESUME_2;
+    private static final Resume RESUME_3;
+    private static final Resume RESUME_4;
+
+    private static final ResumeTestData.ResumeData DATA;
 
     static {
-        RESUME_1 = new Resume(UUID_1, "Name1");
-        RESUME_1.setContact(ContactType.PHONE, DATA.phone);
-        RESUME_1.setContact(ContactType.SKYPE, DATA.skype);
-        RESUME_1.setSection(SectionType.OBJECTIVE, new AboutSection(DATA.objective));
-        RESUME_1.setSection(SectionType.PERSONAL, new AboutSection(DATA.personal));
-
-        RESUME_2 = new Resume(UUID_2, "Name2");
-        RESUME_2.setContact(ContactType.EMAIL, DATA.email);
-        RESUME_2.setContact(ContactType.LINKEDIN, DATA.linkedin);
-        RESUME_2.setSection(SectionType.ACHIEVEMENT, new SkillsSection(DATA.getAchievements()));
-        RESUME_2.setSection(SectionType.QUALIFICATIONS, new SkillsSection(DATA.getQualifications()));
-
-        RESUME_3 = new Resume(UUID_3, "Name1");
-        RESUME_3.setContact(ContactType.GITHUB, DATA.gitHub);
-        RESUME_3.setContact(ContactType.STACKOVERFLOW, DATA.stackOverflow);
-        RESUME_3.setSection(SectionType.EXPERIENCE, new CareerSection(DATA.getExperience()));
-
-        RESUME_4 = new Resume(UUID_4, "Name4");
-        RESUME_4.setContact(ContactType.SITE, DATA.site);
-        RESUME_4.setSection(SectionType.EDUCATION, new CareerSection(DATA.getEducation()));
+        DATA = new ResumeTestData().new ResumeData();
+        RESUME_1 = DATA.getResume(UUID_1, "Name1");
+        RESUME_2 = DATA.getResume(UUID_2, "Name2");
+        RESUME_3 = DATA.getResume(UUID_3, "Name1");
+        RESUME_4 = DATA.getResume(UUID_4, "Name4");
     }
 
     protected AbstractStorageTest(Storage storage) {

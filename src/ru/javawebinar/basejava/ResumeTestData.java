@@ -1,12 +1,12 @@
 package ru.javawebinar.basejava;
 
 import ru.javawebinar.basejava.model.AboutSection;
+import ru.javawebinar.basejava.model.AbstractSection;
 import ru.javawebinar.basejava.model.Career;
 import ru.javawebinar.basejava.model.CareerList;
 import ru.javawebinar.basejava.model.CareerSection;
 import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
-import ru.javawebinar.basejava.model.Section;
 import ru.javawebinar.basejava.model.SectionType;
 import ru.javawebinar.basejava.model.SkillsSection;
 
@@ -46,7 +46,7 @@ public class ResumeTestData {
         testResume.setSection(SectionType.EXPERIENCE, new CareerSection(data.getExperience()));
         testResume.setSection(SectionType.EDUCATION, new CareerSection(data.getEducation()));
 
-        for (EnumMap.Entry<SectionType, Section> entry : testResume.getSections().entrySet()) {
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
             boolean isAboutSection = entry.getKey().name().equals("OBJECTIVE") || entry.getKey().name().equals("PERSONAL");
             if (isAboutSection) {
                 System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue().getElement());
@@ -54,7 +54,7 @@ public class ResumeTestData {
             }
         }
 
-        for (EnumMap.Entry<SectionType, Section> entry : testResume.getSections().entrySet()) {
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
             boolean isSkillsSection = entry.getKey().name().equals("ACHIEVEMENT") || entry.getKey().name().equals("QUALIFICATIONS");
             if (isSkillsSection) {
                 System.out.println(entry.getKey().getTitle() + ": ");
@@ -66,7 +66,7 @@ public class ResumeTestData {
             }
         }
 
-        for (EnumMap.Entry<SectionType, Section> entry : testResume.getSections().entrySet()) {
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
             boolean isCareerSection = entry.getKey().name().equals("EXPERIENCE") || entry.getKey().name().equals("EDUCATION");
             if (isCareerSection) {
                 System.out.println(entry.getKey().getTitle() + ":");
@@ -103,20 +103,41 @@ public class ResumeTestData {
 
     public class ResumeData {
 
-        public String phone = "+7(921) 855-0482";
-        public String skype = "grigory.kislin";
-        public String email = "gkislin@yandex.ru";
-        public String linkedin = "https://www.linkedin.com/in/gkislin";
-        public String gitHub = "https://github.com/gkislin";
-        public String stackOverflow = "https://stackoverflow.com/users/548473";
-        public String site = "http://gkislin.ru/";
+        public Resume getResume(String uuid, String fullName) {
+            Resume resume = new Resume(uuid, fullName);
 
-        public String objective = "Ведущий стажировок " +
+            resume.setContact(ContactType.PHONE, phone);
+            resume.setContact(ContactType.SKYPE, skype);
+            resume.setContact(ContactType.EMAIL, email);
+            resume.setContact(ContactType.LINKEDIN, linkedin);
+            resume.setContact(ContactType.GITHUB, gitHub);
+            resume.setContact(ContactType.STACKOVERFLOW, stackOverflow);
+            resume.setContact(ContactType.SITE, site);
+
+            resume.setSection(SectionType.OBJECTIVE, new AboutSection(objective));
+            resume.setSection(SectionType.PERSONAL, new AboutSection(personal));
+            resume.setSection(SectionType.ACHIEVEMENT, new SkillsSection(getAchievements()));
+            resume.setSection(SectionType.QUALIFICATIONS, new SkillsSection(getQualifications()));
+            resume.setSection(SectionType.EXPERIENCE, new CareerSection(getExperience()));
+            resume.setSection(SectionType.EDUCATION, new CareerSection(getEducation()));
+
+            return resume;
+        }
+
+        private String phone = "+7(921) 855-0482";
+        private String skype = "grigory.kislin";
+        private String email = "gkislin@yandex.ru";
+        private String linkedin = "https://www.linkedin.com/in/gkislin";
+        private String gitHub = "https://github.com/gkislin";
+        private String stackOverflow = "https://stackoverflow.com/users/548473";
+        private String site = "http://gkislin.ru/";
+
+        private String objective = "Ведущий стажировок " +
                 "и корпоративного обучения по Java Web и Enterprise технологиям";
-        public String personal = "Аналитический склад ума, сильная логика, креативность, " +
+        private String personal = "Аналитический склад ума, сильная логика, креативность, " +
                 "инициативность. Пурист кода и архитектуры.";
 
-        public ArrayList<String> getAchievements() {
+        private ArrayList<String> getAchievements() {
             ArrayList<String> achievement = new ArrayList<>();
             achievement.add("С 2013 года: разработка проектов " +
                     "\"Разработка Web приложения\",\"Java Enterprise\", " +
@@ -141,7 +162,7 @@ public class ResumeTestData {
             return achievement;
         }
 
-        public ArrayList<String> getQualifications() {
+        private ArrayList<String> getQualifications() {
             ArrayList<String> qualification = new ArrayList<>();
             qualification.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
             qualification.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
@@ -167,7 +188,7 @@ public class ResumeTestData {
             return qualification;
         }
 
-        public List<CareerList> getExperience() {
+        private List<CareerList> getExperience() {
             List<CareerList> experience = new ArrayList<>();
 
             Career career_1 = new Career("Автор проекта",
@@ -254,7 +275,7 @@ public class ResumeTestData {
             return experience;
         }
 
-        public List<CareerList> getEducation() {
+        private List<CareerList> getEducation() {
             List<CareerList> education = new ArrayList<>();
 
             Career education_1 = new Career("\"Functional Programming Principles in Scala\" by Martin Odersky",

@@ -2,10 +2,10 @@ package ru.javawebinar.basejava.model;
 
 import java.util.Objects;
 
-public abstract class Section<T> {
+public abstract class AbstractSection<T> {
     private final T element;
 
-    public Section(T element) {
+    public AbstractSection(T element) {
         Objects.requireNonNull(element, " sections element can't be null");
         this.element = element;
     }
@@ -18,7 +18,7 @@ public abstract class Section<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Section<?> section = (Section<?>) o;
+        AbstractSection<?> section = (AbstractSection<?>) o;
         return element.equals(section.element);
     }
 
