@@ -5,6 +5,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class MainFile {
+    private static int dirCounter;
+    private static int fileCounter;
+
     public static void main(String[] args) {
         File testFilePath = new File("D:\\Java_Projects\\TopJava.ru\\basejava\\.gitignore");
         String filePath = ".\\.gitignore";
@@ -30,46 +33,24 @@ public class MainFile {
         }
         System.out.println("--------------------");
 
-        FilesTree filesTree = new FilesTree();
-        filesTree.dirWalker("D:/Java_Projects/TopJava.ru/basejava");
-        int totalDirs = 306 + 1;     // it's info from Windows directory properties
-        int totalFiles = 1360;      // it's info from Windows directory properties
-        System.out.println("\nThe file tree walking was successful. " +
-                "\nTotal directory listed: " + filesTree.getDirCounter() + " and is " + totalDirs +
-                "\nTotal files listed: " + filesTree.getFileCounter() + " and is " + totalFiles);
-    }
-}
-
-class FilesTree {
-    private int dirCounter;
-    private int fileCounter;
-
-    int getDirCounter() {
-        return dirCounter;
+        dirWalker("D:/Java_Projects/TopJava.ru/basejava");
+        System.out.println("\nTotal directory passed: " + dirCounter +
+                "\nTotal files listed: " + fileCounter);
     }
 
-    int getFileCounter() {
-        return fileCounter;
-    }
-
-    void dirWalker(String filePath) {
+    private static void dirWalker(String filePath) {
         File dir = new File(filePath);
         if (dir.isDirectory()) {
+            System.out.println("-");
             dirCounter++;
-            System.out.println("\n" + dir);
-            String[] list = dir.list();
-            if (list != null) {
-                for (String name : list) {
-                    System.out.println(name);
-                }
-            }
             File[] files = dir.listFiles();
             if (files != null) {
                 for (File file : files) {
-                    dirWalker(file.getAbsolutePath());
                     if (file.isFile()) {
+                        System.out.println(file.getName());
                         fileCounter++;
                     }
+                    dirWalker(file.getAbsolutePath());
                 }
             }
         }
