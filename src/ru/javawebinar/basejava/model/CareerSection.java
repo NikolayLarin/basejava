@@ -4,11 +4,11 @@ import java.util.List;
 
 /**
  * This class stores EXPERIENCE("Опыт работы") or EDUCATION("Образование") Sections in Resume
- * as a List of Career object.
+ * as a List of Position object.
  */
-public class CareerSection extends AbstractSection<List<CareerList>> {
+public class CareerSection extends AbstractSection<List<Career>> {
 
-    public CareerSection(List<CareerList> careerList) {
-        super(careerList);
+    public CareerSection(List<Career> career) {
+        super(career);
     }
 }

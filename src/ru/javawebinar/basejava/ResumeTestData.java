@@ -3,7 +3,6 @@ package ru.javawebinar.basejava;
 import ru.javawebinar.basejava.model.AboutSection;
 import ru.javawebinar.basejava.model.AbstractSection;
 import ru.javawebinar.basejava.model.Career;
-import ru.javawebinar.basejava.model.CareerList;
 import ru.javawebinar.basejava.model.CareerSection;
 import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
@@ -22,29 +21,13 @@ import java.util.List;
  */
 public class ResumeTestData {
     public static void main(String[] args) {
-        ResumeTestData.ResumeData data = new ResumeTestData().new ResumeData();
-        Resume testResume = new Resume("Григорий Кислин");
+        Resume testResume = createResume("uuid", "Григорий Кислин");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/YYYY");
-
-        testResume.setContact(ContactType.PHONE, data.phone);
-        testResume.setContact(ContactType.SKYPE, data.skype);
-        testResume.setContact(ContactType.EMAIL, data.email);
-        testResume.setContact(ContactType.LINKEDIN, data.linkedin);
-        testResume.setContact(ContactType.GITHUB, data.gitHub);
-        testResume.setContact(ContactType.STACKOVERFLOW, data.stackOverflow);
-        testResume.setContact(ContactType.SITE, data.site);
 
         for (EnumMap.Entry<ContactType, String> entry : testResume.getContacts().entrySet()) {
             System.out.println(entry.getKey().getTitle() + ": " + entry.getValue());
         }
         printLine();
-
-        testResume.setSection(SectionType.OBJECTIVE, new AboutSection(data.objective));
-        testResume.setSection(SectionType.PERSONAL, new AboutSection(data.personal));
-        testResume.setSection(SectionType.ACHIEVEMENT, new SkillsSection(data.getAchievements()));
-        testResume.setSection(SectionType.QUALIFICATIONS, new SkillsSection(data.getQualifications()));
-        testResume.setSection(SectionType.EXPERIENCE, new CareerSection(data.getExperience()));
-        testResume.setSection(SectionType.EDUCATION, new CareerSection(data.getEducation()));
 
         for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
             boolean isAboutSection = entry.getKey().name().equals("OBJECTIVE") || entry.getKey().name().equals("PERSONAL");
@@ -71,18 +54,18 @@ public class ResumeTestData {
             if (isCareerSection) {
                 System.out.println(entry.getKey().getTitle() + ":");
                 CareerSection careerSection = (CareerSection) entry.getValue();
-                for (CareerList list : careerSection.getElement()) {
+                for (Career list : careerSection.getElement()) {
                     System.out.println("\n" + list.getTitle());
                     String url = list.getUrl();
                     if (url != null) {
                         System.out.println(url);
                     }
-                    for (Career career : list.getCareerList()) {
+                    for (Career.Position position : list.getPositions()) {
 
-                        System.out.println(career.getStartDate().format(formatter) + " - " +
-                                career.getEndDate().format(formatter) + "   " +
-                                career.getPosition() + "                    ");
-                        String description = career.getDescription();
+                        System.out.println(position.getStartDate().format(formatter) + " - " +
+                                position.getEndDate().format(formatter) + "   " +
+                                position.getPosition() + "                    ");
+                        String description = position.getDescription();
                         if (description != null) {
                             System.out.print(description + "\n");
                         }
@@ -101,29 +84,28 @@ public class ResumeTestData {
         return "\u00B7 ";
     }
 
-    public class ResumeData {
+    public static Resume createResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
+        ResumeTestData.ResumeData data = new ResumeTestData().new ResumeData();
 
-        public Resume getResume(String uuid, String fullName) {
-            Resume resume = new Resume(uuid, fullName);
+        resume.setContact(ContactType.PHONE, data.phone);
+        resume.setContact(ContactType.SKYPE, data.skype);
+        resume.setContact(ContactType.EMAIL, data.email);
+        resume.setContact(ContactType.LINKEDIN, data.linkedin);
+        resume.setContact(ContactType.GITHUB, data.gitHub);
+        resume.setContact(ContactType.STACKOVERFLOW, data.stackOverflow);
+        resume.setContact(ContactType.SITE, data.site);
 
-            resume.setContact(ContactType.PHONE, phone);
-            resume.setContact(ContactType.SKYPE, skype);
-            resume.setContact(ContactType.EMAIL, email);
-            resume.setContact(ContactType.LINKEDIN, linkedin);
-            resume.setContact(ContactType.GITHUB, gitHub);
-            resume.setContact(ContactType.STACKOVERFLOW, stackOverflow);
-            resume.setContact(ContactType.SITE, site);
+        resume.setSection(SectionType.OBJECTIVE, new AboutSection(data.objective));
+        resume.setSection(SectionType.PERSONAL, new AboutSection(data.personal));
+        resume.setSection(SectionType.ACHIEVEMENT, new SkillsSection(data.getAchievements()));
+        resume.setSection(SectionType.QUALIFICATIONS, new SkillsSection(data.getQualifications()));
+        resume.setSection(SectionType.EXPERIENCE, new CareerSection(data.getExperience()));
+        resume.setSection(SectionType.EDUCATION, new CareerSection(data.getEducation()));
+        return resume;
+    }
 
-            resume.setSection(SectionType.OBJECTIVE, new AboutSection(objective));
-            resume.setSection(SectionType.PERSONAL, new AboutSection(personal));
-            resume.setSection(SectionType.ACHIEVEMENT, new SkillsSection(getAchievements()));
-            resume.setSection(SectionType.QUALIFICATIONS, new SkillsSection(getQualifications()));
-            resume.setSection(SectionType.EXPERIENCE, new CareerSection(getExperience()));
-            resume.setSection(SectionType.EDUCATION, new CareerSection(getEducation()));
-
-            return resume;
-        }
-
+    private class ResumeData {
         private String phone = "+7(921) 855-0482";
         private String skype = "grigory.kislin";
         private String email = "gkislin@yandex.ru";
@@ -188,31 +170,35 @@ public class ResumeTestData {
             return qualification;
         }
 
-        private List<CareerList> getExperience() {
-            List<CareerList> experience = new ArrayList<>();
+        private List<Career> getExperience() {
+            List<Career> experience = new ArrayList<>();
 
-            Career career_1 = new Career("Автор проекта",
+            String title_1 = "Java Online Projects";
+            Career experience_1 = new Career(title_1, "http://javaops.ru/");
+            Career.Position position_1 = experience_1.new Position("Автор проекта",
                     LocalDate.of(2013, 10, 1),
                     LocalDate.now());
-            career_1.setDescription("Создание, организация и проведение Java онлайн проектов и стажировок");
-            CareerList careerList_1 = new CareerList("Java Online Projects", career_1);
-            careerList_1.setUrl("http://javaops.ru/");
-            experience.add(careerList_1);
+            position_1.setDescription("Создание, организация и проведение Java онлайн проектов и стажировок");
+            experience_1.addPosition(title_1, position_1);
+            experience.add(experience_1);
 
-            Career career_2 = new Career("Старший разработчик (backend)",
+            String title_2 = "Wrike";
+            Career experience_2 = new Career(title_2, "https://www.wrike.com/");
+            Career.Position position_2 = experience_2.new Position("Старший разработчик (backend)",
                     LocalDate.of(2014, 10, 1),
                     LocalDate.of(2016, 1, 1));
-            career_2.setDescription("Проектирование и разработка онлайн платформы управления проектами Wrike " +
+            position_2.setDescription("Проектирование и разработка онлайн платформы управления проектами Wrike " +
                     "(Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
                     "Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
-            CareerList careerList_2 = new CareerList("Wrike", career_2);
-            careerList_2.setUrl("https://www.wrike.com/");
-            experience.add(careerList_2);
+            experience_2.addPosition(title_2, position_2);
+            experience.add(experience_2);
 
-            Career career_3 = new Career("Java архитектор",
+            String title_3 = "RIT Center";
+            Career experience_3 = new Career(title_3);
+            Career.Position position_3 = experience_3.new Position("Java архитектор",
                     LocalDate.of(2012, 4, 1),
                     LocalDate.of(2014, 10, 1));
-            career_3.setDescription("Организация процесса разработки системы ERP для разных окружений: " +
+            position_3.setDescription("Организация процесса разработки системы ERP для разных окружений: " +
                     "релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), " +
                     "конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. " +
                     "Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения " +
@@ -220,105 +206,116 @@ public class ResumeTestData {
                     "браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, " +
                     "Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, " +
                     "Unix shell remote scripting via ssh tunnels, PL/Python.");
-            CareerList careerList_3 = new CareerList("RIT Center", career_3);
-            experience.add(careerList_3);
+            experience_3.addPosition(title_3, position_3);
+            experience.add(experience_3);
 
-            Career career_4 = new Career("Ведущий программист",
+            String title_4 = "Luxoft (Deutsche Bank)";
+            Career experience_4 = new Career(title_4, "http://www.luxoft.ru/");
+            Career.Position position_4 = experience_4.new Position("Ведущий программист",
                     LocalDate.of(2010, 12, 1),
                     LocalDate.of(2012, 4, 1));
-            career_4.setDescription("Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC," +
+            position_4.setDescription("Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC," +
                     " SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация " +
                     "RIA-приложения для администрирования, мониторинга и анализа результатов в области " +
                     "алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
-            CareerList careerList_4 = new CareerList("Luxoft (Deutsche Bank)", career_4);
-            careerList_4.setUrl("http://www.luxoft.ru/");
-            experience.add(careerList_4);
+            experience_4.addPosition(title_4, position_4);
+            experience.add(experience_4);
 
-            Career career_5 = new Career("Ведущий специалист",
+            String title_5 = "Yota";
+            Career experience_5 = new Career(title_5, "https://www.yota.ru/");
+            Career.Position position_5 = experience_5.new Position("Ведущий специалист",
                     LocalDate.of(2008, 6, 1),
                     LocalDate.of(2010, 12, 1));
-            career_5.setDescription("Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" " +
+            position_5.setDescription("Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" " +
                     "(GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). " +
                     "Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX " +
                     "клиента (Python/ Jython, Django, ExtJS).");
-            CareerList careerList_5 = new CareerList("Yota", career_5);
-            careerList_5.setUrl("https://www.yota.ru/");
-            experience.add(careerList_5);
+            experience_5.addPosition(title_5, position_5);
+            experience.add(experience_5);
 
-            Career career_6 = new Career("Разработчик ПО",
+            String title_6 = "Enkata";
+            Career experience_6 = new Career(title_6, "http://enkata.com/");
+            Career.Position position_6 = experience_6.new Position("Разработчик ПО",
                     LocalDate.of(2007, 3, 1),
                     LocalDate.of(2008, 6, 1));
-            career_6.setDescription("Реализация клиентской (Eclipse RCP) и серверной " +
+            position_6.setDescription("Реализация клиентской (Eclipse RCP) и серверной " +
                     "(JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).");
-            CareerList careerList_6 = new CareerList("Enkata", career_6);
-            careerList_6.setUrl("http://enkata.com/");
-            experience.add(careerList_6);
+            experience_6.addPosition(title_6, position_6);
+            experience.add(experience_6);
 
-            Career career_7 = new Career("Разработчик ПО",
+            String title_7 = "Siemens AG";
+            Career experience_7 = new Career(title_7, "https://www.siemens.com/ru/ru/home.html");
+            Career.Position position_7 = experience_7.new Position("Разработчик ПО",
                     LocalDate.of(2005, 1, 1),
                     LocalDate.of(2007, 2, 1));
-            career_7.setDescription("Разработка информационной модели, проектирование интерфейсов, реализация и " +
+            position_7.setDescription("Разработка информационной модели, проектирование интерфейсов, реализация и " +
                     "отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).");
-            CareerList careerList_7 = new CareerList("Siemens AG", career_7);
-            careerList_7.setUrl("https://www.siemens.com/ru/ru/home.html");
-            experience.add(careerList_7);
+            experience_7.addPosition(title_7, position_7);
+            experience.add(experience_7);
 
-            Career career_8 = new Career("Инженер по аппаратному и программному тестированию",
+            String title_8 = "Alcatel";
+            Career experience_8 = new Career(title_8, "http://www.alcatel.ru/");
+            Career.Position position_8 = experience_8.new Position("Инженер по аппаратному и программному тестированию",
                     LocalDate.of(1997, 9, 1),
                     LocalDate.of(2005, 1, 1));
-            career_8.setDescription("Тестирование, отладка, внедрение ПО цифровой телефонной " +
+            position_8.setDescription("Тестирование, отладка, внедрение ПО цифровой телефонной " +
                     "станции Alcatel 1000 S12 (CHILL, ASM).");
-            CareerList careerList_8 = new CareerList("Alcatel", career_8);
-            careerList_8.setUrl("http://www.alcatel.ru/");
-            experience.add(careerList_8);
+            experience_8.addPosition(title_8, position_8);
+            experience.add(experience_8);
 
             return experience;
         }
 
-        private List<CareerList> getEducation() {
-            List<CareerList> education = new ArrayList<>();
+        private List<Career> getEducation() {
+            List<Career> education = new ArrayList<>();
 
-            Career education_1 = new Career("\"Functional Programming Principles in Scala\" by Martin Odersky",
+            String title_1 = "Coursera";
+            Career education_1 = new Career(title_1, "https://www.coursera.org/course/progfun");
+            Career.Position position_1 = education_1.new Position("\"Functional Programming " +
+                    "Principles in Scala\" by Martin Odersky",
                     LocalDate.of(2013, 3, 1),
                     LocalDate.of(2013, 5, 1));
-            CareerList careerList_1 = new CareerList("Coursera", education_1);
-            careerList_1.setUrl("https://www.coursera.org/course/progfun");
-            education.add(careerList_1);
+            education_1.addPosition(title_1, position_1);
+            education.add(education_1);
 
-            Career education_2 = new Career("Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"",
+            String title_2 = "Luxoft";
+            Career education_2 = new Career(title_2,
+                    "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366");
+            Career.Position position_2 = education_2.new Position("Курс \"Объектно-ориентированный анализ ИС. " +
+                    "Концептуальное моделирование на UML.\"",
                     LocalDate.of(2011, 3, 1),
                     LocalDate.of(2011, 4, 1));
-            CareerList careerList_2 = new CareerList("Luxoft", education_2);
-            careerList_2.setUrl("http://www.luxoft-training.ru/training/catalog/course.html?ID=22366");
-            education.add(careerList_2);
+            education_2.addPosition(title_2, position_2);
+            education.add(education_2);
 
-            Career education_3 = new Career("3 месяца обучения мобильным IN сетям (Берлин)",
+            String title_3 = "Siemens AG";
+            Career education_3 = new Career(title_3, "http://www.siemens.ru/");
+            Career.Position position_3 = education_3.new Position("3 месяца обучения мобильным IN сетям (Берлин)",
                     LocalDate.of(2005, 1, 1),
                     LocalDate.of(2005, 4, 1));
-            CareerList careerList_3 = new CareerList("Siemens AG", education_3);
-            careerList_3.setUrl("http://www.siemens.ru/");
-            education.add(careerList_3);
+            education_3.addPosition(title_3, position_3);
+            education.add(education_3);
 
-            Career education_4 = new Career("6 месяцев обучения цифровым телефонным сетям (Москва)",
+            String title_4 = "Alcatel";
+            Career education_4 = new Career(title_4, "http://www.alcatel.ru/");
+            Career.Position position_4 = education_4.new Position("6 месяцев обучения цифровым телефонным сетям (Москва)",
                     LocalDate.of(1997, 9, 1),
                     LocalDate.of(1998, 3, 1));
-            CareerList careerList_4 = new CareerList("Alcatel", education_4);
-            careerList_4.setUrl("http://www.alcatel.ru/");
-            education.add(careerList_4);
+            education_4.addPosition(title_4, position_4);
+            education.add(education_4);
 
-            Career education_5 = new Career("Аспирантура (программист С, С++)",
+            String title_5 = "Санкт-Петербургский национальный исследовательский университет " +
+                    "информационных технологий, механики и оптики";
+            Career education_5 = new Career(title_5, "http://www.ifmo.ru/");
+            Career.Position position_5 = education_5.new Position("Аспирантура (программист С, С++)",
                     LocalDate.of(1993, 9, 1),
                     LocalDate.of(1996, 7, 1));
-            CareerList careerList_5 = new CareerList("Санкт-Петербургский национальный исследовательский " +
-                    "университет информационных технологий, механики и оптики", education_5);
-            careerList_5.setUrl("http://www.ifmo.ru/");
-            education.add(careerList_5);
-
-            Career education_6 = new Career("Инженер (программист Fortran, C)",
+            education_5.addPosition(title_5, position_5);
+            Career.Position position_6 = education_5.new Position("Инженер (программист Fortran, C)",
                     LocalDate.of(1987, 9, 1),
                     LocalDate.of(1993, 7, 1));
-            careerList_5.addCareer("Санкт-Петербургский национальный исследовательский " +
-                    "университет информационных технологий, механики и оптики", education_6);
+            education_5.addPosition("1", position_6);
+            education.add(education_5);
 
             return education;
         }
