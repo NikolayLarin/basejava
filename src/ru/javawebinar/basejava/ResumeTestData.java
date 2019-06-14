@@ -175,18 +175,15 @@ public class ResumeTestData {
 
             String title_1 = "Java Online Projects";
             Career experience_1 = new Career(title_1, "http://javaops.ru/");
-            Career.Position position_1 = experience_1.new Position("Автор проекта",
-                    LocalDate.of(2013, 10, 1),
-                    LocalDate.now());
+            Career.Position position_1 = new Career.Position("Автор проекта", 2013, 10);
             position_1.setDescription("Создание, организация и проведение Java онлайн проектов и стажировок");
             experience_1.addPosition(title_1, position_1);
             experience.add(experience_1);
 
             String title_2 = "Wrike";
             Career experience_2 = new Career(title_2, "https://www.wrike.com/");
-            Career.Position position_2 = experience_2.new Position("Старший разработчик (backend)",
-                    LocalDate.of(2014, 10, 1),
-                    LocalDate.of(2016, 1, 1));
+            Career.Position position_2 = new Career.Position("Старший разработчик (backend)",
+                    2014, 10, 2016, 1);
             position_2.setDescription("Проектирование и разработка онлайн платформы управления проектами Wrike " +
                     "(Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
                     "Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
@@ -195,9 +192,8 @@ public class ResumeTestData {
 
             String title_3 = "RIT Center";
             Career experience_3 = new Career(title_3);
-            Career.Position position_3 = experience_3.new Position("Java архитектор",
-                    LocalDate.of(2012, 4, 1),
-                    LocalDate.of(2014, 10, 1));
+            Career.Position position_3 = new Career.Position("Java архитектор",
+                    2012, 4, 2014, 10);
             position_3.setDescription("Организация процесса разработки системы ERP для разных окружений: " +
                     "релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), " +
                     "конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. " +
@@ -211,9 +207,8 @@ public class ResumeTestData {
 
             String title_4 = "Luxoft (Deutsche Bank)";
             Career experience_4 = new Career(title_4, "http://www.luxoft.ru/");
-            Career.Position position_4 = experience_4.new Position("Ведущий программист",
-                    LocalDate.of(2010, 12, 1),
-                    LocalDate.of(2012, 4, 1));
+            Career.Position position_4 = new Career.Position("Ведущий программист",
+                    2010, 12, 2012, 4);
             position_4.setDescription("Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC," +
                     " SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация " +
                     "RIA-приложения для администрирования, мониторинга и анализа результатов в области " +
@@ -223,9 +218,8 @@ public class ResumeTestData {
 
             String title_5 = "Yota";
             Career experience_5 = new Career(title_5, "https://www.yota.ru/");
-            Career.Position position_5 = experience_5.new Position("Ведущий специалист",
-                    LocalDate.of(2008, 6, 1),
-                    LocalDate.of(2010, 12, 1));
+            Career.Position position_5 = new Career.Position("Ведущий специалист",
+                    2008, 6, 2010, 12);
             position_5.setDescription("Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" " +
                     "(GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). " +
                     "Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX " +
@@ -235,9 +229,8 @@ public class ResumeTestData {
 
             String title_6 = "Enkata";
             Career experience_6 = new Career(title_6, "http://enkata.com/");
-            Career.Position position_6 = experience_6.new Position("Разработчик ПО",
-                    LocalDate.of(2007, 3, 1),
-                    LocalDate.of(2008, 6, 1));
+            Career.Position position_6 = new Career.Position("Разработчик ПО",
+                    2007, 3, 2008, 6);
             position_6.setDescription("Реализация клиентской (Eclipse RCP) и серверной " +
                     "(JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).");
             experience_6.addPosition(title_6, position_6);
@@ -245,9 +238,8 @@ public class ResumeTestData {
 
             String title_7 = "Siemens AG";
             Career experience_7 = new Career(title_7, "https://www.siemens.com/ru/ru/home.html");
-            Career.Position position_7 = experience_7.new Position("Разработчик ПО",
-                    LocalDate.of(2005, 1, 1),
-                    LocalDate.of(2007, 2, 1));
+            Career.Position position_7 = new Career.Position("Разработчик ПО",
+                    2005, 1, 2007, 2);
             position_7.setDescription("Разработка информационной модели, проектирование интерфейсов, реализация и " +
                     "отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).");
             experience_7.addPosition(title_7, position_7);
@@ -255,9 +247,8 @@ public class ResumeTestData {
 
             String title_8 = "Alcatel";
             Career experience_8 = new Career(title_8, "http://www.alcatel.ru/");
-            Career.Position position_8 = experience_8.new Position("Инженер по аппаратному и программному тестированию",
-                    LocalDate.of(1997, 9, 1),
-                    LocalDate.of(2005, 1, 1));
+            Career.Position position_8 = new Career.Position("Инженер по аппаратному и программному тестированию",
+                    1997, 9, 2005, 1);
             position_8.setDescription("Тестирование, отладка, внедрение ПО цифровой телефонной " +
                     "станции Alcatel 1000 S12 (CHILL, ASM).");
             experience_8.addPosition(title_8, position_8);
@@ -271,7 +262,7 @@ public class ResumeTestData {
 
             String title_1 = "Coursera";
             Career education_1 = new Career(title_1, "https://www.coursera.org/course/progfun");
-            Career.Position position_1 = education_1.new Position("\"Functional Programming " +
+            Career.Position position_1 = new Career.Position("\"Functional Programming " +
                     "Principles in Scala\" by Martin Odersky",
                     LocalDate.of(2013, 3, 1),
                     LocalDate.of(2013, 5, 1));
@@ -281,40 +272,35 @@ public class ResumeTestData {
             String title_2 = "Luxoft";
             Career education_2 = new Career(title_2,
                     "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366");
-            Career.Position position_2 = education_2.new Position("Курс \"Объектно-ориентированный анализ ИС. " +
+            Career.Position position_2 = new Career.Position("Курс \"Объектно-ориентированный анализ ИС. " +
                     "Концептуальное моделирование на UML.\"",
-                    LocalDate.of(2011, 3, 1),
-                    LocalDate.of(2011, 4, 1));
+                    2011, 3, 2011, 4);
             education_2.addPosition(title_2, position_2);
             education.add(education_2);
 
             String title_3 = "Siemens AG";
             Career education_3 = new Career(title_3, "http://www.siemens.ru/");
-            Career.Position position_3 = education_3.new Position("3 месяца обучения мобильным IN сетям (Берлин)",
-                    LocalDate.of(2005, 1, 1),
-                    LocalDate.of(2005, 4, 1));
+            Career.Position position_3 = new Career.Position("3 месяца обучения мобильным IN сетям (Берлин)",
+                    2005, 1, 2005, 4);
             education_3.addPosition(title_3, position_3);
             education.add(education_3);
 
             String title_4 = "Alcatel";
             Career education_4 = new Career(title_4, "http://www.alcatel.ru/");
-            Career.Position position_4 = education_4.new Position("6 месяцев обучения цифровым телефонным сетям (Москва)",
-                    LocalDate.of(1997, 9, 1),
-                    LocalDate.of(1998, 3, 1));
+            Career.Position position_4 = new Career.Position("6 месяцев обучения цифровым телефонным сетям (Москва)",
+                    1997, 9, 1998, 3);
             education_4.addPosition(title_4, position_4);
             education.add(education_4);
 
             String title_5 = "Санкт-Петербургский национальный исследовательский университет " +
                     "информационных технологий, механики и оптики";
             Career education_5 = new Career(title_5, "http://www.ifmo.ru/");
-            Career.Position position_5 = education_5.new Position("Аспирантура (программист С, С++)",
-                    LocalDate.of(1993, 9, 1),
-                    LocalDate.of(1996, 7, 1));
+            Career.Position position_5 = new Career.Position("Аспирантура (программист С, С++)",
+                    1993, 9, 1996, 7);
             education_5.addPosition(title_5, position_5);
-            Career.Position position_6 = education_5.new Position("Инженер (программист Fortran, C)",
-                    LocalDate.of(1987, 9, 1),
-                    LocalDate.of(1993, 7, 1));
-            education_5.addPosition("1", position_6);
+            Career.Position position_6 = new Career.Position("Инженер (программист Fortran, C)",
+                    1987, 9, 1993, 7);
+            education_5.addPosition(title_5, position_6);
             education.add(education_5);
 
             return education;

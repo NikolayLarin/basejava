@@ -40,18 +40,17 @@ public class MainFile {
 
     private static void dirWalker(String filePath) {
         File dir = new File(filePath);
-        if (dir.isDirectory()) {
-            System.out.println("-");
-            dirCounter++;
-            File[] files = dir.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    if (file.isFile()) {
-                        System.out.println(file.getName());
-                        fileCounter++;
-                    }
-                    dirWalker(file.getAbsolutePath());
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    System.out.println("Directory: " + file.getName());
+                    dirCounter++;
+                } else if (file.isFile()) {
+                    System.out.println("   file: " + file.getName());
+                    fileCounter++;
                 }
+                dirWalker(file.getAbsolutePath());
             }
         }
     }

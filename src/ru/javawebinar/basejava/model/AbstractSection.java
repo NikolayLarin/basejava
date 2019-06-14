@@ -6,7 +6,7 @@ public abstract class AbstractSection<T> {
     private final T element;
 
     public AbstractSection(T element) {
-        Objects.requireNonNull(element, " sections element can't be null");
+        Objects.requireNonNull(element, "Section element can't be null");
         this.element = element;
     }
 

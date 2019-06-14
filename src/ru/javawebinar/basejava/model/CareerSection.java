@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.model;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -8,7 +9,11 @@ import java.util.List;
  */
 public class CareerSection extends AbstractSection<List<Career>> {
 
-    public CareerSection(List<Career> career) {
-        super(career);
+    public CareerSection(Career... careers) {
+        this(Arrays.asList(careers));
+    }
+
+    public CareerSection(List<Career> element) {
+        super(element);
     }
 }

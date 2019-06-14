@@ -1,7 +1,10 @@
 package ru.javawebinar.basejava.model;
 
+import ru.javawebinar.basejava.util.DateUtil;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,8 +16,7 @@ public class Career {
     private List<Position> positions = new ArrayList<>();
 
     public Career(String title) {
-        Objects.requireNonNull(title, "Company or institution name can't be null");
-        this.homePage = new Link(title);
+        this(title, null);
     }
 
     public Career(String title, String url) {
@@ -22,11 +24,22 @@ public class Career {
         this.homePage = new Link(title, url);
     }
 
+    public Career(String title, String url, Position... position) {
+        this(new Link(title, url), Arrays.asList(position));
+    }
+
+    public Career(Link link, List<Position> positions) {
+        Objects.requireNonNull(link, "Company or institution link can't be null");
+        Objects.requireNonNull(positions, "List of positions in company or institution can't be null");
+        this.homePage = link;
+        this.positions = positions;
+    }
+
     public void addPosition(String title, Position position) {
-        Objects.requireNonNull(title, "Company or institution name can't be null");
+        Objects.requireNonNull(title, "Company or institution title can't be null");
         Objects.requireNonNull(position, "Career element can't be null");
         if (!this.homePage.getTitle().equals(title)) {
-            throw new RuntimeException("Company or institution name is not equal to existing");
+            throw new RuntimeException("Can't add position with Company or institution name not equal to existing");
         }
         this.positions.add(position);
     }
@@ -64,14 +77,22 @@ public class Career {
     /**
      * This class describes EXPERIENCE("Опыт работы") and EDUCATION("Образование") Sections in Resume.
      */
-    public class Position {
+    public static class Position {
         private String position;
         private LocalDate startDate;
         private LocalDate endDate;
         private String description;
 
+        public Position(String position, int startYear, int startMonth) {
+            this(position, DateUtil.of(startYear, startMonth), DateUtil.NOW);
+        }
+
+        public Position(String position, int startYear, int startMonth, int endYear, int endMonth) {
+            this(position, DateUtil.of(startYear, startMonth), DateUtil.of(endYear, endMonth));
+        }
+
         public Position(String position, LocalDate startDate, LocalDate endDate) {
-            Objects.requireNonNull(position, "Position or career can't be null");
+            Objects.requireNonNull(position, "Position in career can't be null");
             Objects.requireNonNull(startDate, "StartDate can't be null");
             Objects.requireNonNull(endDate, "EndDate can't be null");
             this.startDate = startDate;
