@@ -8,6 +8,8 @@ import java.util.List;
  * in Resume and stores it as a List of String.
  */
 public class SkillsSection extends AbstractSection<List<String>> {
+    private static final long serialVersionUID = 20190616;
+
 
     public SkillsSection(String... skills) {
         this(Arrays.asList(skills));

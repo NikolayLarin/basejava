@@ -5,6 +5,8 @@ package ru.javawebinar.basejava.model;
  * in Resume and stores it as a String.
  */
 public class AboutSection extends AbstractSection<String> {
+    private static final long serialVersionUID = 20190616;
+
 
     public AboutSection(String element) {
         super(element);

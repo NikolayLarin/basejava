@@ -1,8 +1,11 @@
 package ru.javawebinar.basejava.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Link {
+public class Link implements Serializable {
+    private static final long serialVersionUID = 20190616;
+
     private final String title;
     private String url;
 

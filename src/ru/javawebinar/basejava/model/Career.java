@@ -2,6 +2,7 @@ package ru.javawebinar.basejava.model;
 
 import ru.javawebinar.basejava.util.DateUtil;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +12,9 @@ import java.util.Objects;
 /**
  * This class stores Position instances of EXPERIENCE("Опыт работы") and EDUCATION("Образование") Sections in Resume.
  */
-public class Career {
+public class Career implements Serializable {
+    private static final long serialVersionUID = 20190616;
+
     private Link homePage;
     private List<Position> positions = new ArrayList<>();
 
@@ -77,7 +80,9 @@ public class Career {
     /**
      * This class describes EXPERIENCE("Опыт работы") and EDUCATION("Образование") Sections in Resume.
      */
-    public static class Position {
+    public static class Position implements Serializable{
+        private static final long serialVersionUID = 20190616;
+
         private String position;
         private LocalDate startDate;
         private LocalDate endDate;

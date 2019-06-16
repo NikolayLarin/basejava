@@ -8,6 +8,8 @@ import java.util.List;
  * as a List of Position object.
  */
 public class CareerSection extends AbstractSection<List<Career>> {
+    private static final long serialVersionUID = 20190616;
+
 
     public CareerSection(Career... careers) {
         this(Arrays.asList(careers));
