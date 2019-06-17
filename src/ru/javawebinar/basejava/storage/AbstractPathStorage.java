@@ -41,7 +41,6 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     protected void doUpdate(Resume resume, Path path) {
         try {
             doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
-//            doWrite(resume, new BufferedOutputStream(new FileOutputStream(path.toFile())));
         } catch (IOException e) {
             throw new StorageException("Can't write path " + path.getFileName(), resume.getUuid(), e);
         }
