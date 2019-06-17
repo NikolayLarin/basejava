@@ -23,7 +23,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected abstract Resume doRead(InputStream inputStream) throws IOException;
 
     protected AbstractFileStorage(File directory) {
-        Objects.requireNonNull(directory, "directory can't be null");
+        Objects.requireNonNull(directory, "Directory can't be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -61,7 +61,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doDelete(File file) {
         if (!file.delete()) {
-         throw new StorageException("Can't delete file ", file.getName());
+            throw new StorageException("Can't delete file ", file.getName());
         }
     }
 
@@ -81,7 +81,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> doCopyAll() {
-        File[] files = getFiles();
+        File[] files = directory.listFiles();
         if (files == null) {
             throw new StorageException("Can't read directory " + directory.getAbsolutePath(), null);
         }
@@ -94,7 +94,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-        File[] files = getFiles();
+        File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
                 doDelete(file);
@@ -109,9 +109,5 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
             throw new StorageException("Directory reed Error", null);
         }
         return list.length;
-    }
-
-    private File[] getFiles() {
-        return directory.listFiles();
     }
 }
