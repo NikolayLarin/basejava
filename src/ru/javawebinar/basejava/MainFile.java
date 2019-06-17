@@ -5,9 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class MainFile {
-    private static int dirCounter;
-    private static int fileCounter;
-
     public static void main(String[] args) {
         File testFilePath = new File("D:\\Java_Projects\\TopJava.ru\\basejava\\.gitignore");
         String filePath = ".\\.gitignore";
@@ -33,10 +30,15 @@ public class MainFile {
         }
         System.out.println("--------------------");
 
-        dirWalker("D:/Java_Projects/TopJava.ru/basejava");
+        dirWalker("D:\\Java_Projects\\TopJava.ru\\basejava");
         System.out.println("\nTotal directory passed: " + dirCounter +
                 "\nTotal files listed: " + fileCounter);
     }
+
+    private static int dirCounter;
+    private static int fileCounter;
+
+    private static StringBuilder sb = new StringBuilder(" ");
 
     private static void dirWalker(String filePath) {
         File dir = new File(filePath);
@@ -44,15 +46,21 @@ public class MainFile {
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    System.out.println("Directory: " + file.getName());
+                    System.out.println("\n" + sb + file.getName());
                     dirCounter++;
                 } else if (file.isFile()) {
-                    System.out.println("   file: " + file.getName());
+                    System.out.println(sb + file.getName());
                     fileCounter++;
                 }
+                sb.append(dot());
                 dirWalker(file.getAbsolutePath());
             }
         }
+        sb.deleteCharAt(sb.length() - 1);
+    }
+
+    private static String dot() {
+        return "\u00B7";
     }
 }
 
