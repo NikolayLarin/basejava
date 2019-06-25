@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
+public abstract class AbstractPathStorage extends AbstractStorage<Path> implements IOStrategy {
     private Path directory;
 
-    protected abstract void doWrite(Resume resume, OutputStream outputStream) throws IOException;
+    public abstract void doWrite(Resume resume, OutputStream outputStream) throws IOException;
 
-    protected abstract Resume doRead(InputStream inputStream) throws IOException;
+    public abstract Resume doRead(InputStream inputStream) throws IOException;
 
     protected AbstractPathStorage(String dir) {
         directory = Paths.get(dir);

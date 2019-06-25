@@ -10,21 +10,21 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 public class ObjectStreamPathStorage extends AbstractPathStorage {
+
     protected ObjectStreamPathStorage(String directory) {
         super(directory);
     }
 
     @Override
-    protected void doWrite(Resume resume, OutputStream os) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
+    public void doWrite(Resume resume, OutputStream outputStream) throws IOException {
+        try (ObjectOutputStream oos = new ObjectOutputStream(outputStream)) {
             oos.writeObject(resume);
         }
-
     }
 
     @Override
-    protected Resume doRead(InputStream is) throws IOException {
-        try (ObjectInputStream ois = new ObjectInputStream(is)) {
+    public Resume doRead(InputStream inputStream) throws IOException {
+        try (ObjectInputStream ois = new ObjectInputStream(inputStream)) {
             return (Resume) ois.readObject();
         } catch (ClassNotFoundException e) {
             throw new StorageException("Can't downcast resume after reading", null, e);
