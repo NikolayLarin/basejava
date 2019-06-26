@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> implements IOStrategy {
+public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private File directory;
 
     public abstract void doWrite(Resume resume, OutputStream outputStream) throws IOException;

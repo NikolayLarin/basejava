@@ -10,9 +10,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-public class ObjectStreamFileStorage extends AbstractFileStorage {
+public class FileStorage extends AbstractFileStorage implements IOStrategy {
 
-    public ObjectStreamFileStorage(File directory) {
+    public FileStorage(File directory) {
         super(directory);
     }
 

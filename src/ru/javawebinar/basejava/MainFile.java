@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class MainFile {
     public static void main(String[] args) {
-        File testFilePath = new File("D:\\Java_Projects\\TopJava.ru\\basejava\\.gitignore");
+        File testFilePath = new File("D:\\Java\\MyProjects\\basejava\\.gitignore");
         String filePath = ".\\.gitignore";
         File file = new File(filePath);
         try {
@@ -30,7 +30,7 @@ public class MainFile {
         }
         System.out.println("--------------------");
 
-        dirWalker("D:\\Java_Projects\\TopJava.ru\\basejava");
+        dirWalker("D:\\Java\\MyProjects\\basejava");
         System.out.println("\nTotal directory passed: " + dirCounter +
                 "\nTotal files listed: " + fileCounter);
     }

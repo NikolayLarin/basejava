@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("D:/Java_Projects/TopJava.ru/basejava/storage");
+    protected static final File STORAGE_DIR = new File("D:/Java/MyProjects/basejava/storage");
     protected Storage storage;
 
     private static final String UUID_1 = "uuid1";

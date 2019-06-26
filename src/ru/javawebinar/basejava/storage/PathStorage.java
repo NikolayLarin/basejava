@@ -3,16 +3,15 @@ package ru.javawebinar.basejava.storage;
 import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
-public class ObjectStreamFileStorage extends AbstractFileStorage {
+public class PathStorage extends AbstractPathStorage implements IOStrategy{
 
-    public ObjectStreamFileStorage(File directory) {
+    protected PathStorage(String directory) {
         super(directory);
     }
 

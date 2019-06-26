@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> implements IOStrategy {
+public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     private Path directory;
 
     public abstract void doWrite(Resume resume, OutputStream outputStream) throws IOException;
