@@ -4,7 +4,7 @@ import java.io.File;
 
 public class ObjectStreamFileStorage extends FileStorage {
 
-    public ObjectStreamFileStorage(File directory) {
-        super(directory);
+    protected ObjectStreamFileStorage(File directory) {
+        super(directory, new ObjectStreamStorage());
     }
 }

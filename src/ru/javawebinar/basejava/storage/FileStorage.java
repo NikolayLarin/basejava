@@ -9,19 +9,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class FileStorage extends AbstractStorage<File> implements IOStrategy {
+public class FileStorage extends AbstractStorage<File> {
     private File directory;
+    private IOStrategy ioStrategy;
 
-    protected FileStorage(File directory) {
+    public FileStorage(File directory, IOStrategy ioStrategy) {
         Objects.requireNonNull(directory, "Directory can't be null");
+        Objects.requireNonNull(ioStrategy, "Input/Output strategy can't be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
@@ -29,22 +27,7 @@ public class FileStorage extends AbstractStorage<File> implements IOStrategy {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
         }
         this.directory = directory;
-    }
-
-    @Override
-    public void doWrite(Resume resume, OutputStream outputStream) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(outputStream)) {
-            oos.writeObject(resume);
-        }
-    }
-
-    @Override
-    public Resume doRead(InputStream inputStream) throws IOException {
-        try (ObjectInputStream ois = new ObjectInputStream(inputStream)) {
-            return (Resume) ois.readObject();
-        } catch (ClassNotFoundException e) {
-            throw new StorageException("Can't downcast resume after reading", null, e);
-        }
+        this.ioStrategy = ioStrategy;
     }
 
     @Override
@@ -55,7 +38,7 @@ public class FileStorage extends AbstractStorage<File> implements IOStrategy {
     @Override
     protected void doUpdate(Resume resume, File file) {
         try {
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+            ioStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("Can't write file " + file.getAbsolutePath(), resume.getUuid(), e);
         }
@@ -86,7 +69,7 @@ public class FileStorage extends AbstractStorage<File> implements IOStrategy {
     @Override
     protected Resume doGet(File file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file)));
+            return ioStrategy.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("Can't read file " + file.getAbsolutePath(), file.getName(), e);
         }

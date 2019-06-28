@@ -6,10 +6,6 @@ import ru.javawebinar.basejava.model.Resume;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -19,32 +15,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class PathStorage extends AbstractStorage<Path> implements IOStrategy {
+public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
+    private IOStrategy ioStrategy;
 
-    protected PathStorage(String dir) {
+    public PathStorage(String dir, IOStrategy ioStrategy) {
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "Directory can't be null");
+        Objects.requireNonNull(ioStrategy, "Input/Output strategy can't be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is't directory or is't writable");
         }
+        this.ioStrategy = ioStrategy;
     }
 
-    @Override
-    public void doWrite(Resume resume, OutputStream outputStream) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(outputStream)) {
-            oos.writeObject(resume);
-        }
-    }
-
-    @Override
-    public Resume doRead(InputStream inputStream) throws IOException {
-        try (ObjectInputStream ois = new ObjectInputStream(inputStream)) {
-            return (Resume) ois.readObject();
-        } catch (ClassNotFoundException e) {
-            throw new StorageException("Can't downcast resume after reading", null, e);
-        }
-    }
 
     @Override
     protected Path getSearchKey(String uuid) {
@@ -54,7 +38,7 @@ public class PathStorage extends AbstractStorage<Path> implements IOStrategy {
     @Override
     protected void doUpdate(Resume resume, Path path) {
         try {
-            doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
+            ioStrategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Can't write path " + path.getFileName(), resume.getUuid(), e);
         }
@@ -87,7 +71,7 @@ public class PathStorage extends AbstractStorage<Path> implements IOStrategy {
     @Override
     protected Resume doGet(Path path) {
         try {
-            return doRead(new BufferedInputStream(Files.newInputStream(path)));
+            return ioStrategy.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Can't read path", path.toFile().getName(), e);
         }
