@@ -46,10 +46,10 @@ public class MainFile {
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    System.out.println("\n" + sb + file.getName());
+                    System.out.println(sb + " dir: " + file.getName());
                     dirCounter++;
                 } else if (file.isFile()) {
-                    System.out.println(sb + file.getName());
+                    System.out.println(sb + " f: " + file.getName());
                     fileCounter++;
                 }
                 sb.append(dot());
@@ -63,5 +63,3 @@ public class MainFile {
         return "\u00B7";
     }
 }
-
-
