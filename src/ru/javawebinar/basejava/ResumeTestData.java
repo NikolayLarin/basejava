@@ -32,7 +32,7 @@ public class ResumeTestData {
         for (EnumMap.Entry<SectionType, AbstractSection> entry : testResume.getSections().entrySet()) {
             boolean isAboutSection = entry.getKey().name().equals("OBJECTIVE") || entry.getKey().name().equals("PERSONAL");
             if (isAboutSection) {
-                System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue().getElement());
+                System.out.println(entry.getKey().getTitle() + ": \n" + dot() + entry.getValue());
                 printLine();
             }
         }
@@ -210,7 +210,7 @@ public class ResumeTestData {
             Career.Position position_4 = new Career.Position("Ведущий программист",
                     2010, 12, 2012, 4);
             position_4.setDescription("Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC," +
-                    " SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация " +
+                    "SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация " +
                     "RIA-приложения для администрирования, мониторинга и анализа результатов в области " +
                     "алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
             experience_4.addPosition(title_4, position_4);

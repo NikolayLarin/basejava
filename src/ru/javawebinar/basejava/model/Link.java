@@ -1,13 +1,19 @@
 package ru.javawebinar.basejava.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.io.Serializable;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Link implements Serializable {
     private static final long serialVersionUID = 20190616;
 
-    private final String title;
+    private String title;
     private String url;
+
+    public Link() {
+    }
 
     public Link(String title) {
         this(title, null);
@@ -36,7 +42,7 @@ public class Link implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Link link = (Link) o;
-        return title.equals(link.title) &&
+        return Objects.equals(title, link.title) &&
                 Objects.equals(url, link.url);
     }
 

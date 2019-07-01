@@ -1,7 +1,11 @@
 package ru.javawebinar.basejava.model;
 
 import ru.javawebinar.basejava.util.DateUtil;
+import ru.javawebinar.basejava.util.LocalDateAdapter;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,11 +16,15 @@ import java.util.Objects;
 /**
  * This class stores Position instances of EXPERIENCE("Опыт работы") and EDUCATION("Образование") Sections in Resume.
  */
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Career implements Serializable {
     private static final long serialVersionUID = 20190616;
 
     private Link homePage;
     private List<Position> positions = new ArrayList<>();
+
+    public Career() {
+    }
 
     public Career(String title) {
         this(title, null);
@@ -64,12 +72,17 @@ public class Career implements Serializable {
     }
 
     @Override
+    public String toString() {
+        return "Career (" + homePage + ", " + positions + ")";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Career career = (Career) o;
-        return homePage.equals(career.homePage) &&
-                positions.equals(career.positions);
+        return Objects.equals(homePage, career.homePage) &&
+                Objects.equals(positions, career.positions);
     }
 
     @Override
@@ -80,13 +93,19 @@ public class Career implements Serializable {
     /**
      * This class describes EXPERIENCE("Опыт работы") and EDUCATION("Образование") Sections in Resume.
      */
-    public static class Position implements Serializable{
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class Position implements Serializable {
         private static final long serialVersionUID = 20190616;
 
         private String position;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate endDate;
         private String description;
+
+        public Position() {
+        }
 
         public Position(String position, int startYear, int startMonth) {
             this(position, DateUtil.of(startYear, startMonth), DateUtil.NOW);
@@ -126,13 +145,18 @@ public class Career implements Serializable {
         }
 
         @Override
+        public String toString() {
+            return "Position (" + startDate + ", " + endDate + ", " + position + ", " + description + ")";
+        }
+
+        @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Position position1 = (Position) o;
-            return position.equals(position1.position) &&
-                    startDate.equals(position1.startDate) &&
-                    endDate.equals(position1.endDate) &&
+            return Objects.equals(position, position1.position) &&
+                    Objects.equals(startDate, position1.startDate) &&
+                    Objects.equals(endDate, position1.endDate) &&
                     Objects.equals(description, position1.description);
         }
 
