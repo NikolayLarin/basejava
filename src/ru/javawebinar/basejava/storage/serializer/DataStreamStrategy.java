@@ -27,19 +27,8 @@ public class DataStreamStrategy implements IOStrategy {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
 
-            EnumMap<ContactType, String> contacts = resume.getContacts();
-            writeContacts(dos, contacts);
-
-            EnumMap<SectionType, AbstractSection> sections = resume.getSections();
-
-            writeAboutSection(dos, SectionType.OBJECTIVE, sections.get(SectionType.OBJECTIVE));
-            writeAboutSection(dos, SectionType.PERSONAL, sections.get(SectionType.PERSONAL));
-
-            writeSkillsSection(dos, SectionType.ACHIEVEMENT, sections.get(SectionType.ACHIEVEMENT));
-            writeSkillsSection(dos, SectionType.QUALIFICATIONS, sections.get(SectionType.QUALIFICATIONS));
-
-            writeCareerSection(dos, SectionType.EXPERIENCE, sections.get(SectionType.EXPERIENCE));
-            writeCareerSection(dos, SectionType.EDUCATION, sections.get(SectionType.EDUCATION));
+            writeContacts(dos, resume.getContacts());
+            writeSections(dos, resume.getSections());
         }
     }
 
@@ -48,19 +37,11 @@ public class DataStreamStrategy implements IOStrategy {
         try (DataInputStream dis = new DataInputStream(inputStream)) {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
+
             Resume resume = new Resume(uuid, fullName);
 
             readContacts(dis, resume);
-
-            readAboutSection(dis, resume);
-            readAboutSection(dis, resume);
-
-            readSkillsSection(dis, resume);
-            readSkillsSection(dis, resume);
-
-            readCareerSection(dis, resume);
-            readCareerSection(dis, resume);
-
+            readSections(dis, resume);
             return resume;
         }
     }
@@ -80,102 +61,127 @@ public class DataStreamStrategy implements IOStrategy {
         }
     }
 
-    private void writeAboutSection(DataOutputStream dos, SectionType sectionType, AbstractSection section) throws IOException {
-        AboutSection aboutSection = (AboutSection) section;
-        if (aboutSection != null) {
-            dos.writeInt(1);
-            dos.writeUTF(sectionType.name());
-            dos.writeUTF(aboutSection.getElement());
-        } else {
-            dos.writeInt(0);
+    private void writeSections(DataOutputStream dos, EnumMap<SectionType, AbstractSection> sections) throws IOException {
+        dos.writeInt(sections.size());
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+            SectionType sectionType = entry.getKey();
+            AbstractSection section = entry.getValue();
+            switch (sectionType.name()) {
+                case "OBJECTIVE":
+                case "PERSONAL":
+                    writeAboutSection(dos, sectionType, section);
+                    break;
+                case "ACHIEVEMENT":
+                case "QUALIFICATIONS":
+                    writeSkillsSection(dos, sectionType, section);
+                    break;
+                case "EXPERIENCE":
+                case "EDUCATION":
+                    writeCareerSection(dos, sectionType, section);
+                    break;
+            }
         }
     }
 
-    private void readAboutSection(DataInputStream dis, Resume resume) throws IOException {
-        if (dis.readInt() == 1) {
-            resume.setSection(SectionType.valueOf(dis.readUTF()), new AboutSection(dis.readUTF()));
+    private void readSections(DataInputStream dis, Resume resume) throws IOException {
+        int sectionsSize = dis.readInt();
+        for (int i = 0; i < sectionsSize; i++) {
+            String sectionType = dis.readUTF();
+            switch (sectionType) {
+                case "OBJECTIVE":
+                case "PERSONAL":
+                    readAboutSection(dis, sectionType, resume);
+                    break;
+                case "ACHIEVEMENT":
+                case "QUALIFICATIONS":
+                    readSkillsSection(dis, sectionType, resume);
+                    break;
+                case "EXPERIENCE":
+                case "EDUCATION":
+                    readCareerSection(dis, sectionType, resume);
+                    break;
+            }
         }
+
+    }
+
+    private void writeAboutSection(DataOutputStream dos, SectionType sectionType, AbstractSection section) throws IOException {
+        dos.writeUTF(sectionType.name());
+        dos.writeUTF(((AboutSection) section).getElement());
+    }
+
+    private void readAboutSection(DataInputStream dis, String sectionType, Resume resume) throws IOException {
+        resume.setSection(SectionType.valueOf(sectionType), new AboutSection(dis.readUTF()));
     }
 
     private void writeSkillsSection(DataOutputStream dos, SectionType sectionType, AbstractSection section) throws IOException {
+        dos.writeUTF(sectionType.name());
         SkillsSection skillsSection = (SkillsSection) section;
-        if (skillsSection != null) {
-            dos.writeInt(1);
-            dos.writeInt(skillsSection.getElement().size());
-            for (String str : skillsSection.getElement()) {
-                dos.writeUTF(str);
-            }
-            dos.writeUTF(sectionType.name());
-        } else {
-            dos.writeInt(0);
+        List<String> element = skillsSection.getElement();
+        dos.writeInt(element.size());
+        for (String str : element) {
+            dos.writeUTF(str);
         }
     }
 
-    private void readSkillsSection(DataInputStream dis, Resume resume) throws IOException {
+    private void readSkillsSection(DataInputStream dis, String sectionType, Resume resume) throws IOException {
         List<String> list = new ArrayList<>();
-        if (dis.readInt() == 1) {
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                list.add(dis.readUTF());
-            }
-            resume.setSection(SectionType.valueOf(dis.readUTF()), new SkillsSection(list));
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            list.add(dis.readUTF());
         }
+        resume.setSection(SectionType.valueOf(sectionType), new SkillsSection(list));
     }
 
     private void writeCareerSection(DataOutputStream dos, SectionType sectionType, AbstractSection section) throws IOException {
+        dos.writeUTF(sectionType.name());
         CareerSection careerSection = (CareerSection) section;
-        if (careerSection != null) {
-            dos.writeInt(1);
-            dos.writeInt(careerSection.getElement().size());
-            for (Career list : careerSection.getElement()) {
-                dos.writeUTF(list.getTitle());
-                if (list.getUrl() != null) {
-                    dos.writeInt(1);
-                    dos.writeUTF(list.getUrl());
+        List<Career> element = careerSection.getElement();
+        dos.writeInt(element.size());
+        for (Career list : element) {
+            dos.writeUTF(list.getTitle());
+            if (list.getUrl() != null) {
+                dos.writeUTF(list.getUrl());
+            } else {
+                dos.writeUTF("");
+            }
+            List<Career.Position> positions = list.getPositions();
+            dos.writeInt(positions.size());
+            for (Career.Position position : positions) {
+                dos.writeUTF(position.getPosition());
+                dos.writeUTF(position.getStartDate().toString());
+                dos.writeUTF(position.getEndDate().toString());
+                if (position.getDescription() != null) {
+                    dos.writeUTF(position.getDescription());
                 } else {
-                    dos.writeInt(0);
-                }
-                dos.writeInt(list.getPositions().size());
-                for (Career.Position position : list.getPositions()) {
-                    dos.writeUTF(position.getPosition());
-                    dos.writeUTF(position.getStartDate().toString());
-                    dos.writeUTF(position.getEndDate().toString());
-                    if (position.getDescription() != null) {
-                        dos.writeInt(1);
-                        dos.writeUTF(position.getDescription());
-                    } else {
-                        dos.writeInt(0);
-                    }
+                    dos.writeUTF("");
                 }
             }
-            dos.writeUTF(sectionType.name());
-        } else {
-            dos.writeInt(0);
         }
     }
 
-    private void readCareerSection(DataInputStream dis, Resume resume) throws IOException {
+    private void readCareerSection(DataInputStream dis, String sectionType, Resume resume) throws IOException {
         List<Career> careers = new ArrayList<>();
-        if (dis.readInt() == 1) {
-            int careersSize = dis.readInt();
-            for (int i = 0; i < careersSize; i++) {
-                String title = dis.readUTF();
-                Career career = new Career(title);
-                if (dis.readInt() == 1) {
-                    career.setUrl(dis.readUTF());
-                }
-                int positionsSize = dis.readInt();
-                for (int j = 0; j < positionsSize; j++) {
-                    Career.Position position = new Career.Position(dis.readUTF(),
-                            LocalDate.parse(dis.readUTF()), LocalDate.parse(dis.readUTF()));
-                    if (dis.readInt() == 1) {
-                        position.setDescription(dis.readUTF());
-                    }
-                    career.addPosition(title, position);
-                }
-                careers.add(career);
+        int careersSize = dis.readInt();
+        for (int i = 0; i < careersSize; i++) {
+            String title = dis.readUTF();
+            Career career = new Career(title);
+            String url = dis.readUTF();
+            if (!url.equals("")) {
+                career.setUrl(url);
             }
-            resume.setSection(SectionType.valueOf(dis.readUTF()), new CareerSection(careers));
+            int positionsSize = dis.readInt();
+            for (int j = 0; j < positionsSize; j++) {
+                Career.Position position = new Career.Position(dis.readUTF(),
+                        LocalDate.parse(dis.readUTF()), LocalDate.parse(dis.readUTF()));
+                String description = dis.readUTF();
+                if (!description.equals("")) {
+                    position.setDescription(description);
+                }
+                career.addPosition(title, position);
+            }
+            careers.add(career);
         }
+        resume.setSection(SectionType.valueOf(sectionType), new CareerSection(careers));
     }
 }
