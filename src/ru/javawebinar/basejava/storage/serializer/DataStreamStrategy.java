@@ -64,20 +64,21 @@ public class DataStreamStrategy implements IOStrategy {
     private void writeSections(DataOutputStream dos, EnumMap<SectionType, AbstractSection> sections) throws IOException {
         dos.writeInt(sections.size());
         for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-            SectionType sectionType = entry.getKey();
+            String sectionTypeName = entry.getKey().name();
+            dos.writeUTF(sectionTypeName);
             AbstractSection section = entry.getValue();
-            switch (sectionType.name()) {
+            switch (sectionTypeName) {
                 case "OBJECTIVE":
                 case "PERSONAL":
-                    writeAboutSection(dos, sectionType, section);
+                    writeAboutSection(dos, section);
                     break;
                 case "ACHIEVEMENT":
                 case "QUALIFICATIONS":
-                    writeSkillsSection(dos, sectionType, section);
+                    writeSkillsSection(dos, section);
                     break;
                 case "EXPERIENCE":
                 case "EDUCATION":
-                    writeCareerSection(dos, sectionType, section);
+                    writeCareerSection(dos, section);
                     break;
             }
         }
@@ -105,8 +106,7 @@ public class DataStreamStrategy implements IOStrategy {
 
     }
 
-    private void writeAboutSection(DataOutputStream dos, SectionType sectionType, AbstractSection section) throws IOException {
-        dos.writeUTF(sectionType.name());
+    private void writeAboutSection(DataOutputStream dos, AbstractSection section) throws IOException {
         dos.writeUTF(((AboutSection) section).getElement());
     }
 
@@ -114,8 +114,7 @@ public class DataStreamStrategy implements IOStrategy {
         resume.setSection(SectionType.valueOf(sectionType), new AboutSection(dis.readUTF()));
     }
 
-    private void writeSkillsSection(DataOutputStream dos, SectionType sectionType, AbstractSection section) throws IOException {
-        dos.writeUTF(sectionType.name());
+    private void writeSkillsSection(DataOutputStream dos, AbstractSection section) throws IOException {
         SkillsSection skillsSection = (SkillsSection) section;
         List<String> element = skillsSection.getElement();
         dos.writeInt(element.size());
@@ -133,29 +132,22 @@ public class DataStreamStrategy implements IOStrategy {
         resume.setSection(SectionType.valueOf(sectionType), new SkillsSection(list));
     }
 
-    private void writeCareerSection(DataOutputStream dos, SectionType sectionType, AbstractSection section) throws IOException {
-        dos.writeUTF(sectionType.name());
+    private void writeCareerSection(DataOutputStream dos, AbstractSection section) throws IOException {
         CareerSection careerSection = (CareerSection) section;
         List<Career> element = careerSection.getElement();
         dos.writeInt(element.size());
         for (Career list : element) {
             dos.writeUTF(list.getTitle());
-            if (list.getUrl() != null) {
-                dos.writeUTF(list.getUrl());
-            } else {
-                dos.writeUTF("");
-            }
+            String url = list.getUrl();
+            dos.writeUTF(url != null ? url : "");
             List<Career.Position> positions = list.getPositions();
             dos.writeInt(positions.size());
             for (Career.Position position : positions) {
                 dos.writeUTF(position.getPosition());
                 dos.writeUTF(position.getStartDate().toString());
                 dos.writeUTF(position.getEndDate().toString());
-                if (position.getDescription() != null) {
-                    dos.writeUTF(position.getDescription());
-                } else {
-                    dos.writeUTF("");
-                }
+                String description = position.getDescription();
+                dos.writeUTF(description != null ? description : "");
             }
         }
     }
@@ -167,17 +159,13 @@ public class DataStreamStrategy implements IOStrategy {
             String title = dis.readUTF();
             Career career = new Career(title);
             String url = dis.readUTF();
-            if (!url.equals("")) {
-                career.setUrl(url);
-            }
+            career.setUrl(!url.equals("") ? url : null);
             int positionsSize = dis.readInt();
             for (int j = 0; j < positionsSize; j++) {
                 Career.Position position = new Career.Position(dis.readUTF(),
                         LocalDate.parse(dis.readUTF()), LocalDate.parse(dis.readUTF()));
                 String description = dis.readUTF();
-                if (!description.equals("")) {
-                    position.setDescription(description);
-                }
+                position.setDescription(!description.equals("") ? description : null);
                 career.addPosition(title, position);
             }
             careers.add(career);
