@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.storage.serializer;
 
+import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.AboutSection;
 import ru.javawebinar.basejava.model.AbstractSection;
 import ru.javawebinar.basejava.model.Career;
@@ -46,11 +47,50 @@ public class DataStreamStrategy implements IOStrategy {
         }
     }
 
-    private void writeContacts(DataOutputStream dos, EnumMap<ContactType, String> contacts) throws IOException {
-        dos.writeInt(contacts.size());
-        for (EnumMap.Entry<ContactType, String> entry : contacts.entrySet()) {
-            dos.writeUTF(entry.getKey().name());
-            dos.writeUTF(entry.getValue());
+    private void writeContacts(DataOutputStream dos, EnumMap<ContactType, String> contacts) {
+        try {
+            dos.writeInt(contacts.size());
+            for (EnumMap.Entry<ContactType, String> entry : contacts.entrySet()) {
+                dos.writeUTF(entry.getKey().name());
+                dos.writeUTF(entry.getValue());
+            }
+        } catch (IOException e) {
+            throw new StorageException("Can't write data", e);
+        }
+    }
+
+    private void writeSections(DataOutputStream dos, EnumMap<SectionType, AbstractSection> sections) {
+        try {
+            dos.writeInt(sections.size());
+            for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+                String sectionTypeName = entry.getKey().name();
+                dos.writeUTF(sectionTypeName);
+                AbstractSection section = entry.getValue();
+                switch (sectionTypeName) {
+                    case "OBJECTIVE":
+                    case "PERSONAL":
+                        writeWithException(dos, section, new WriteAboutSection());
+                        break;
+                    case "ACHIEVEMENT":
+                    case "QUALIFICATIONS":
+                        writeWithException(dos, section, new WriteSkillsSection());
+                        break;
+                    case "EXPERIENCE":
+                    case "EDUCATION":
+                        writeWithException(dos, section, new WriteCareerSection());
+                        break;
+                }
+            }
+        } catch (IOException e) {
+            throw new StorageException("Can't write data", e);
+        }
+    }
+
+    private void writeWithException(DataOutputStream dos, AbstractSection section, WriteSection writeSection) {
+        try {
+            writeSection.writeSection(dos, section);
+        } catch (IOException e) {
+            throw new StorageException("Can't write data", e);
         }
     }
 
@@ -58,29 +98,6 @@ public class DataStreamStrategy implements IOStrategy {
         int contactsSize = dis.readInt();
         for (int i = 0; i < contactsSize; i++) {
             resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-        }
-    }
-
-    private void writeSections(DataOutputStream dos, EnumMap<SectionType, AbstractSection> sections) throws IOException {
-        dos.writeInt(sections.size());
-        for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-            String sectionTypeName = entry.getKey().name();
-            dos.writeUTF(sectionTypeName);
-            AbstractSection section = entry.getValue();
-            switch (sectionTypeName) {
-                case "OBJECTIVE":
-                case "PERSONAL":
-                    writeAboutSection(dos, section);
-                    break;
-                case "ACHIEVEMENT":
-                case "QUALIFICATIONS":
-                    writeSkillsSection(dos, section);
-                    break;
-                case "EXPERIENCE":
-                case "EDUCATION":
-                    writeCareerSection(dos, section);
-                    break;
-            }
         }
     }
 
@@ -103,24 +120,10 @@ public class DataStreamStrategy implements IOStrategy {
                     break;
             }
         }
-
-    }
-
-    private void writeAboutSection(DataOutputStream dos, AbstractSection section) throws IOException {
-        dos.writeUTF(((AboutSection) section).getElement());
     }
 
     private void readAboutSection(DataInputStream dis, String sectionType, Resume resume) throws IOException {
         resume.setSection(SectionType.valueOf(sectionType), new AboutSection(dis.readUTF()));
-    }
-
-    private void writeSkillsSection(DataOutputStream dos, AbstractSection section) throws IOException {
-        SkillsSection skillsSection = (SkillsSection) section;
-        List<String> element = skillsSection.getElement();
-        dos.writeInt(element.size());
-        for (String str : element) {
-            dos.writeUTF(str);
-        }
     }
 
     private void readSkillsSection(DataInputStream dis, String sectionType, Resume resume) throws IOException {
@@ -130,26 +133,6 @@ public class DataStreamStrategy implements IOStrategy {
             list.add(dis.readUTF());
         }
         resume.setSection(SectionType.valueOf(sectionType), new SkillsSection(list));
-    }
-
-    private void writeCareerSection(DataOutputStream dos, AbstractSection section) throws IOException {
-        CareerSection careerSection = (CareerSection) section;
-        List<Career> element = careerSection.getElement();
-        dos.writeInt(element.size());
-        for (Career list : element) {
-            dos.writeUTF(list.getTitle());
-            String url = list.getUrl();
-            dos.writeUTF(url != null ? url : "");
-            List<Career.Position> positions = list.getPositions();
-            dos.writeInt(positions.size());
-            for (Career.Position position : positions) {
-                dos.writeUTF(position.getPosition());
-                dos.writeUTF(position.getStartDate().toString());
-                dos.writeUTF(position.getEndDate().toString());
-                String description = position.getDescription();
-                dos.writeUTF(description != null ? description : "");
-            }
-        }
     }
 
     private void readCareerSection(DataInputStream dis, String sectionType, Resume resume) throws IOException {
