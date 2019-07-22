@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -29,7 +30,10 @@ public class DataStreamStrategy implements IOStrategy {
             dos.writeUTF(resume.getFullName());
 
             writeContacts(dos, resume.getContacts());
-            writeSections(dos, resume.getSections());
+
+            EnumMap<SectionType, AbstractSection> sections = resume.getSections();
+            List<Writer> writer = Arrays.asList(new AboutSectionWriter(), new SkillsSectionWriter(), new CareerSectionWriter());
+            writeWithException(dos, sections, writer);
         }
     }
 
@@ -59,38 +63,26 @@ public class DataStreamStrategy implements IOStrategy {
         }
     }
 
-    private void writeSections(DataOutputStream dos, EnumMap<SectionType, AbstractSection> sections) {
-        try {
-            dos.writeInt(sections.size());
-            for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-                String sectionTypeName = entry.getKey().name();
-                dos.writeUTF(sectionTypeName);
-                AbstractSection section = entry.getValue();
-                switch (sectionTypeName) {
-                    case "OBJECTIVE":
-                    case "PERSONAL":
-                        writeWithException(dos, section, new WriteAboutSection());
-                        break;
-                    case "ACHIEVEMENT":
-                    case "QUALIFICATIONS":
-                        writeWithException(dos, section, new WriteSkillsSection());
-                        break;
-                    case "EXPERIENCE":
-                    case "EDUCATION":
-                        writeWithException(dos, section, new WriteCareerSection());
-                        break;
-                }
+    private void writeWithException(DataOutputStream dos, EnumMap<SectionType, AbstractSection> sections, List<? super Writer> writer) throws IOException {
+        dos.writeInt(sections.size());
+        for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+            String sectionTypeName = entry.getKey().name();
+            dos.writeUTF(sectionTypeName);
+            AbstractSection section = entry.getValue();
+            switch (sectionTypeName) {
+                case "OBJECTIVE":
+                case "PERSONAL":
+                    ((AboutSectionWriter) writer.get(0)).writeSection(dos, (AboutSection) section);
+                    break;
+                case "ACHIEVEMENT":
+                case "QUALIFICATIONS":
+                    ((SkillsSectionWriter) writer.get(1)).writeSection(dos, (SkillsSection) section);
+                    break;
+                case "EXPERIENCE":
+                case "EDUCATION":
+                    ((CareerSectionWriter) writer.get(2)).writeSection(dos, (CareerSection) section);
+                    break;
             }
-        } catch (IOException e) {
-            throw new StorageException("Can't write data", e);
-        }
-    }
-
-    private void writeWithException(DataOutputStream dos, AbstractSection section, WriteSection writeSection) {
-        try {
-            writeSection.writeSection(dos, section);
-        } catch (IOException e) {
-            throw new StorageException("Can't write data", e);
         }
     }
 
