@@ -1,6 +1,5 @@
 package ru.javawebinar.basejava.storage.serializer;
 
-import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.AboutSection;
 import ru.javawebinar.basejava.model.AbstractSection;
 import ru.javawebinar.basejava.model.Career;
@@ -18,6 +17,7 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 
@@ -29,11 +29,69 @@ public class DataStreamStrategy implements IOStrategy {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
 
-            writeContacts(dos, resume.getContacts());
+            Writer<Object> contactsWriter = (dataOutputStream, collection) ->
+                    dos.writeUTF((String) collection);
+
+            EnumMap<ContactType, String> contacts = resume.getContacts();
+            dos.writeInt(contacts.size());
+            for (EnumMap.Entry<ContactType, String> entry : contacts.entrySet()) {
+                List<String> contactsList = Arrays.asList(entry.getKey().name(), entry.getValue());
+                writeWithException(dos, contactsList, contactsWriter);
+            }
+
+            Writer<Object> aboutSectionWriter = (dataOutputStream, collection) ->
+                    dos.writeUTF(((AboutSection) collection).getElement());
+
+            Writer<Object> skillsSectionWriter = (dataOutputStream, collection) -> {
+                SkillsSection skillsSection = (SkillsSection) collection;
+                List<String> skillsList = skillsSection.getElement();
+                dos.writeInt(skillsList.size());
+                for (String skill : skillsList) {
+                    dos.writeUTF(skill);
+                }
+            };
+
+            Writer<Object> careerSectionWriter = (dataOutputStream, collection) -> {
+                CareerSection careerSection = (CareerSection) collection;
+                List<Career> element = careerSection.getElement();
+                dos.writeInt(element.size());
+                for (Career list : element) {
+                    dos.writeUTF(list.getTitle());
+                    String url = list.getUrl();
+                    dos.writeUTF(url != null ? url : "");
+                    List<Career.Position> positions = list.getPositions();
+                    dos.writeInt(positions.size());
+                    for (Career.Position position : positions) {
+                        dos.writeUTF(position.getPosition());
+                        dos.writeUTF(position.getStartDate().toString());
+                        dos.writeUTF(position.getEndDate().toString());
+                        String description = position.getDescription();
+                        dos.writeUTF(description != null ? description : "");
+                    }
+                }
+            };
 
             EnumMap<SectionType, AbstractSection> sections = resume.getSections();
-            List<Writer> writer = Arrays.asList(new AboutSectionWriter(), new SkillsSectionWriter(), new CareerSectionWriter());
-            writeWithException(dos, sections, writer);
+            dos.writeInt(sections.size());
+            for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+                String sectionTypeName = entry.getKey().name();
+                dos.writeUTF(sectionTypeName);
+                AbstractSection section = entry.getValue();
+                switch (sectionTypeName) {
+                    case "OBJECTIVE":
+                    case "PERSONAL":
+                        writeWithException(dos, Collections.singletonList((AboutSection) section), aboutSectionWriter);
+                        break;
+                    case "ACHIEVEMENT":
+                    case "QUALIFICATIONS":
+                        writeWithException(dos, Collections.singletonList((SkillsSection) section), skillsSectionWriter);
+                        break;
+                    case "EXPERIENCE":
+                    case "EDUCATION":
+                        writeWithException(dos, Collections.singletonList((CareerSection) section), careerSectionWriter);
+                        break;
+                }
+            }
         }
     }
 
@@ -51,38 +109,9 @@ public class DataStreamStrategy implements IOStrategy {
         }
     }
 
-    private void writeContacts(DataOutputStream dos, EnumMap<ContactType, String> contacts) {
-        try {
-            dos.writeInt(contacts.size());
-            for (EnumMap.Entry<ContactType, String> entry : contacts.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
-            }
-        } catch (IOException e) {
-            throw new StorageException("Can't write data", e);
-        }
-    }
-
-    private void writeWithException(DataOutputStream dos, EnumMap<SectionType, AbstractSection> sections, List<? super Writer> writer) throws IOException {
-        dos.writeInt(sections.size());
-        for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-            String sectionTypeName = entry.getKey().name();
-            dos.writeUTF(sectionTypeName);
-            AbstractSection section = entry.getValue();
-            switch (sectionTypeName) {
-                case "OBJECTIVE":
-                case "PERSONAL":
-                    ((AboutSectionWriter) writer.get(0)).writeSection(dos, (AboutSection) section);
-                    break;
-                case "ACHIEVEMENT":
-                case "QUALIFICATIONS":
-                    ((SkillsSectionWriter) writer.get(1)).writeSection(dos, (SkillsSection) section);
-                    break;
-                case "EXPERIENCE":
-                case "EDUCATION":
-                    ((CareerSectionWriter) writer.get(2)).writeSection(dos, (CareerSection) section);
-                    break;
-            }
+    private void writeWithException(DataOutputStream dos, List collection, Writer<? super Object> writer) throws IOException {
+        for (Object o : collection) {
+            writer.writeCollection(dos, o);
         }
     }
 

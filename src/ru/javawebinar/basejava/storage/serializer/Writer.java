@@ -5,5 +5,5 @@ import java.io.IOException;
 
 @FunctionalInterface
 public interface Writer<T> {
-    void writeSection(DataOutputStream dos, T section) throws IOException;
+    void writeCollection(DataOutputStream dataOutputStream, T collection) throws IOException;
 }
