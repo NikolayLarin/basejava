@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
@@ -29,45 +30,27 @@ public class DataStreamStrategy implements IOStrategy {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
 
-            Writer<Object> contactsWriter = (dataOutputStream, collection) ->
-                    dos.writeUTF((String) collection);
+            Writer<String> stringWriter = dos::writeUTF;
 
             EnumMap<ContactType, String> contacts = resume.getContacts();
             dos.writeInt(contacts.size());
             for (EnumMap.Entry<ContactType, String> entry : contacts.entrySet()) {
                 List<String> contactsList = Arrays.asList(entry.getKey().name(), entry.getValue());
-                writeWithException(dos, contactsList, contactsWriter);
+                writeWithException(contactsList, stringWriter);
             }
 
-            Writer<Object> aboutSectionWriter = (dataOutputStream, collection) ->
-                    dos.writeUTF(((AboutSection) collection).getElement());
-
-            Writer<Object> skillsSectionWriter = (dataOutputStream, collection) -> {
-                SkillsSection skillsSection = (SkillsSection) collection;
-                List<String> skillsList = skillsSection.getElement();
-                dos.writeInt(skillsList.size());
-                for (String skill : skillsList) {
-                    dos.writeUTF(skill);
-                }
-            };
-
-            Writer<Object> careerSectionWriter = (dataOutputStream, collection) -> {
-                CareerSection careerSection = (CareerSection) collection;
-                List<Career> element = careerSection.getElement();
-                dos.writeInt(element.size());
-                for (Career list : element) {
-                    dos.writeUTF(list.getTitle());
-                    String url = list.getUrl();
-                    dos.writeUTF(url != null ? url : "");
-                    List<Career.Position> positions = list.getPositions();
-                    dos.writeInt(positions.size());
-                    for (Career.Position position : positions) {
-                        dos.writeUTF(position.getPosition());
-                        dos.writeUTF(position.getStartDate().toString());
-                        dos.writeUTF(position.getEndDate().toString());
-                        String description = position.getDescription();
-                        dos.writeUTF(description != null ? description : "");
-                    }
+            Writer<Career> careerWriter = element -> {
+                dos.writeUTF(element.getTitle());
+                String url = element.getUrl();
+                dos.writeUTF(url != null ? url : "");
+                List<Career.Position> positions = element.getPositions();
+                dos.writeInt(positions.size());
+                for (Career.Position position : positions) {
+                    dos.writeUTF(position.getPosition());
+                    dos.writeUTF(position.getStartDate().toString());
+                    dos.writeUTF(position.getEndDate().toString());
+                    String description = position.getDescription();
+                    dos.writeUTF(description != null ? description : "");
                 }
             };
 
@@ -80,15 +63,20 @@ public class DataStreamStrategy implements IOStrategy {
                 switch (sectionTypeName) {
                     case "OBJECTIVE":
                     case "PERSONAL":
-                        writeWithException(dos, Collections.singletonList((AboutSection) section), aboutSectionWriter);
+                        List<String> aboutList = Collections.singletonList(((AboutSection) section).getElement());
+                        writeWithException(aboutList, stringWriter);
                         break;
                     case "ACHIEVEMENT":
                     case "QUALIFICATIONS":
-                        writeWithException(dos, Collections.singletonList((SkillsSection) section), skillsSectionWriter);
+                        List<String> skillsList = ((SkillsSection) section).getElement();
+                        dos.writeInt(skillsList.size());
+                        writeWithException(skillsList, stringWriter);
                         break;
                     case "EXPERIENCE":
                     case "EDUCATION":
-                        writeWithException(dos, Collections.singletonList((CareerSection) section), careerSectionWriter);
+                        List<Career> careerList = ((CareerSection) section).getElement();
+                        dos.writeInt(careerList.size());
+                        writeWithException(careerList, careerWriter);
                         break;
                 }
             }
@@ -109,9 +97,9 @@ public class DataStreamStrategy implements IOStrategy {
         }
     }
 
-    private void writeWithException(DataOutputStream dos, List collection, Writer<? super Object> writer) throws IOException {
-        for (Object o : collection) {
-            writer.writeCollection(dos, o);
+    private <T> void writeWithException(Collection<T> collection, Writer<? super T> writer) throws IOException {
+        for (T element : collection) {
+            writer.writeElement(element);
         }
     }
 
