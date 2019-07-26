@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This class stores EXPERIENCE("Опыт работы") or EDUCATION("Образование") Sections in Resume
- * as a List of Position object.
+ * This class stores EXPERIENCE ("Опыт работы") or EDUCATION ("Образование") Sections in Resume
+ * as a List of Position objects.
  */
 public class CareerSection extends AbstractSection {
     private static final long serialVersionUID = 20190616;

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This class describes ACHIEVEMENT("Достижения") and QUALIFICATIONS("Квалификация") Sections
- * in Resume and stores it as a List of String.
+ * This class describes ACHIEVEMENT ("Достижения") and QUALIFICATIONS ("Квалификация") Sections
+ * in Resume and stores it as a List of Strings.
  */
 public class SkillsSection extends AbstractSection {
     private static final long serialVersionUID = 20190616;

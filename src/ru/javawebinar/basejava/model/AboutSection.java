@@ -3,7 +3,7 @@ package ru.javawebinar.basejava.model;
 import java.util.Objects;
 
 /**
- * This class describes OBJECTIVE("Позиция") and PERSONAL("Личные качества") Sections
+ * This class describes OBJECTIVE ("Позиция") and PERSONAL ("Личные качества") Sections
  * in Resume and stores it as a String.
  */
 public class AboutSection extends AbstractSection {

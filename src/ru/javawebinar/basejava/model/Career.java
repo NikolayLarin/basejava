@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * This class stores Position instances of EXPERIENCE("Опыт работы") and EDUCATION("Образование") Sections in Resume.
+ * This class stores Position instances of EXPERIENCE ("Опыт работы") and EDUCATION ("Образование") Sections in Resume.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Career implements Serializable {
