@@ -16,10 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.EnumMap;
 import java.util.List;
 
 public class DataStreamStrategy implements IOStrategy {
@@ -30,56 +27,41 @@ public class DataStreamStrategy implements IOStrategy {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
 
-            Writer<String> stringWriter = dos::writeUTF;
+            writeWithException(dos, resume.getContacts().entrySet(), entry -> {
+                dos.writeUTF(entry.getKey().name());
+                dos.writeUTF(entry.getValue());
+            });
 
-            EnumMap<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            for (EnumMap.Entry<ContactType, String> entry : contacts.entrySet()) {
-                List<String> contactsList = Arrays.asList(entry.getKey().name(), entry.getValue());
-                writeWithException(contactsList, stringWriter);
-            }
-
-            Writer<Career> careerWriter = element -> {
-                dos.writeUTF(element.getTitle());
-                String url = element.getUrl();
-                dos.writeUTF(url != null ? url : "");
-                List<Career.Position> positions = element.getPositions();
-                dos.writeInt(positions.size());
-                for (Career.Position position : positions) {
-                    dos.writeUTF(position.getPosition());
-                    dos.writeUTF(position.getStartDate().toString());
-                    dos.writeUTF(position.getEndDate().toString());
-                    String description = position.getDescription();
-                    dos.writeUTF(description != null ? description : "");
-                }
-            };
-
-            EnumMap<SectionType, AbstractSection> sections = resume.getSections();
-            dos.writeInt(sections.size());
-            for (EnumMap.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+            writeWithException(dos, resume.getSections().entrySet(), entry -> {
                 String sectionTypeName = entry.getKey().name();
                 dos.writeUTF(sectionTypeName);
                 AbstractSection section = entry.getValue();
                 switch (sectionTypeName) {
                     case "OBJECTIVE":
                     case "PERSONAL":
-                        List<String> aboutList = Collections.singletonList(((AboutSection) section).getElement());
-                        writeWithException(aboutList, stringWriter);
+                        dos.writeUTF(((AboutSection) section).getElement());
                         break;
                     case "ACHIEVEMENT":
                     case "QUALIFICATIONS":
-                        List<String> skillsList = ((SkillsSection) section).getElement();
-                        dos.writeInt(skillsList.size());
-                        writeWithException(skillsList, stringWriter);
+                        writeWithException(dos, ((SkillsSection) section).getElement(), dos::writeUTF);
                         break;
                     case "EXPERIENCE":
                     case "EDUCATION":
-                        List<Career> careerList = ((CareerSection) section).getElement();
-                        dos.writeInt(careerList.size());
-                        writeWithException(careerList, careerWriter);
+                        writeWithException(dos, ((CareerSection) section).getElement(), element -> {
+                            dos.writeUTF(element.getTitle());
+                            String url = element.getUrl();
+                            dos.writeUTF(url != null ? url : "");
+                            writeWithException(dos, element.getPositions(), position -> {
+                                dos.writeUTF(position.getPosition());
+                                dos.writeUTF(position.getStartDate().toString());
+                                dos.writeUTF(position.getEndDate().toString());
+                                String description = position.getDescription();
+                                dos.writeUTF(description != null ? description : "");
+                            });
+                        });
                         break;
                 }
-            }
+            });
         }
     }
 
@@ -97,7 +79,8 @@ public class DataStreamStrategy implements IOStrategy {
         }
     }
 
-    private <T> void writeWithException(Collection<T> collection, Writer<? super T> writer) throws IOException {
+    private <T> void writeWithException(DataOutputStream dos, Collection<T> collection, Writer<? super T> writer) throws IOException {
+        dos.writeInt(collection.size());
         for (T element : collection) {
             writer.writeElement(element);
         }
