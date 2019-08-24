@@ -2,6 +2,7 @@ package ru.javawebinar.basejava;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MainStream {
@@ -21,15 +22,17 @@ public class MainStream {
     }
 
     private static int minValue(int[] values) {
-        return Arrays.stream(values).distinct().sorted().reduce(0, (left, right) -> 10 * left + right);
+        return Arrays.stream(values)
+                .distinct()
+                .sorted()
+                .reduce(0, (left, right) -> 10 * left + right);
     }
 
     private static List<Integer> oddOrEven(List<Integer> integers) {
         System.out.println(integers.stream().reduce(0, Integer::sum));
-        if (integers.stream().filter((p) -> p % 2 != 0).count() % 2 != 0) {
-            return integers.stream().filter((p) -> p % 2 == 0).collect(Collectors.toList());
-        }
-        return integers.stream().filter((p) -> p % 2 != 0).collect(Collectors.toList());
+        Map<Boolean, List<Integer>> integersMap = integers.stream()
+                .collect(Collectors.partitioningBy(p -> p % 2 != 0, Collectors.toList()));
+        return integersMap.get(integersMap.get(true).size() % 2 == 0);
     }
 
     private static int oddCount(int[] integers) {
