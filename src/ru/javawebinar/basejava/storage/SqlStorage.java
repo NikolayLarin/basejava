@@ -21,17 +21,15 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
-        PreparedStatement ps = sqlHelper.getPrepareStatement("DELETE FROM resume");
-        sqlHelper.executeSqlCommand(ps, preparedStatement -> ps.execute());
+        sqlHelper.executeSqlQuery("DELETE FROM resume", PreparedStatement::execute);
     }
 
     @Override
     public void update(Resume resume) {
-        PreparedStatement ps = sqlHelper.getPrepareStatement("UPDATE resume SET full_name=? WHERE uuid=?");
-        sqlHelper.executeSqlCommand(ps, preparedStatement -> {
-            ps.setString(1, resume.getFullName());
-            ps.setString(2, resume.getUuid());
-            if (ps.executeUpdate() == 0) {
+        sqlHelper.executeSqlQuery("UPDATE resume SET full_name=? WHERE uuid=?", preparedStatement -> {
+            preparedStatement.setString(1, resume.getFullName());
+            preparedStatement.setString(2, resume.getUuid());
+            if (preparedStatement.executeUpdate() == 0) {
                 throw new NotExistStorageException(resume.getUuid());
             }
             return null;
@@ -40,14 +38,15 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
-        PreparedStatement ps = sqlHelper.getPrepareStatement("INSERT INTO resume (full_name, uuid) VALUES (?, ?)");
-        sqlHelper.executeSqlCommand(ps, preparedStatement -> {
-            ps.setString(1, resume.getFullName());
-            ps.setString(2, resume.getUuid());
+        sqlHelper.executeSqlQuery("INSERT INTO resume (full_name, uuid) VALUES (?, ?)", preparedStatement -> {
+            preparedStatement.setString(1, resume.getFullName());
+            preparedStatement.setString(2, resume.getUuid());
             try {
-                ps.execute();
+                preparedStatement.execute();
             } catch (SQLException e) {
-                throw new ExistStorageException(resume.getUuid());
+                if (e.getSQLState().equals("23505")) { // a key with such uuid already exists
+                    throw new ExistStorageException(resume.getUuid());
+                }
             }
             return null;
         });
@@ -55,10 +54,9 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        PreparedStatement ps = sqlHelper.getPrepareStatement("SELECT * FROM resume r WHERE r.uuid = ?");
-        return sqlHelper.executeSqlCommand(ps, preparedStatement -> {
-            ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
+        return sqlHelper.executeSqlQuery("SELECT * FROM resume r WHERE r.uuid = ?", preparedStatement -> {
+            preparedStatement.setString(1, uuid);
+            ResultSet rs = preparedStatement.executeQuery();
             if (!rs.next()) {
                 throw new NotExistStorageException(uuid);
             }
@@ -68,10 +66,9 @@ public class SqlStorage implements Storage {
 
     @Override
     public void delete(String uuid) {
-        PreparedStatement ps = sqlHelper.getPrepareStatement("DELETE FROM resume WHERE uuid=?");
-        sqlHelper.executeSqlCommand(ps, preparedStatement -> {
-            ps.setString(1, uuid);
-            if (ps.executeUpdate() == 0) {
+        sqlHelper.executeSqlQuery("DELETE FROM resume WHERE uuid=?", preparedStatement -> {
+            preparedStatement.setString(1, uuid);
+            if (preparedStatement.executeUpdate() == 0) {
                 throw new NotExistStorageException(uuid);
             }
             return null;
@@ -80,9 +77,8 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        PreparedStatement ps = sqlHelper.getPrepareStatement("SELECT * FROM resume ORDER BY full_name, uuid");
-        return sqlHelper.executeSqlCommand(ps, preparedStatement -> {
-            ResultSet rs = ps.executeQuery();
+        return sqlHelper.executeSqlQuery("SELECT * FROM resume ORDER BY full_name, uuid", preparedStatement -> {
+            ResultSet rs = preparedStatement.executeQuery();
             List<Resume> list = new ArrayList<>();
             while (rs.next()) {
                 list.add(new Resume(rs.getString("uuid"), rs.getString("full_name")));
@@ -93,9 +89,8 @@ public class SqlStorage implements Storage {
 
     @Override
     public int size() {
-        PreparedStatement ps = sqlHelper.getPrepareStatement("SELECT COUNT(*) FROM resume");
-        return sqlHelper.executeSqlCommand(ps, preparedStatement -> {
-            ResultSet rs = ps.executeQuery();
+        return sqlHelper.executeSqlQuery("SELECT COUNT(*) FROM resume", preparedStatement -> {
+            ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             return rs.getInt(1);
         });

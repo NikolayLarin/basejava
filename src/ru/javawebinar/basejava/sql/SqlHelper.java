@@ -8,26 +8,15 @@ import java.sql.SQLException;
 
 public class SqlHelper {
     private final ConnectionFactory connectionFactory;
-    private Connection connection;
 
     public SqlHelper(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
     }
 
-    public PreparedStatement getPrepareStatement(String sql) {
-        try {
-            connection = connectionFactory.getConnection();
-            return connectionFactory.getConnection().prepareStatement(sql);
-        } catch (SQLException e) {
-            throw new StorageException(e);
-        }
-    }
-
-    public <T> T executeSqlCommand(PreparedStatement preparedStatement, SqlExecutor<T> sqlExecutor) {
-        try {
-            T value = sqlExecutor.execute(preparedStatement);
-            connection.close();
-            return value;
+    public <T> T executeSqlQuery(String sql, SqlExecutor<T> sqlExecutor) {
+        try (Connection connection = connectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            return sqlExecutor.execute(preparedStatement);
         } catch (SQLException e) {
             throw new StorageException(e);
         }
