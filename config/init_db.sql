@@ -1,15 +1,15 @@
 CREATE TABLE resume
 (
-    uuid      TEXT NOT NULL CONSTRAINT resume_pk PRIMARY KEY,
-    full_name TEXT NOT NULL
+    uuid      CHAR(36) NOT NULL CONSTRAINT resume_pk PRIMARY KEY,
+    full_name TEXT     NOT NULL
 );
 
 CREATE TABLE contact
 (
-    id          SERIAL NOT NULL CONSTRAINT contact_pk PRIMARY KEY,
-    resume_uuid TEXT   NOT NULL CONSTRAINT contact_resume_uuid_fk
+    id          SERIAL   NOT NULL CONSTRAINT contact_pk PRIMARY KEY,
+    resume_uuid CHAR(36) NOT NULL CONSTRAINT contact_resume_uuid_fk
         REFERENCES resume ON UPDATE RESTRICT ON DELETE CASCADE,
-    type        TEXT   NOT NULL,
-    value       TEXT   NOT NULL
+    type        TEXT     NOT NULL,
+    value       TEXT     NOT NULL
 );
 CREATE UNIQUE INDEX contact_uuid_type_index ON contact (resume_uuid, type);

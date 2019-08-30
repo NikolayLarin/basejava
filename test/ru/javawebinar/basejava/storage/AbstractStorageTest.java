@@ -10,6 +10,7 @@ import ru.javawebinar.basejava.util.Config;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
@@ -19,10 +20,10 @@ public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.getINSTANCE().getStorageDir();
     protected Storage storage;
 
-    private static final String UUID_1 = "uuid1";
-    private static final String UUID_2 = "uuid2";
-    private static final String UUID_3 = "uuid3";
-    private static final String UUID_4 = "uuid4";
+    private static final String UUID_1 = UUID.randomUUID().toString();
+    private static final String UUID_2 = UUID.randomUUID().toString();
+    private static final String UUID_3 = UUID.randomUUID().toString();
+    private static final String UUID_4 = UUID.randomUUID().toString();
 
 
     private static final Resume RESUME_1;
@@ -38,7 +39,7 @@ public abstract class AbstractStorageTest {
 
         RESUME_1 = new Resume(UUID_1, "Name1");
         RESUME_2 = new Resume(UUID_2, "Name2");
-        RESUME_3 = new Resume(UUID_3, "Name1");
+        RESUME_3 = new Resume(UUID_3, "Name3");
         RESUME_4 = new Resume(UUID_4, "Name4");
     }
 
@@ -79,7 +80,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAllSorted() {
-        List<Resume> expected = Arrays.asList(RESUME_1, RESUME_3, RESUME_2);
+        List<Resume> expected = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
         List<Resume> result = storage.getAllSorted();
         assertEquals(expected, result);
         assertEquals(3, result.size());
