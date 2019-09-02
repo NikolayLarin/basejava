@@ -1,6 +1,5 @@
 package ru.javawebinar.basejava;
 
-import ru.javawebinar.basejava.model.AboutSection;
 import ru.javawebinar.basejava.model.AbstractSection;
 import ru.javawebinar.basejava.model.Career;
 import ru.javawebinar.basejava.model.CareerSection;
@@ -96,12 +95,12 @@ public class ResumeTestData {
         resume.setContact(ContactType.STACKOVERFLOW, data.stackOverflow);
         resume.setContact(ContactType.SITE, data.site);
 
-        resume.setSection(SectionType.OBJECTIVE, new AboutSection(data.objective));
-        resume.setSection(SectionType.PERSONAL, new AboutSection(data.personal));
-        resume.setSection(SectionType.ACHIEVEMENT, new SkillsSection(data.getAchievements()));
-        resume.setSection(SectionType.QUALIFICATIONS, new SkillsSection(data.getQualifications()));
-        resume.setSection(SectionType.EXPERIENCE, new CareerSection(data.getExperience()));
-        resume.setSection(SectionType.EDUCATION, new CareerSection(data.getEducation()));
+//        resume.setSection(SectionType.OBJECTIVE, new AboutSection(data.objective));
+//        resume.setSection(SectionType.PERSONAL, new AboutSection(data.personal));
+//        resume.setSection(SectionType.ACHIEVEMENT, new SkillsSection(data.getAchievements()));
+//        resume.setSection(SectionType.QUALIFICATIONS, new SkillsSection(data.getQualifications()));
+//        resume.setSection(SectionType.EXPERIENCE, new CareerSection(data.getExperience()));
+//        resume.setSection(SectionType.EDUCATION, new CareerSection(data.getEducation()));
         return resume;
     }
 
