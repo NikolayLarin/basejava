@@ -34,7 +34,7 @@ public abstract class AbstractStorageTest {
 
     static {
         RESUME_1 = ResumeTestData.createResume(UUID_1, "Name1");
-        RESUME_2 = ResumeTestData.createResume(UUID_2, "Name2");
+        RESUME_2 = new Resume(UUID_2, "Name2");
         RESUME_3 = ResumeTestData.createResume(UUID_3, "Name3");
         RESUME_4 = ResumeTestData.createResume(UUID_4, "Name4");
     }

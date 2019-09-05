@@ -148,7 +148,7 @@ public class SqlStorage implements Storage {
         String uuid = resume.getUuid();
         String contactUuid = rs.getString("resume_uuid");
         if (contactUuid != null) {
-            while (hasNext && contactUuid.equals(uuid)) {
+            while (hasNext && contactUuid != null && contactUuid.equals(uuid)) {
                 String contact = rs.getString("value");
                 ContactType contactType = ContactType.valueOf(rs.getString("type"));
                 resume.setContact(contactType, contact);
