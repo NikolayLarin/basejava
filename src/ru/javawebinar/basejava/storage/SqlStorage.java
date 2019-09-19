@@ -214,7 +214,7 @@ public class SqlStorage implements Storage {
                         case "ACHIEVEMENT":
                         case "QUALIFICATIONS":
                             List<String> element = ((SkillsSection) section).getElement();
-                            ps.setString(3, String.join("-!-!-!-!-", element));
+                            ps.setString(3, String.join("/n", element));
                             ps.addBatch();
                             break;
 //                        case "EXPERIENCE":
@@ -244,7 +244,7 @@ public class SqlStorage implements Storage {
                 case "ACHIEVEMENT":
                 case "QUALIFICATIONS":
                     String joinedString = rs.getString("section_value");
-                    List<String> element = Arrays.asList(joinedString.split("-!-!-!-!-"));
+                    List<String> element = Arrays.asList(joinedString.split("/n"));
                     resume.setSection(SectionType.valueOf(type), new SkillsSection(element));
                     break;
 //                case "EXPERIENCE":
