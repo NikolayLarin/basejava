@@ -2,13 +2,12 @@ package ru.javawebinar.basejava.storage;
 
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.exception.StorageException;
-import ru.javawebinar.basejava.model.AboutSection;
 import ru.javawebinar.basejava.model.AbstractSection;
 import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.model.SectionType;
-import ru.javawebinar.basejava.model.SkillsSection;
 import ru.javawebinar.basejava.sql.SqlHelper;
+import ru.javawebinar.basejava.util.JsonParser;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,7 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -160,20 +159,21 @@ public class SqlStorage implements Storage {
     }
 
     private void deleteContacts(String uuid, Connection connection) throws SQLException {
-        try (PreparedStatement ps = connection.prepareStatement("" +
+        deleteAttributes(uuid, connection, "" +
                 "DELETE FROM contact " +
-                " WHERE resume_uuid=?")) {
-            ps.setString(1, uuid);
-            ps.executeUpdate();
-        }
+                " WHERE resume_uuid=?");
     }
 
     private void deleteSections(String uuid, Connection connection) throws SQLException {
-        try (PreparedStatement ps = connection.prepareStatement("" +
+        deleteAttributes(uuid, connection, "" +
                 "DELETE FROM section " +
-                " WHERE resume_uuid=?")) {
+                " WHERE resume_uuid=?");
+    }
+
+    private void deleteAttributes(String uuid, Connection connection, String sql) throws SQLException {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, uuid);
-            ps.executeUpdate();
+            ps.execute();
         }
     }
 
@@ -194,6 +194,7 @@ public class SqlStorage implements Storage {
         }
     }
 
+/*  Simple incomplete implementation without JSON serialization
     private void insertSections(Resume resume, Connection connection) throws SQLException {
         Map<SectionType, AbstractSection> sections = resume.getSections();
         if (sections.size() > 0) {
@@ -225,6 +226,25 @@ public class SqlStorage implements Storage {
             }
         }
     }
+*/
+
+    private void insertSections(Resume resume, Connection connection) throws SQLException {
+        EnumMap<SectionType, AbstractSection> sections = resume.getSections();
+        if (sections.size() > 0) {
+            try (PreparedStatement ps = connection.prepareStatement("" +
+                    "INSERT INTO section (resume_uuid, section_type, section_value) " +
+                    "VALUES (?,?,?)")) {
+                for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
+                    ps.setString(1, resume.getUuid());
+                    ps.setString(2, entry.getKey().name());
+                    AbstractSection section = entry.getValue();
+                    ps.setString(3, JsonParser.write(section, AbstractSection.class));
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            }
+        }
+    }
 
     private void setContact(Resume resume, ResultSet rs) throws SQLException {
         String type = rs.getString("type");
@@ -233,6 +253,7 @@ public class SqlStorage implements Storage {
         }
     }
 
+/*  Simple incomplete implementation without JSON deserialization
     private void setSection(Resume resume, ResultSet rs) throws SQLException {
         String type = rs.getString("section_type");
         if (type != null) {
@@ -250,6 +271,15 @@ public class SqlStorage implements Storage {
 //                case "EXPERIENCE":
 //                case "EDUCATION":
             }
+        }
+    }
+*/
+
+    private void setSection(Resume resume, ResultSet rs) throws SQLException {
+        String value = rs.getString("section_value");
+        if (value != null) {
+            SectionType type = SectionType.valueOf(rs.getString("section_type"));
+            resume.setSection(type, JsonParser.read(value, AbstractSection.class));
         }
     }
 }

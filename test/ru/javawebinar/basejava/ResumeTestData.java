@@ -86,7 +86,7 @@ public class ResumeTestData {
 
     public static Resume createResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        ResumeTestData.ResumeData data = new ResumeTestData().new ResumeData();
+        ResumeTestData.ResumeData data = new ResumeData();
 
         resume.setContact(ContactType.PHONE, data.phone);
         resume.setContact(ContactType.SKYPE, data.skype);
@@ -100,12 +100,12 @@ public class ResumeTestData {
         resume.setSection(SectionType.PERSONAL, new AboutSection(data.personal));
         resume.setSection(SectionType.ACHIEVEMENT, new SkillsSection(data.getAchievements()));
         resume.setSection(SectionType.QUALIFICATIONS, new SkillsSection(data.getQualifications()));
-//        resume.setSection(SectionType.EXPERIENCE, new CareerSection(data.getExperience()));
-//        resume.setSection(SectionType.EDUCATION, new CareerSection(data.getEducation()));
+        resume.setSection(SectionType.EXPERIENCE, new CareerSection(data.getExperience()));
+        resume.setSection(SectionType.EDUCATION, new CareerSection(data.getEducation()));
         return resume;
     }
 
-    private class ResumeData {
+    private static class ResumeData {
         private String phone = "+7(921) 855-0482";
         private String skype = "grigory.kislin";
         private String email = "gkislin@yandex.ru";
