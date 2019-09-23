@@ -29,3 +29,14 @@ dd {
     margin-left: 0;
     vertical-align: top;
 }
+
+input[type=text] {
+    background-color: lavender;
+    border: 0;
+    padding: 0;
+}
+
+textarea {
+    border: none;
+    background-color: lavender;
+}

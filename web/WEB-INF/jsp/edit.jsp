@@ -1,4 +1,5 @@
 <%@ page import="ru.javawebinar.basejava.model.ContactType" %>
+<%@ page import="ru.javawebinar.basejava.model.SkillsSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -22,25 +23,46 @@
         </dl>
         <h2>Контакты:</h2>
         <c:forEach var="type" items="<%=ContactType.values()%>">
-            <dl>
-                <dt>${type.title}</dt>
-                <dd><input type="text" name="${type.name()}" size=60 value="${resume.getContact(type)}"></dd>
-            </dl>
+        <dl>
+            <dt>${type.title}:</dt>
+            <dd><input type="text" name="${type.name()}" size=60 value="${resume.getContact(type)}"></dd>
+        </dl>
         </c:forEach>
+
         <h2>Секции:</h2>
-        <dd><input type="text" name="section" size=60 value="1"></dd>
-        <br/>
-        <dd><input type="text" name="section" size=60 value="2"></dd>
-        <br/>
-        <dd><input type="text" name="section" size=60 value="3"></dd>
-        <br/>
+        <c:set var="objective" value="OBJECTIVE"/>
+        <c:set var="personal" value="PERSONAL"/>
+        <c:set var="achievement" value="ACHIEVEMENT"/>
+        <c:set var="qualifications" value="QUALIFICATIONS"/>
+        <c:set var="experience" value="EXPERIENCE"/>
+        <c:set var="education" value="EDUCATION"/>
+
+        <c:forEach var="sectionEntry" items="<%=resume.getSections().entrySet()%>">
+            <jsp:useBean id="sectionEntry"
+                         type="java.util.Map.Entry<ru.javawebinar.basejava.model.SectionType,
+                                 ru.javawebinar.basejava.model.AbstractSection>"/>
+            <c:set var="type" value="${sectionEntry.key.name()}"/>
+        <b>${sectionEntry.key.title}:</b><br/>
+
+        <c:choose>
+        <c:when test="${type.equals(objective) || type.equals(personal)}">
+        <textarea rows="2" cols="120" name="${type}">${sectionEntry.value}</textarea><br/><br/>
+            <%--        <input type="text" name="${sectionEntry.key.title}" size=120 value="${sectionEntry.value}"><br/><br/>--%>
+        </c:when>
+
+        <c:when test="${type.equals(achievement) || type.equals(qualifications)}">
+        <c:forEach var="skill" items="<%=((SkillsSection)sectionEntry.getValue()).getElement()%>">
+        <textarea rows="2" cols="120" name="${type}">${skill}</textarea><br/>
+        </c:forEach>
+        </c:when>
 
 
-        <hr>
+        </c:choose>
+        </c:forEach>
         <button type="submit">Сохранить</button>
-        <button type="reset">Очистить</button>
-        <button onclick="window.history.back()">Отменить</button>
-    </form>
+        <button type="reset">Отменить правки</button>
+        <button onclick="window.history.back()">Выйти</button>
+
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

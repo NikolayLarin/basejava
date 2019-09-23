@@ -1,7 +1,10 @@
 package ru.javawebinar.basejava.web;
 
+import ru.javawebinar.basejava.model.AboutSection;
 import ru.javawebinar.basejava.model.ContactType;
 import ru.javawebinar.basejava.model.Resume;
+import ru.javawebinar.basejava.model.SectionType;
+import ru.javawebinar.basejava.model.SkillsSection;
 import ru.javawebinar.basejava.storage.Storage;
 import ru.javawebinar.basejava.util.Config;
 
@@ -11,6 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
     private Storage sqlStorage; // = Config.getINSTANCE().getSqlStorage();
@@ -33,6 +38,33 @@ public class ResumeServlet extends HttpServlet {
                 resume.setContact(contactType, value);
             } else {
                 resume.getContacts().remove(contactType);
+            }
+        }
+        for (SectionType sectionType : SectionType.values()) {
+            String sectionTypeName = sectionType.name();
+            String value = request.getParameter(sectionTypeName);
+            if (value != null && value.trim().length() != 0) {
+                switch (sectionTypeName) {
+                    case ("OBJECTIVE"):
+                    case ("PERSONAL"):
+                        resume.setSection(sectionType, new AboutSection(value));
+                        break;
+                    case ("ACHIEVEMENT"):
+                    case ("QUALIFICATIONS"):
+                        List<String> skills = new ArrayList<>();
+                        String[] values = request.getParameterValues(sectionTypeName);
+                        for (String el : values) {
+                            if (el != null && el.trim().length() != 0) {
+                                skills.add(el);
+                            }
+                        }
+                        resume.setSection(sectionType, new SkillsSection(skills));
+                        break;
+                    case ("EXPERIENCE"):
+                    case ("EDUCATION"):
+                }
+            } else {
+                resume.getSections().remove(sectionType);
             }
         }
         sqlStorage.update(resume);
