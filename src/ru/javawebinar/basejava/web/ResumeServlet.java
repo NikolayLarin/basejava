@@ -67,7 +67,11 @@ public class ResumeServlet extends HttpServlet {
                 resume.getSections().remove(sectionType);
             }
         }
-        sqlStorage.update(resume);
+        if (resume.getFullName().trim().length() == 0) {
+            sqlStorage.delete(uuid);
+        } else {
+            sqlStorage.update(resume);
+        }
         response.sendRedirect("resume");
     }
 
@@ -89,6 +93,27 @@ public class ResumeServlet extends HttpServlet {
             case "edit":
                 resume = sqlStorage.get(uuid);
                 break;
+            case "add":
+                resume = new Resume("");
+                sqlStorage.save(resume);
+                request.setAttribute("resume", resume);
+                request.getRequestDispatcher("WEB-INF/jsp/edit.jsp").forward(request, response);
+                return;
+            case "addObjective":
+                resume = sqlStorage.get(uuid);
+                request.setAttribute("resume", resume);
+                request.getRequestDispatcher("WEB-INF/jsp/addObjective.jsp").forward(request, response);
+                return;
+            case "addAchievement":
+                resume = sqlStorage.get(uuid);
+                request.setAttribute("resume", resume);
+                request.getRequestDispatcher("WEB-INF/jsp/addAchievement.jsp").forward(request, response);
+                return;
+            case "addQualifications":
+                resume = sqlStorage.get(uuid);
+                request.setAttribute("resume", resume);
+                request.getRequestDispatcher("WEB-INF/jsp/addQualifications.jsp").forward(request, response);
+                return;
             default:
                 throw new IllegalStateException("Action " + action + "is illegal");
         }
