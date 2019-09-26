@@ -37,17 +37,21 @@ public class ResumeServlet extends HttpServlet {
             if (value != null && value.trim().length() != 0) {
                 resume.setContact(contactType, value);
             } else {
-                resume.getContacts().remove(contactType);
+                resume.removeContact(contactType);
             }
         }
         for (SectionType sectionType : SectionType.values()) {
             String sectionTypeName = sectionType.name();
             String value = request.getParameter(sectionTypeName);
-            if (value != null && value.trim().length() != 0) {
+            if (value != null) {
                 switch (sectionTypeName) {
                     case ("OBJECTIVE"):
                     case ("PERSONAL"):
-                        resume.setSection(sectionType, new AboutSection(value));
+                        if (value.trim().isEmpty()) {
+                            resume.removeSection(sectionType);
+                        } else {
+                            resume.setSection(sectionType, new AboutSection(value));
+                        }
                         break;
                     case ("ACHIEVEMENT"):
                     case ("QUALIFICATIONS"):
@@ -62,9 +66,10 @@ public class ResumeServlet extends HttpServlet {
                         break;
                     case ("EXPERIENCE"):
                     case ("EDUCATION"):
+                        break;
                 }
             } else {
-                resume.getSections().remove(sectionType);
+                resume.removeSection(sectionType);
             }
         }
         if (resume.getFullName().trim().length() == 0) {
@@ -90,36 +95,36 @@ public class ResumeServlet extends HttpServlet {
                 response.sendRedirect("resume");
                 return;
             case "view":
+                forward(request, response, uuid, "WEB-INF/jsp/view.jsp");
+                break;
             case "edit":
-                resume = sqlStorage.get(uuid);
+                forward(request, response, uuid, "WEB-INF/jsp/edit.jsp");
                 break;
             case "add":
                 resume = new Resume("");
                 sqlStorage.save(resume);
-                request.setAttribute("resume", resume);
-                request.getRequestDispatcher("WEB-INF/jsp/edit.jsp").forward(request, response);
-                return;
+                forward(request, response, resume.getUuid(),"WEB-INF/jsp/edit.jsp");
+                break;
             case "addObjective":
-                resume = sqlStorage.get(uuid);
-                request.setAttribute("resume", resume);
-                request.getRequestDispatcher("WEB-INF/jsp/addObjective.jsp").forward(request, response);
-                return;
+                forward(request, response, uuid, "WEB-INF/jsp/addObjective.jsp");
+                break;
+            case "addPersonal":
+                forward(request, response, uuid, "WEB-INF/jsp/addPersonal.jsp");
+                break;
             case "addAchievement":
-                resume = sqlStorage.get(uuid);
-                request.setAttribute("resume", resume);
-                request.getRequestDispatcher("WEB-INF/jsp/addAchievement.jsp").forward(request, response);
-                return;
-            case "addQualifications":
-                resume = sqlStorage.get(uuid);
-                request.setAttribute("resume", resume);
-                request.getRequestDispatcher("WEB-INF/jsp/addQualifications.jsp").forward(request, response);
-                return;
+                forward(request, response, uuid, "WEB-INF/jsp/addAchievement.jsp");
+                break;
+            case "addQualification":
+                forward(request, response, uuid, "WEB-INF/jsp/addQualification.jsp");
+                break;
             default:
                 throw new IllegalStateException("Action " + action + "is illegal");
         }
+    }
+
+    private void forward(HttpServletRequest request, HttpServletResponse response, String uuid, String jsp) throws ServletException, IOException {
+        Resume resume = sqlStorage.get(uuid);
         request.setAttribute("resume", resume);
-        request.getRequestDispatcher(
-                action.equals("view") ? "WEB-INF/jsp/view.jsp" : "WEB-INF/jsp/edit.jsp"
-        ).forward(request, response);
+        request.getRequestDispatcher(jsp).forward(request, response);
     }
 }

@@ -1,6 +1,7 @@
+<%@ page import="ru.javawebinar.basejava.model.AboutSection" %>
+<%@ page import="ru.javawebinar.basejava.model.ContactType" %>
 <%@ page import="ru.javawebinar.basejava.model.SectionType" %>
 <%@ page import="ru.javawebinar.basejava.model.SkillsSection" %>
-<%@ page import="ru.javawebinar.basejava.model.AboutSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -16,24 +17,63 @@
 <section>
     <form method="post" action="resume" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="uuid" value="${resume.uuid}">
-        <dl>
-            <h2>
-                <dt>ФИО:</dt>
-            </h2>
-            <dd><input type="text" name="fullName" size=89 value="${resume.fullName}"></dd>
-        </dl>
-        <c:set var="objective" value="OBJECTIVE"/>
-        <c:forEach var="sectionType" items="<%=SectionType.values()%>">
-            <c:if test="${sectionType.name().equals(objective)}">
-                <c:if test="${resume.getSection(sectionType) != null}">
-                    <c:set var="about"
-                           value='<%=((AboutSection)resume.getSection(SectionType.valueOf("OBJECTIVE"))).getElement()%>'/>
-                    <b>${sectionType.title}:</b><br/>
-                        <textarea rows="2" cols="120" name="${sectionType.name()}">${about}</textarea><br/>
-                </c:if>
-                <textarea rows="2" cols="120" name="${sectionType.name()}"></textarea><br/>
-            </c:if>
+        <h2>ФИО:</h2>
+        <br>
+        <input readonly type="text" name="fullName" size=89 value="${resume.fullName}">
+        <br/><br/>
+
+        <c:forEach var="type" items="<%=ContactType.values()%>">
+            <input type="hidden" name="${type.name()}" size=60 value="${resume.getContact(type)}">
         </c:forEach>
+
+        <c:set var="objective" value="OBJECTIVE"/>
+        <c:set var="personal" value="PERSONAL"/>
+        <c:set var="achievement" value="ACHIEVEMENT"/>
+        <c:set var="qualifications" value="QUALIFICATIONS"/>
+        <c:set var="experience" value="EXPERIENCE"/>
+        <c:set var="education" value="EDUCATION"/>
+
+        <c:forEach var="sectionType" items="<%=SectionType.values()%>">
+            <c:choose>
+                <c:when test="${sectionType == objective}">
+                    <c:out value="${sectionType.title}:"/><br/>
+                    <c:if test="${resume.getSection(sectionType) != null}">
+                        <c:set var="objectiveAbout"
+                               value='<%=((AboutSection)resume.getSection(SectionType.valueOf("OBJECTIVE"))).getElement()%>'/>
+                    </c:if>
+                    <textarea rows="2" cols="120" name="${sectionType.name()}">${objectiveAbout}</textarea>
+                </c:when>
+
+                <c:when test="${sectionType == personal}">
+                    <c:if test="${resume.getSection(sectionType) != null}">
+                        <c:set var="personalAbout"
+                               value='<%=((AboutSection)resume.getSection(SectionType.valueOf("PERSONAL"))).getElement()%>'/>
+                    </c:if>
+                    <textarea hidden rows="2" cols="120" name="${sectionType.name()}">${personalAbout}</textarea>
+                </c:when>
+
+                <c:when test="${sectionType == achievement}">
+                    <c:if test="${resume.getSection(sectionType) != null}">
+                        <c:set var="achievementSkills"
+                               value='<%=((SkillsSection)resume.getSection(SectionType.valueOf("ACHIEVEMENT"))).getElement()%>'/>
+                        <c:forEach var="skill" items="${achievementSkills}">
+                            <textarea hidden rows="2" cols="120" name="${sectionType.name()}">${skill}</textarea>
+                        </c:forEach>
+                    </c:if>
+                </c:when>
+
+                <c:when test="${sectionType == qualifications}">
+                    <c:if test="${resume.getSection(sectionType) != null}">
+                        <c:set var="qualificationsSkills"
+                               value='<%=((SkillsSection)resume.getSection(SectionType.valueOf("QUALIFICATIONS"))).getElement()%>'/>
+                        <c:forEach var="skill" items="${qualificationsSkills}">
+                            <textarea hidden rows="2" cols="120" name="${sectionType.name()}">${skill}</textarea>
+                        </c:forEach>
+                    </c:if>
+                </c:when>
+            </c:choose>
+        </c:forEach>
+
         <br/>
         <button type="submit">Сохранить</button>
         <button type="reset">Отменить правки</button>

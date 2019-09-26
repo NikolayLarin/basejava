@@ -52,26 +52,26 @@
                 </c:when>
 
                 <c:when test="${sectionType == achievement}">
-                    <c:out value="${sectionType.title}:"/><br/>
                     <c:if test="${resume.getSection(sectionType) != null}">
                         <c:set var="achievementSkills"
                                value='<%=((SkillsSection)resume.getSection(SectionType.valueOf("ACHIEVEMENT"))).getElement()%>'/>
                         <c:forEach var="skill" items="${achievementSkills}">
-                            <textarea readonly rows="2" cols="120" name="${sectionType.name()}">${skill}</textarea><br/><br>
+                            <textarea hidden rows="2" cols="120" name="${sectionType.name()}">${skill}</textarea>
                         </c:forEach>
                     </c:if>
-                    Новое достижение: <br/>
-                    <textarea rows="2" cols="120" name="${sectionType.name()}"></textarea>
                 </c:when>
 
                 <c:when test="${sectionType == qualifications}">
+                    <c:out value="${sectionType.title}:"/><br/>
                     <c:if test="${resume.getSection(sectionType) != null}">
                         <c:set var="qualificationsSkills"
                                value='<%=((SkillsSection)resume.getSection(SectionType.valueOf("QUALIFICATIONS"))).getElement()%>'/>
                         <c:forEach var="skill" items="${qualificationsSkills}">
-                            <textarea hidden rows="2" cols="120" name="${sectionType.name()}">${skill}</textarea>
+                            <textarea readonly rows="2" cols="120" name="${sectionType.name()}">${skill}</textarea><br/><br>
                         </c:forEach>
                     </c:if>
+                    Новая квалификация: <br/>
+                    <textarea rows="2" cols="120" name="${sectionType.name()}"></textarea>
                 </c:when>
             </c:choose>
         </c:forEach>

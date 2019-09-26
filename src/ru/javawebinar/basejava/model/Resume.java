@@ -65,6 +65,14 @@ public class Resume implements Comparable<Resume>, Serializable {
         return sections.get(type);
     }
 
+    public void removeContact(ContactType type) {
+        this.contacts.remove(type);
+    }
+
+    public void removeSection(SectionType type) {
+        this.sections.remove(type);
+    }
+
     public String getUuid() {
         return uuid;
     }

@@ -11,7 +11,7 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <h2><a href="resume?uuid=${null}&action=add">Добавить резюме</a></h2>
+    <h3><a href="resume?uuid=${null}&action=add">Добавить резюме</a></h3>
     <table border="3" cellpadding="8" cellspacing="0">
         <tr>
             <th>Name</th>

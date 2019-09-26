@@ -21,6 +21,7 @@
             </h2>
             <dd><input type="text" name="fullName" required size=89 value="${resume.fullName}"></dd>
         </dl>
+
         <h2>Контакты:</h2>
         <c:forEach var="type" items="<%=ContactType.values()%>">
             <dl>
@@ -49,21 +50,21 @@
             <c:choose>
                 <c:when test="${type.equals(objective) || type.equals(personal)}">
                     <textarea rows="2" cols="120" name="${type}">${sectionEntry.value}</textarea>
-                    <br/>
+                    <br/><br/>
                 </c:when>
                 <c:when test="${type.equals(achievement) || type.equals(qualifications)}">
                     <c:forEach var="skill" items="<%=((SkillsSection)sectionEntry.getValue()).getElement()%>">
                         <textarea rows="2" cols="120" name="${type}">${skill}</textarea>
-                        <br/>
+                        <br/><br/>
                     </c:forEach>
                 </c:when>
             </c:choose>
             <br/>
         </c:forEach>
-        <a href="resume?uuid=${resume.uuid}&action=addObjective">Добавить позицию</a>
-        <a href="resume?uuid=${resume.uuid}&action=addPersonal">Добавить личные качества</a>
+        <a href="resume?uuid=${resume.uuid}&action=addObjective">Изменить позицию</a>
+        <a href="resume?uuid=${resume.uuid}&action=addPersonal">Изменить личные качества</a>
         <a href="resume?uuid=${resume.uuid}&action=addAchievement">Добавить достижения</a>
-        <a href="resume?uuid=${resume.uuid}&action=addQualifications">Добавить квалификацию</a>
+        <a href="resume?uuid=${resume.uuid}&action=addQualification">Добавить квалификацию</a>
         <br/><br/>
         <button type="submit">Сохранить</button>
         <button type="reset">Отменить правки</button>

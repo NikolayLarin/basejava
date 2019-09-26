@@ -21,52 +21,59 @@
             <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
         </c:forEach>
     </p><br/>
-    <p>
-        <c:set var="objective" value="OBJECTIVE"/>
-        <c:set var="personal" value="PERSONAL"/>
-        <c:set var="achievement" value="ACHIEVEMENT"/>
-        <c:set var="qualifications" value="QUALIFICATIONS"/>
-        <c:set var="experience" value="EXPERIENCE"/>
-        <c:set var="education" value="EDUCATION"/>
 
-        <c:forEach var="sectionEntry" items="${resume.sections}">
-            <jsp:useBean id="sectionEntry"
-                         type="java.util.Map.Entry<ru.javawebinar.basejava.model.SectionType,
+    <c:set var="objective" value="OBJECTIVE"/>
+    <c:set var="personal" value="PERSONAL"/>
+    <c:set var="achievement" value="ACHIEVEMENT"/>
+    <c:set var="qualifications" value="QUALIFICATIONS"/>
+    <c:set var="experience" value="EXPERIENCE"/>
+    <c:set var="education" value="EDUCATION"/>
+
+    <c:forEach var="sectionEntry" items="${resume.sections}">
+        <jsp:useBean id="sectionEntry"
+                     type="java.util.Map.Entry<ru.javawebinar.basejava.model.SectionType,
                                  ru.javawebinar.basejava.model.AbstractSection>"/>
-            <b><%=sectionEntry.getKey().getTitle()%>:</b><br/><br/>
-            <c:set var="type" value="${sectionEntry.key.name()}"/>
-            <c:choose>
-                <c:when test="${type.equals(objective) || type.equals(personal)}">
-                    <%=sectionEntry.getValue()%><br/><br/>
-                </c:when>
-                <c:when test="${type.equals(achievement) || type.equals(qualifications)}">
+        <b><%=sectionEntry.getKey().getTitle()%>:</b><br/><br/>
+        <c:set var="type" value="${sectionEntry.key.name()}"/>
+        <c:choose>
+            <c:when test="${type.equals(objective) || type.equals(personal)}">
+                <%=sectionEntry.getValue()%><br/>
+                <br/>
+            </c:when>
+
+            <c:when test="${type.equals(achievement) || type.equals(qualifications)}">
+                <ul>
                     <c:forEach var="skill" items="<%=((SkillsSection)sectionEntry.getValue()).getElement()%>">
-                        • ${skill}<br/>
+                        <li>${skill}</li>
+                        <br/>
                     </c:forEach>
-                    <br/>
-                </c:when>
-                <c:when test="${type.equals(experience) || type.equals(education)}">
-                    <c:set var="careerList" value="<%=((CareerSection)sectionEntry.getValue()).getElement()%>"/>
+                </ul>
+            </c:when>
+
+            <c:when test="${type.equals(experience) || type.equals(education)}">
+                <c:set var="careerList" value="<%=((CareerSection)sectionEntry.getValue()).getElement()%>"/>
+                <ul>
                     <c:forEach var="career" items="${careerList}">
-                        • ${career.title}:<br/>
+                        <li><em><b>${career.title}:</b></em></li>
                         <c:if test="${career.url != null}">
                             ${career.url}<br/>
                         </c:if>
-                        <c:forEach var="posirion" items="${career.positions}">
-                            ${posirion.startDate.toString()} - ${posirion.endDate.toString()}
-                            ${posirion.position}<br/>
-                            <c:if test="${posirion.description != null}">
-                                ${posirion.description}<br/>
+                        <c:forEach var="position" items="${career.positions}">
+                            ${position.startDate.toString()} – ${position.endDate.toString()}
+                            <em><b>${position.position}</b></em><br/>
+                            <c:if test="${position.description != null}">
+                                ${position.description}<br/>
                             </c:if>
                         </c:forEach>
                         <br/>
                     </c:forEach>
-                    <br/>
-                </c:when>
-            </c:choose>
-            <br/><br/>
-        </c:forEach>
-    </p>
+                </ul>
+                <br/>
+            </c:when>
+
+        </c:choose>
+        <br/>
+    </c:forEach>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
