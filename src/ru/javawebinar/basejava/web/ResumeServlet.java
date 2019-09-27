@@ -57,9 +57,12 @@ public class ResumeServlet extends HttpServlet {
                     case ("QUALIFICATIONS"):
                         List<String> skills = new ArrayList<>();
                         String[] values = request.getParameterValues(sectionTypeName);
-                        for (String el : values) {
-                            if (el != null && el.trim().length() != 0) {
-                                skills.add(el);
+                        for (String joinedString : values) {
+                            String[] el = joinedString.split("\n");
+                            for (String s : el) {
+                                if (s != null && s.trim().isEmpty()) {
+                                    skills.add(s);
+                                }
                             }
                         }
                         resume.setSection(sectionType, new SkillsSection(skills));
@@ -103,7 +106,10 @@ public class ResumeServlet extends HttpServlet {
             case "add":
                 resume = new Resume("");
                 sqlStorage.save(resume);
-                forward(request, response, resume.getUuid(),"WEB-INF/jsp/edit.jsp");
+                forward(request, response, resume.getUuid(), "WEB-INF/jsp/edit.jsp");
+                break;
+            case "editDeprecated":
+                forward(request, response, uuid, "WEB-INF/jsp/editDeprecated.jsp");
                 break;
             case "addObjective":
                 forward(request, response, uuid, "WEB-INF/jsp/addObjective.jsp");

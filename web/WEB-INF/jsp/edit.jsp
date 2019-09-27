@@ -1,4 +1,6 @@
+<%@ page import="ru.javawebinar.basejava.model.AboutSection" %>
 <%@ page import="ru.javawebinar.basejava.model.ContactType" %>
+<%@ page import="ru.javawebinar.basejava.model.SectionType" %>
 <%@ page import="ru.javawebinar.basejava.model.SkillsSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -40,35 +42,64 @@
         <c:set var="qualifications" value="QUALIFICATIONS"/>
         <c:set var="experience" value="EXPERIENCE"/>
         <c:set var="education" value="EDUCATION"/>
-        <c:forEach var="sectionEntry" items="<%=resume.getSections().entrySet()%>">
-            <jsp:useBean id="sectionEntry"
-                         type="java.util.Map.Entry<ru.javawebinar.basejava.model.SectionType,
-                                 ru.javawebinar.basejava.model.AbstractSection>"/>
-            <c:set var="type" value="${sectionEntry.key.name()}"/>
-            <b>${sectionEntry.key.title}:
-            </b><br/>
+
+        <c:forEach var="sectionType" items="<%=SectionType.values()%>">
             <c:choose>
-                <c:when test="${type.equals(objective) || type.equals(personal)}">
-                    <textarea rows="2" cols="120" name="${type}">${sectionEntry.value}</textarea>
+                <c:when test="${sectionType == objective}">
+                    <b><c:out value="${sectionType.title}:"/></b><br/>
+                    <c:if test="${resume.getSection(sectionType) != null}">
+                        <c:set var="objectiveAbout"
+                               value='<%=((AboutSection)resume.getSection(SectionType.valueOf("OBJECTIVE"))).getElement()%>'/>
+                    </c:if>
+                    <textarea rows="2" cols="120" name="${sectionType.name()}">${objectiveAbout}</textarea>
                     <br/><br/>
                 </c:when>
-                <c:when test="${type.equals(achievement) || type.equals(qualifications)}">
-                    <c:forEach var="skill" items="<%=((SkillsSection)sectionEntry.getValue()).getElement()%>">
-                        <textarea rows="2" cols="120" name="${type}">${skill}</textarea>
+
+                <c:when test="${sectionType == personal}">
+                    <b><c:out value="${sectionType.title}:"/></b><br/>
+                    <c:if test="${resume.getSection(sectionType) != null}">
+                        <c:set var="personalAbout"
+                               value='<%=((AboutSection)resume.getSection(SectionType.valueOf("PERSONAL"))).getElement()%>'/>
+                    </c:if>
+                    <textarea rows="2" cols="120" name="${sectionType.name()}">${personalAbout}</textarea>
+                    <br/><br/>
+                </c:when>
+
+                <c:when test="${sectionType == achievement}">
+                    <b><c:out value="${sectionType.title}:"/></b><br/>
+                    <c:if test="${resume.getSection(sectionType) != null}">
+                        <c:set var="achievementSkills"
+                               value='<%=String.join("\n",
+                               ((SkillsSection)resume.getSection(SectionType.valueOf("ACHIEVEMENT"))).getElement())%>'/>
+                        <textarea rows="20" cols="120" name="${sectionType.name()}">${achievementSkills}</textarea>
                         <br/><br/>
-                    </c:forEach>
+                    </c:if>
+                    Новые достижения (через Enter): <br/>
+                    <textarea rows="6" cols="120" name="${sectionType.name()}"></textarea>
+                    <br/><br/>
+                </c:when>
+
+                <c:when test="${sectionType == qualifications}">
+                    <b><c:out value="${sectionType.title}:"/></b><br/>
+                    <c:if test="${resume.getSection(sectionType) != null}">
+                        <c:set var="qualificationsSkills"
+                               value='<%=String.join("\n",
+                               ((SkillsSection)resume.getSection(SectionType.valueOf("QUALIFICATIONS"))).getElement())%>'/>
+                        <textarea rows="20" cols="120" name="${sectionType.name()}">${achievementSkills}</textarea>
+                        <br/><br/>
+                    </c:if>
+                    Новые квалификации (через Enter): <br/>
+                    <textarea rows="6" cols="120" name="${sectionType.name()}"></textarea>
+                    <br/><br/>
                 </c:when>
             </c:choose>
-            <br/>
         </c:forEach>
-        <a href="resume?uuid=${resume.uuid}&action=addObjective">Изменить позицию</a>
-        <a href="resume?uuid=${resume.uuid}&action=addPersonal">Изменить личные качества</a>
-        <a href="resume?uuid=${resume.uuid}&action=addAchievement">Добавить достижения</a>
-        <a href="resume?uuid=${resume.uuid}&action=addQualification">Добавить квалификацию</a>
-        <br/><br/>
+        <br/>
         <button type="submit">Сохранить</button>
         <button type="reset">Отменить правки</button>
         <button onclick="window.history.back()">Выйти</button>
+        <br/><br/>
+        <a href="resume?uuid=${resume.uuid}&action=editDeprecated">Deprecated Edit realization</a>
         <br/>
     </form>
 </section>

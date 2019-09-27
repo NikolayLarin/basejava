@@ -1,5 +1,6 @@
 <%@ page import="ru.javawebinar.basejava.model.CareerSection" %>
 <%@ page import="ru.javawebinar.basejava.model.SkillsSection" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -51,6 +52,7 @@
             </c:when>
 
             <c:when test="${type.equals(experience) || type.equals(education)}">
+                <c:set var="formatter" value='<%=DateTimeFormatter.ofPattern("MM/YYYY")%>'/>
                 <c:set var="careerList" value="<%=((CareerSection)sectionEntry.getValue()).getElement()%>"/>
                 <ul>
                     <c:forEach var="career" items="${careerList}">
@@ -59,7 +61,7 @@
                             ${career.url}<br/>
                         </c:if>
                         <c:forEach var="position" items="${career.positions}">
-                            ${position.startDate.toString()} – ${position.endDate.toString()}
+                            ${position.startDate.format(formatter)} – ${position.endDate.format(formatter)}
                             <em><b>${position.position}</b></em><br/>
                             <c:if test="${position.description != null}">
                                 ${position.description}<br/>
