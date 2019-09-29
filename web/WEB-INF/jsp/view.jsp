@@ -61,7 +61,12 @@
                             ${career.url}<br/>
                         </c:if>
                         <c:forEach var="position" items="${career.positions}">
-                            ${position.startDate.format(formatter)} – ${position.endDate.format(formatter)}
+                            <c:set var="endDate" value="${position.endDate}"/>
+                            <c:if test='${endDate.toString().equals("3000-01-01")}'>
+                                <c:set var="endDate" value="<%=java.time.LocalDate.now()%>"/>
+                            </c:if>
+                            <c:out value="${position.startDate.format(formatter)}"/> –
+                            <c:out value="${endDate.format(formatter)}"/>
                             <em><b>${position.position}</b></em><br/>
                             <c:if test="${position.description != null}">
                                 ${position.description}<br/>

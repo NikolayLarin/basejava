@@ -9,4 +9,10 @@ public class DateUtil {
     public static LocalDate of(int year, int month) {
         return LocalDate.of(year, month, 1);
     }
+    public static LocalDate of(String joinedString) {
+        String[] arr = joinedString.split("/");
+        int month = Integer.parseInt(arr[0]);
+        int year = Integer.parseInt(arr[1]);
+        return LocalDate.of(year, month, 1);
+    }
 }
