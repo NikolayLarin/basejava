@@ -4,7 +4,6 @@ import ru.javawebinar.basejava.model.AboutSection;
 import ru.javawebinar.basejava.model.Career;
 import ru.javawebinar.basejava.model.CareerSection;
 import ru.javawebinar.basejava.model.ContactType;
-import ru.javawebinar.basejava.model.Link;
 import ru.javawebinar.basejava.model.Resume;
 import ru.javawebinar.basejava.model.SectionType;
 import ru.javawebinar.basejava.model.SkillsSection;
@@ -18,12 +17,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ResumeServlet extends HttpServlet {
     private Storage sqlStorage; // = Config.getINSTANCE().getSqlStorage();
@@ -83,8 +83,7 @@ public class ResumeServlet extends HttpServlet {
                         experienceReference.put("startDates", "experiencePositionStartDate");
                         experienceReference.put("endDates", "experiencePositionEndDate");
                         experienceReference.put("descriptions", "experiencePositionDescription");
-                        List<Career> careers = setCareers(resume, experienceReference, request);
-                        resume.setSection(sectionType, new CareerSection(careers));
+                        resume.setSection(sectionType, new CareerSection(setCareers(experienceReference, request)));
                         break;
                     case ("EDUCATION"):
                         Map<String, String> educationReference = new HashMap<>();
@@ -94,8 +93,7 @@ public class ResumeServlet extends HttpServlet {
                         educationReference.put("startDates", "educationPositionStartDate");
                         educationReference.put("endDates", "educationPositionEndDate");
                         educationReference.put("descriptions", "educationPositionDescription");
-                        List<Career> educationCareers = setCareers(resume, educationReference, request);
-                        resume.setSection(sectionType, new CareerSection(educationCareers));
+                        resume.setSection(sectionType, new CareerSection(setCareers(educationReference, request)));
                         break;
                 }
             } else {
@@ -140,50 +138,45 @@ public class ResumeServlet extends HttpServlet {
         }
     }
 
-    private List<Career> setCareers(Resume resume, Map<String, String> reference, HttpServletRequest request) {
-        String[] values = request.getParameterValues(reference.get("careers"));
+    private List<Career> setCareers(Map<String, String> reference, HttpServletRequest request) {
+        String[] titles = request.getParameterValues(reference.get("careers"));
         String[] careerPositions = request.getParameterValues(reference.get("positions"));
         String[] careerUrls = request.getParameterValues(reference.get("urls"));
         String[] startDates = request.getParameterValues(reference.get("startDates"));
         String[] endDates = request.getParameterValues(reference.get("endDates"));
         String[] descriptions = request.getParameterValues(reference.get("descriptions"));
-        List<Career> careers = new ArrayList<>();
-        int newCareerSize = values.length;
+        Map<String, Career> careersMap = new HashMap<>();
+        int newCareerSize = titles.length;
         for (int i = 0; i < newCareerSize; i++) {
-            List<Career.Position> positions = new ArrayList<>();
-            if (!careerPositions[i].trim().isEmpty() && !startDates[i].trim().isEmpty()) {
-                LocalDate startDate = DateUtil.of(startDates[i]);
-                LocalDate endDate = DateUtil.of(endDates[i]);
-                Career.Position position = new Career.Position(careerPositions[i], startDate, endDate);
-                positions.add(position);
-
-                String title = values[i];
-                Link link = new Link(title);
+            if (!titles[i].trim().isEmpty() && !startDates[i].trim().isEmpty()) {
+                String title = titles[i];
+                Career career = careersMap.get(title);
+                if (career == null) {
+                    career = new Career(title);
+                }
                 String url = careerUrls[i];
                 if (!url.trim().isEmpty()) {
-                    link.setUrl(url);
+                    career.setUrl(url);
                 }
+                Career.Position position =
+                        new Career.Position(careerPositions[i], DateUtil.of(startDates[i]), DateUtil.of(endDates[i]));
+                career.addPosition(title, position);
                 String description = descriptions[i];
                 if (!description.trim().isEmpty()) {
                     position.setDescription(description);
                 }
-                Career career = new Career(link, positions);
-                careers.add(career);
-            } else {
-                newCareerSize--;
+                career.getPositions().sort(Comparator.comparing(Career.Position::getEndDate).reversed());
+                careersMap.put(title, career);
             }
         }
-        CareerSection careerSection = ((CareerSection) resume.getSection(SectionType.valueOf(reference.get("careers"))));
-        if (careerSection != null) {
-            int careerSize = careerSection.getElement().size();
-            if (careerSize < newCareerSize) {
-                Collections.rotate(careers, newCareerSize + 1);
-            }
-        }
-        return careers;
+        return careersMap.values()
+                .stream()
+                .sorted(Collections.reverseOrder())
+                .collect(Collectors.toList());
     }
 
-    private void forward(HttpServletRequest request, HttpServletResponse response, String uuid, String jsp) throws ServletException, IOException {
+    private void forward(HttpServletRequest request, HttpServletResponse response, String uuid, String jsp) throws
+            ServletException, IOException {
         Resume resume = sqlStorage.get(uuid);
         request.setAttribute("resume", resume);
         request.getRequestDispatcher(jsp).forward(request, response);

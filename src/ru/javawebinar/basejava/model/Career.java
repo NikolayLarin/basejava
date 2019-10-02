@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.model;
 
+import org.jetbrains.annotations.NotNull;
 import ru.javawebinar.basejava.util.DateUtil;
 import ru.javawebinar.basejava.util.LocalDateAdapter;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +19,7 @@ import java.util.Objects;
  * This class stores Position instances of EXPERIENCE ("Опыт работы") and EDUCATION ("Образование") Sections in Resume.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Career implements Serializable {
+public class Career implements Serializable, Comparable<Career> {
     private static final long serialVersionUID = 20190616;
 
     private Link homePage;
@@ -88,6 +90,19 @@ public class Career implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(homePage, positions);
+    }
+
+    @Override
+    public int compareTo(@NotNull Career o) {
+        LocalDate newestDateC1 = positions.stream()
+                .max(Comparator.comparing(Position::getEndDate))
+                .get()
+                .getEndDate();
+        LocalDate newestDateC2 = o.getPositions().stream()
+                .max(Comparator.comparing(Position::getEndDate))
+                .get()
+                .getEndDate();
+        return newestDateC1.compareTo(newestDateC2);
     }
 
     /**

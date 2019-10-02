@@ -220,7 +220,7 @@ public class ResumeTestData {
             Career experience_5 = new Career(title_5, "https://www.yota.ru/");
             Career.Position position_5 = new Career.Position("Ведущий специалист",
                     2008, 6, 2010, 12);
-            position_5.setDescription("Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" " +
+            position_5.setDescription("Дизайн и имплементация Java EE фреймворка для отдела Платежные Системы " +
                     "(GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). " +
                     "Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX " +
                     "клиента (Python/ Jython, Django, ExtJS).");
@@ -262,8 +262,8 @@ public class ResumeTestData {
 
             String title_1 = "Coursera";
             Career education_1 = new Career(title_1, "https://www.coursera.org/course/progfun");
-            Career.Position position_1 = new Career.Position("\"Functional Programming " +
-                    "Principles in Scala\" by Martin Odersky",
+            Career.Position position_1 = new Career.Position("Functional Programming " +
+                    "Principles in Scala by Martin Odersky",
                     LocalDate.of(2013, 3, 1),
                     LocalDate.of(2013, 5, 1));
             education_1.addPosition(title_1, position_1);
@@ -272,8 +272,8 @@ public class ResumeTestData {
             String title_2 = "Luxoft";
             Career education_2 = new Career(title_2,
                     "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366");
-            Career.Position position_2 = new Career.Position("Курс \"Объектно-ориентированный анализ ИС. " +
-                    "Концептуальное моделирование на UML.\"",
+            Career.Position position_2 = new Career.Position("Курс Объектно-ориентированный анализ ИС. " +
+                    "Концептуальное моделирование на UML.",
                     2011, 3, 2011, 4);
             education_2.addPosition(title_2, position_2);
             education.add(education_2);
