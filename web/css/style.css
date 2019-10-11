@@ -1,51 +1,101 @@
 header {
-    background: none repeat scroll 0 0 #A6C9E2;
-    color: #2E6E9E;
+    background: none repeat scroll 0 0 #E0E0E0;
+    color: #424242;
     font-size: 20px;
     padding: 5px 20px;
-    font-family: Garamond, Calibri, sans-serif;
+    font-family: Calibri, sans-serif
 }
 
 footer {
-    background: none repeat scroll 0 0 #A6C9E2;
-    color: #2E6E9E;
+    background: none repeat scroll 0 0 #E0E0E0;
+    color: #424242;
     font-size: 20px;
     padding: 5px 20px;
     margin: 20px 0;
-    font-family: Garamond, Calibri, sans-serif;
+    font-family: Calibri, sans-serif;
+}
+
+title, h1, h2, h3 {
+    font-family: Calibri, sans-serif;
+    color: #424242;
+}
+
+h3 {
+    margin: 15px 0 5px;
+}
+
+a, p, param, ul, li, button {
+    font-family: Calibri, sans-serif;
+    color: #424242;
+    font-size: medium;
+}
+
+table {
+    border-collapse: collapse;
+    border: 2px solid dimgrey;
+    text-align: center;
+    color: #424242;
+    font-family: Calibri, sans-serif;
+    font-size: medium;
+}
+
+th {
+    padding: 10px 50px 10px 50px;
+    border: 1px solid dimgrey;
+    text-align: center;
+    font-family: Calibri, sans-serif;
+    color: #424242;
+    font-size: medium;
+}
+
+td {
+    padding: 10px 50px 10px 50px;
+    border: 1px solid lightgrey;
+    text-align: center;
+    font-family: Calibri, sans-serif;
+    color: #424242;
+    font-size: medium;
 }
 
 dl {
     background: none repeat scroll 0 0 #FAFAFA;
     margin: 8px 0;
     padding: 0;
-    font-family: Garamond, Calibri, sans-serif;
+    font-family: Calibri, sans-serif;
+    color: #424242;
+    font-size: medium;
 }
 
 dt {
     display: inline-block;
     width: 170px;
-    font-family: Garamond, Calibri, sans-serif;
+    font-family: Calibri, sans-serif;
+    color: #424242;
+    font-size: medium;
 }
 
 dd {
     display: inline-block;
     margin-left: 0;
     vertical-align: top;
-    font-family: Garamond, Calibri, sans-serif;
+    font-family: Calibri, sans-serif;
+    color: #424242;
+    font-size: medium;
 }
 
-input {
-    background-color: lavender;
+input[type='text'], input {
+    background-color: #E0E0E0;
     border: 0;
     padding: 0;
-    font-family: Garamond, Calibri, sans-serif;
-    font-size: medium!important;
+    font-family: Calibri, sans-serif;
+    color: #424242;
+    font-size: medium;
 }
 
 textarea {
     border: none;
-    background-color: lavender;
-    font-family: Garamond, Calibri, sans-serif;
-    font-size: medium !important;
+    background-color: #E0E0E0;
+    font-family: Calibri, sans-serif;
+    color: #424242;
+    font-size: medium;
 }

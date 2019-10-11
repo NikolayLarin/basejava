@@ -6,20 +6,41 @@ public enum ContactType {
     HOME_PHONE("Домашний тел."),
     SKYPE("Skype") {
         @Override
-        public String toHtmlLowLevel(String value) {
-            return getTitle() + ": " + "<a href='skype:" + value + "'>" + value + "</a>";
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink("skype:" + value, value);
         }
     },
+
     EMAIL("Почта") {
         @Override
-        public String toHtmlLowLevel(String value) {
-            return getTitle() + ": " + "<a href='mailto:" + value + "'>" + value + "</a>";
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink("mailto:" + value, value);
         }
     },
-    LINKEDIN("Профиль LinkedIn"),
-    GITHUB("Профиль GitHub"),
-    STACKOVERFLOW("Профиль Stackoverflow"),
-    SITE("Домашняя страница");
+    LINKEDIN("Профиль LinkedIn") {
+        @Override
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink(value, value);
+        }
+    },
+    GITHUB("Профиль GitHub") {
+        @Override
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink(value, value);
+        }
+    },
+    STACKOVERFLOW("Профиль Stackoverflow") {
+        @Override
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink(value, value);
+        }
+    },
+    SITE("Домашняя страница") {
+        @Override
+        public String toHtml0(String value) {
+            return getTitle() + ": " + toLink(value, value);
+        }
+    };
 
     private final String title;
 
@@ -31,11 +52,15 @@ public enum ContactType {
         return title;
     }
 
-    protected String toHtmlLowLevel(String value) {
+    protected String toHtml0(String value) {
         return title + ": " + value;
     }
 
     public String toHtml(String value) {
-        return value == null ? "" : toHtmlLowLevel(value);
+        return value == null ? "" : toHtml0(value);
+    }
+
+    public static String toLink(String href, String title) {
+        return "<a href='" + href + "' target='_blank'>" + title + "</a>";
     }
 }

@@ -1,5 +1,7 @@
+<%@ page import="ru.javawebinar.basejava.model.AboutSection" %>
 <%@ page import="ru.javawebinar.basejava.model.CareerSection" %>
 <%@ page import="ru.javawebinar.basejava.model.SkillsSection" %>
+<%@ page import="ru.javawebinar.basejava.util.DateUtil" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -11,17 +13,21 @@
     <jsp:useBean id="resume" type="ru.javawebinar.basejava.model.Resume" scope="request"/>
     <title>Resume ${resume.fullName}</title>
 </head>
-<body>
+<body marginwidth="20" marginheight="20">
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <h2>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit">Edit</a></h2>
+    <h2>${resume.fullName}
+        <a href="resume?uuid=${resume.uuid}&action=edit">
+            <img src="img/resume-edit.png" width="35" height="35" title="edit resume" align="absbottom"></a></h2>
     <p>
         <c:forEach var="contactEntry" items="${resume.contacts}">
             <jsp:useBean id="contactEntry"
                          type="java.util.Map.Entry<ru.javawebinar.basejava.model.ContactType, java.lang.String>"/>
             <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
         </c:forEach>
-    </p><br/>
+    </p>
+    <hr>
+    <br/>
 
     <c:set var="objective" value="OBJECTIVE"/>
     <c:set var="personal" value="PERSONAL"/>
@@ -34,53 +40,56 @@
         <jsp:useBean id="sectionEntry"
                      type="java.util.Map.Entry<ru.javawebinar.basejava.model.SectionType,
                                  ru.javawebinar.basejava.model.AbstractSection>"/>
-        <b><%=sectionEntry.getKey().getTitle()%>:</b><br/><br/>
-        <c:set var="type" value="${sectionEntry.key.name()}"/>
+        <c:set var="type" value="${sectionEntry.key}"/>
+        <c:set var="section" value="${sectionEntry.value}"/>
+        <jsp:useBean id="section" type="ru.javawebinar.basejava.model.AbstractSection"/>
         <c:choose>
-            <c:when test="${type.equals(objective) || type.equals(personal)}">
-                <%=sectionEntry.getValue()%><br/>
+            <c:when test="${type == objective || type == personal}">
+                <c:if test="<%=!((AboutSection) section).getElement().trim().isEmpty()%>">
+                    <h3><b>${sectionEntry.key.title}:</b></h3>
+                    <p>${sectionEntry.value}</p>
+                </c:if>
                 <br/>
             </c:when>
-
-            <c:when test="${type.equals(achievement) || type.equals(qualifications)}">
-                <ul>
-                    <c:forEach var="skill" items="<%=((SkillsSection)sectionEntry.getValue()).getElement()%>">
-                        <li>${skill}</li>
-                        <br/>
-                    </c:forEach>
-                </ul>
-            </c:when>
-
-            <c:when test="${type.equals(experience) || type.equals(education)}">
-                <c:set var="formatter" value='<%=DateTimeFormatter.ofPattern("MM/YYYY")%>'/>
-                <c:set var="careerList" value="<%=((CareerSection)sectionEntry.getValue()).getElement()%>"/>
-                <ul>
-                    <c:forEach var="career" items="${careerList}">
-                        <li><em><b>${career.title}:</b></em></li>
-                        <c:if test="${career.url != null}">
-                            ${career.url}<br/>
-                        </c:if>
-                        <c:forEach var="position" items="${career.positions}">
-                            <c:set var="endDate" value="${position.endDate}"/>
-                            <c:if test='${endDate.toString().equals("3000-01-01")}'>
-                                <c:set var="endDate" value="<%=java.time.LocalDate.now()%>"/>
-                            </c:if>
-                            <c:out value="${position.startDate.format(formatter)}"/> –
-                            <c:out value="${endDate.format(formatter)}"/>
-                            <em><b>${position.position}</b></em><br/>
-                            <c:if test="${position.description != null}">
-                                ${position.description}<br/>
-                            </c:if>
+            <c:when test="${type == achievement || type == qualifications}">
+                <c:if test="<%=((SkillsSection) section).getElement().size() != 0%>">
+                    <h3><b>${sectionEntry.key.title}:</b></h3>
+                    <ul>
+                        <c:forEach var="skill" items="<%=((SkillsSection) section).getElement()%>">
+                            <li>${skill}</li>
+                            <br/>
                         </c:forEach>
-                        <br/>
-                    </c:forEach>
-                </ul>
-                <br/>
+                    </ul>
+                </c:if>
             </c:when>
-
+            <c:when test="${type == experience || type == education}">
+                <c:if test="<%=((CareerSection) section).getElement().size() != 0%>">
+                    <h3><b>${sectionEntry.key.title}:</b></h3>
+                    <c:set var="careerList" value="<%=((CareerSection) section).getElement()%>"/>
+                    <ul>
+                        <c:forEach var="career" items="${careerList}">
+                            <li><em><b>${career.title}:</b></em></li>
+                            <c:if test="${career.url != null}">
+                                <a href="${career.url}" target="_blank">${career.url}</a><br/>
+                            </c:if>
+                            <c:forEach var="position" items="${career.positions}">
+                                <jsp:useBean id="position" type="ru.javawebinar.basejava.model.Career.Position"/>
+                                <c:out value="<%=DateUtil.format(position.getStartDate())%>"/> –
+                                <c:out value="<%=DateUtil.format(position.getEndDate())%>"/>
+                                <em><b>${position.position}</b></em><br/>
+                                <c:if test="${position.description != null}">
+                                    ${position.description}<br/>
+                                </c:if>
+                            </c:forEach>
+                            <br/>
+                        </c:forEach>
+                    </ul>
+                    <br/>
+                </c:if>
+            </c:when>
         </c:choose>
-        <br/>
     </c:forEach>
+    <button onclick="window.history.back()">OK</button>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

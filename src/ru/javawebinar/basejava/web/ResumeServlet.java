@@ -38,8 +38,14 @@ public class ResumeServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        final Resume resume = sqlStorage.get(uuid);
-        resume.setFullName(fullName);
+        final Resume resume;
+        if (uuid == null || uuid.trim().isEmpty()) {
+             resume = new Resume(fullName);
+             sqlStorage.save(resume);
+        } else {
+            resume = sqlStorage.get(uuid);
+            resume.setFullName(fullName);
+        }
         for (ContactType contactType : ContactType.values()) {
             String value = request.getParameter(contactType.name());
             if (value != null && value.trim().length() != 0) {
@@ -51,7 +57,6 @@ public class ResumeServlet extends HttpServlet {
         for (SectionType sectionType : SectionType.values()) {
             String sectionTypeName = sectionType.name();
             String value = request.getParameter(sectionTypeName);
-            String[] values = request.getParameterValues(sectionTypeName);
             if (value != null) {
                 switch (sectionTypeName) {
                     case ("OBJECTIVE"):
@@ -59,12 +64,15 @@ public class ResumeServlet extends HttpServlet {
                         if (value.trim().isEmpty()) {
                             resume.removeSection(sectionType);
                         } else {
-                            resume.setSection(sectionType, new AboutSection(value));
+                            resume.setSection(sectionType, new AboutSection(value.trim()
+                                    .replace("\r", "")
+                                    .replace("\n", "")));
                         }
                         break;
                     case ("ACHIEVEMENT"):
                     case ("QUALIFICATIONS"):
                         List<String> skills = new ArrayList<>();
+                        String[] values = request.getParameterValues(sectionTypeName);
                         for (String joinedString : values) {
                             String[] el = joinedString.split("\n");
                             for (String s : el) {
@@ -76,23 +84,11 @@ public class ResumeServlet extends HttpServlet {
                         resume.setSection(sectionType, new SkillsSection(skills));
                         break;
                     case ("EXPERIENCE"):
-                        Map<String, String> experienceReference = new HashMap<>();
-                        experienceReference.put("careers", sectionTypeName);
-                        experienceReference.put("positions", "experiencePosition");
-                        experienceReference.put("urls", "experienceCareerUrl");
-                        experienceReference.put("startDates", "experiencePositionStartDate");
-                        experienceReference.put("endDates", "experiencePositionEndDate");
-                        experienceReference.put("descriptions", "experiencePositionDescription");
+                        Map<String, String> experienceReference = getReferenceMap("experience", sectionTypeName);
                         resume.setSection(sectionType, new CareerSection(setCareers(experienceReference, request)));
                         break;
                     case ("EDUCATION"):
-                        Map<String, String> educationReference = new HashMap<>();
-                        educationReference.put("careers", sectionTypeName);
-                        educationReference.put("positions", "educationPosition");
-                        educationReference.put("urls", "educationCareerUrl");
-                        educationReference.put("startDates", "educationPositionStartDate");
-                        educationReference.put("endDates", "educationPositionEndDate");
-                        educationReference.put("descriptions", "educationPositionDescription");
+                        Map<String, String> educationReference = getReferenceMap("education", sectionTypeName);
                         resume.setSection(sectionType, new CareerSection(setCareers(educationReference, request)));
                         break;
                 }
@@ -116,26 +112,34 @@ public class ResumeServlet extends HttpServlet {
             request.getRequestDispatcher("WEB-INF/jsp/list.jsp").forward(request, response);
             return;
         }
-        Resume resume;
         switch (action) {
             case "delete":
                 sqlStorage.delete(uuid);
                 response.sendRedirect("resume");
                 return;
             case "view":
-                forward(request, response, uuid, "WEB-INF/jsp/view.jsp");
+                forward(request, response, sqlStorage.get(uuid), "WEB-INF/jsp/view.jsp");
                 break;
             case "edit":
-                forward(request, response, uuid, "WEB-INF/jsp/edit.jsp");
+                forward(request, response, sqlStorage.get(uuid), "WEB-INF/jsp/edit.jsp");
                 break;
             case "add":
-                resume = new Resume("");
-                sqlStorage.save(resume);
-                forward(request, response, resume.getUuid(), "WEB-INF/jsp/edit.jsp");
+                forward(request, response, new Resume(),"WEB-INF/jsp/edit.jsp");
                 break;
             default:
                 throw new IllegalStateException("Action " + action + "is illegal");
         }
+    }
+
+    private Map<String, String> getReferenceMap(String prefix, String sectionTypeName) {
+        Map<String, String> reference = new HashMap<>();
+        reference.put("careers", sectionTypeName);
+        reference.put("positions", prefix + "Position");
+        reference.put("urls", prefix + "CareerUrl");
+        reference.put("startDates", prefix + "PositionStartDate");
+        reference.put("endDates", prefix + "PositionEndDate");
+        reference.put("descriptions", prefix + "PositionDescription");
+        return reference;
     }
 
     private List<Career> setCareers(Map<String, String> reference, HttpServletRequest request) {
@@ -146,10 +150,10 @@ public class ResumeServlet extends HttpServlet {
         String[] endDates = request.getParameterValues(reference.get("endDates"));
         String[] descriptions = request.getParameterValues(reference.get("descriptions"));
         Map<String, Career> careersMap = new HashMap<>();
-        int newCareerSize = titles.length;
-        for (int i = 0; i < newCareerSize; i++) {
-            if (!titles[i].trim().isEmpty() && !startDates[i].trim().isEmpty()) {
-                String title = titles[i];
+        for (int i = 0; i < titles.length; i++) {
+            String title = titles[i];
+            String careerPosition = careerPositions[i];
+            if (!title.trim().isEmpty() && !careerPosition.trim().isEmpty()) {
                 Career career = careersMap.get(title);
                 if (career == null) {
                     career = new Career(title);
@@ -159,7 +163,7 @@ public class ResumeServlet extends HttpServlet {
                     career.setUrl(url);
                 }
                 Career.Position position =
-                        new Career.Position(careerPositions[i], DateUtil.of(startDates[i]), DateUtil.of(endDates[i]));
+                        new Career.Position(careerPosition, DateUtil.parse(startDates[i]), DateUtil.parse(endDates[i]));
                 career.addPosition(title, position);
                 String description = descriptions[i];
                 if (!description.trim().isEmpty()) {
@@ -175,9 +179,7 @@ public class ResumeServlet extends HttpServlet {
                 .collect(Collectors.toList());
     }
 
-    private void forward(HttpServletRequest request, HttpServletResponse response, String uuid, String jsp) throws
-            ServletException, IOException {
-        Resume resume = sqlStorage.get(uuid);
+    private void forward(HttpServletRequest request, HttpServletResponse response, Resume resume, String jsp) throws ServletException, IOException {
         request.setAttribute("resume", resume);
         request.getRequestDispatcher(jsp).forward(request, response);
     }
