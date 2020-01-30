@@ -1,3 +1,7 @@
+Java SE application "Resumes Database" 
+===============================
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d443af68138d4f799b671565fb2f1304)](https://www.codacy.com/manual/NikolayLarin/basejava?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=NikolayLarin/basejava&amp;utm_campaign=Badge_Grade)
+===============================
 #### Разработка полнофункционального веб-приложения "База данных резюме" по темам: массивы, коллекции, объектная модель, система ввода-вывода, работа с файлами, сериализация, работа с XML, JSON, SQL, сохранение в базу данных PostgreSQL, сервлеты, JSP/JSTL, web-контайнер Tomcat, HTML, JUnit, логирование, система контроля версий Git и деплоем приложения в облачный сервис Heroku
   -  используются: Java 8, <a href="https://zeroturnaround.com/rebellabs/java-tools-and-technologies-landscape-2016-trends/#java-ides-adoption">IntelliJ IDEA</a>,
     <a href="https://zeroturnaround.com/rebellabs/java-tools-and-technologies-landscape-2016-trends/#java-vcs-adoption">GitHib/Git</a>, Сервлеты, JSP, JSTL, Tomcat, JUnit, PostgreSQL, GSON, JAXB
